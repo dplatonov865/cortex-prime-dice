@@ -1,50 +1,51 @@
 /* Кнопки управления пулом */
 .pool-controls {
   display: flex;
-  gap: 10px;
+  gap: 12px;
 }
 
 .roll-button, .clear-button {
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.9rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .roll-button {
-  background: #27ae60;
+  background: linear-gradient(135deg, #27ae60, #219653);
   color: white;
+  box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
 }
 
 .roll-button:hover:not(:disabled) {
-  background: #219653;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+  box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
 }
 
 .roll-button:disabled {
-  background: #95a5a6;
+  background: rgba(149, 165, 166, 0.3);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
 
 .clear-button {
-  background: #e74c3c;
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
   color: white;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
 }
 
 .clear-button:hover:not(:disabled) {
-  background: #c0392b;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
 }
 
 .clear-button:disabled {
-  background: #bdc3c7;
+  background: rgba(189, 195, 199, 0.3);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;

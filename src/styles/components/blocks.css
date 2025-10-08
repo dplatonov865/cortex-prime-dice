@@ -2,12 +2,22 @@
 /* .attributes-block {
   grid-column: 1;
 } */
+ .block h3 {
+  margin-bottom: 20px;
+  color: #e8e6e3;
+  border-bottom: 2px solid;
+  padding-bottom: 8px;
+  font-weight: 600;
+  font-size: 1.3rem;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+}
 
 .attributes-block h3 {
-  margin-bottom: 15px;
-  color: #2c3e50;
-  border-bottom: 2px solid #3498db;
-  padding-bottom: 5px;
+  border-color: #8a6dff;
+  background: linear-gradient(135deg, #8a6dff 0%, transparent 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .attributes-list {
@@ -20,33 +30,37 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
-  background: #f8f9fa;
-  border-radius: 8px;
+  padding: 10px 14px;
+  background: rgba(40, 45, 70, 0.6);
+  border-radius: 12px;
+  border: 1px solid rgba(138, 109, 255, 0.2);
   transition: all 0.3s ease;
   cursor: pointer;
   user-select: none;
 }
 
 .attribute-row:hover {
-  background: #e3f2fd !important;
+  background: rgba(138, 109, 255, 0.15) !important;
   transform: translateX(5px);
+  border-color: rgba(138, 109, 255, 0.4);
 }
 
 .attribute-name {
   font-weight: 600;
-  color: #2c3e50;
+  color: #e8e6e3;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .attribute-hint {
   margin-top: 15px;
-  padding: 10px;
-  background: #e3f2fd;
-  border-radius: 6px;
+  padding: 12px;
+  background: rgba(138, 109, 255, 0.15);
+  border-radius: 8px;
   font-size: 0.8rem;
-  color: #1565c0;
+  color: #b8a9ff;
   text-align: center;
-  border-left: 3px solid #2196f3;
+  border-left: 3px solid #8a6dff;
+  border: 1px solid rgba(138, 109, 255, 0.2);
 }
 
 /* Блок ролей */
@@ -55,10 +69,11 @@
 } */
 
 .roles-block h3 {
-  margin-bottom: 15px;
-  color: #2c3e50;
-  border-bottom: 2px solid #9b59b6;
-  padding-bottom: 5px;
+  border-color: #6dc1ff;
+  background: linear-gradient(135deg, #6dc1ff 0%, transparent 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .roles-list {
@@ -71,33 +86,37 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
-  background: #f8f9fa;
-  border-radius: 8px;
+  padding: 10px 14px;
+  background: rgba(40, 45, 70, 0.6);
+  border-radius: 12px;
+  border: 1px solid rgba(109, 193, 255, 0.2);
   transition: all 0.3s ease;
   cursor: pointer;
   user-select: none;
 }
 
 .role-row:hover {
-  background: #f3e5f5 !important;
+  background: rgba(109, 193, 255, 0.15) !important;
   transform: translateX(5px);
+  border-color: rgba(109, 193, 255, 0.4);
 }
 
 .role-name {
   font-weight: 600;
-  color: #2c3e50;
+  color: #e8e6e3;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .role-hint {
   margin-top: 15px;
-  padding: 10px;
-  background: #f3e5f5;
-  border-radius: 6px;
+  padding: 12px;
+  background: rgba(109, 193, 255, 0.15);
+  border-radius: 8px;
   font-size: 0.8rem;
-  color: #7b1fa2;
+  color: #a8d7ff;
   text-align: center;
-  border-left: 3px solid #9b59b6;
+  border-left: 3px solid #6dc1ff;
+  border: 1px solid rgba(109, 193, 255, 0.2);
 }
 
 /* Блок осложнений */
@@ -106,10 +125,11 @@
 } */
 
 .complications-block h3 {
-  margin-bottom: 15px;
-  color: #2c3e50;
-  border-bottom: 2px solid #e74c3c;
-  padding-bottom: 5px;
+  border-color: #ff6b6b;
+  background: linear-gradient(135deg, #ff6b6b 0%, transparent 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .complications-list {
@@ -122,19 +142,39 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
-  background: #f8f9fa;
-  border-radius: 8px;
+  padding: 10px 14px;
+  background: rgba(40, 45, 70, 0.6);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 107, 107, 0.2);
   transition: all 0.3s ease;
   cursor: pointer;
   user-select: none;
 }
 
 .complication-row:hover {
-  background: #ffebee !important;
+  background: rgba(255, 107, 107, 0.15) !important;
   transform: translateX(5px);
+  border-color: rgba(255, 107, 107, 0.4);
 }
 
+.complication-name {
+  font-weight: 600;
+  color: #e8e6e3;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  flex: 1;
+}
+
+.complication-hint {
+  margin-top: 15px;
+  padding: 12px;
+  background: rgba(255, 107, 107, 0.15);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: #ffa8a8;
+  text-align: center;
+  border-left: 3px solid #ff6b6b;
+  border: 1px solid rgba(255, 107, 107, 0.2);
+}
 /* Стили для неактивных осложнений (ранг не d4) */
 .complication-row.complication-disabled {
   cursor: not-allowed;
@@ -201,29 +241,41 @@
 
 /* Блок пула кубов */
 .dice-pool-block {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  background: rgba(30, 35, 60, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(100, 110, 140, 0.3);
+  border-radius: 20px;
+  padding: 25px;
 }
 
 .block-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.dice-pool-block h3 {
+  color: #e8e6e3;
+  border-bottom: 2px solid #8a6dff;
+  padding-bottom: 8px;
+  margin-bottom: 0;
 }
 
 .dice-pool {
-  min-height: 100px;
-  padding: 15px;
-  background: #f8f9fa;
-  border-radius: 10px;
-  border: 2px dashed #bdc3c7;
+  min-height: 120px;
+  padding: 20px;
+  background: rgba(40, 45, 70, 0.6);
+  border-radius: 15px;
+  border: 2px dashed rgba(138, 109, 255, 0.3);
 }
 
 .empty-pool-message {
   text-align: center;
   color: #7f8c8d;
   font-style: italic;
-  padding: 20px;
+  padding: 30px 20px;
   font-size: 1rem;
 }
 
@@ -239,19 +291,19 @@
   align-items: center;
   gap: 8px;
   padding: 12px;
-  background: white;
-  border-radius: 10px;
-  border: 2px solid transparent;
+  background: rgba(50, 55, 80, 0.8);
+  border-radius: 12px;
+  border: 1px solid rgba(138, 109, 255, 0.3);
   transition: all 0.3s ease;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .pool-dice-item:hover {
-  border-color: #3498db;
-  background: #e3f2fd;
+  border-color: rgba(138, 109, 255, 0.6);
+  background: rgba(138, 109, 255, 0.15);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+  box-shadow: 0 4px 12px rgba(138, 109, 255, 0.2);
 }
 
 .dice-info-small {
@@ -263,28 +315,29 @@
 
 .dice-category {
   font-size: 0.7rem;
-  color: #7f8c8d;
+  color: #b8b6b3;
   font-weight: 500;
 }
 
 .dice-name {
   font-size: 0.8rem;
-  color: #2c3e50;
+  color: #e8e6e3;
   text-align: center;
   max-width: 80px;
   word-break: break-word;
   font-weight: 500;
-}
-/* Блок отличий */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}/* Блок отличий */
 /* .distinctions-block {
   grid-column: 4;
 } */
 
 .distinctions-block h3 {
-  margin-bottom: 15px;
-  color: #2c3e50;
-  border-bottom: 2px solid #f39c12;
-  padding-bottom: 5px;
+  border-color: #ffd93d;
+  background: linear-gradient(135deg, #ffd93d 0%, transparent 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .distinctions-list {
@@ -294,19 +347,21 @@
 }
 
 .distinction-category {
-  padding: 12px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  border-left: 3px solid #f39c12;
+  padding: 14px;
+  background: rgba(40, 45, 70, 0.6);
+  border-radius: 12px;
+  border-left: 3px solid #ffd93d;
+  border: 1px solid rgba(255, 217, 61, 0.2);
 }
 
 .distinction-title {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #e67e22;
+  color: #ffd93d;
   margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .distinction-row {
@@ -318,65 +373,68 @@
 
 .distinction-input {
   flex: 1;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 6px 8px;
+  border: 1px solid rgba(255, 217, 61, 0.3);
+  border-radius: 8px;
+  padding: 8px 12px;
   font-size: 0.9rem;
   font-family: inherit;
-  background: white;
+  background: rgba(30, 35, 50, 0.8);
+  color: #e8e6e3;
   transition: all 0.2s ease;
-  min-width: 0; /* Для правильного сжатия в flex */
 }
 
 .distinction-input:focus {
   outline: none;
-  border-color: #f39c12;
-  box-shadow: 0 0 0 2px rgba(243, 156, 18, 0.2);
+  border-color: #ffd93d;
+  box-shadow: 0 0 0 2px rgba(255, 217, 61, 0.2);
+  background: rgba(35, 40, 55, 0.9);
 }
 
 .distinction-input:hover {
-  border-color: #ccc;
+  border-color: rgba(255, 217, 61, 0.5);
 }
 
 .distinction-dice {
   display: flex;
   gap: 8px;
   align-items: center;
-  flex-shrink: 0; /* Предотвращает сжатие кубов */
+  flex-shrink: 0;
 }
 
 .distinction-dice-item {
   cursor: pointer;
   transition: all 0.2s ease;
-  border-radius: 4px;
-  padding: 2px;
+  border-radius: 6px;
+  padding: 4px;
 }
 
 .distinction-dice-item:hover {
   transform: scale(1.1);
-  background: rgba(243, 156, 18, 0.1);
+  background: rgba(255, 217, 61, 0.1);
 }
 
 .distinction-hint {
   margin-top: 15px;
-  padding: 10px;
-  background: #fff9e6;
-  border-radius: 6px;
+  padding: 12px;
+  background: rgba(255, 217, 61, 0.15);
+  border-radius: 8px;
   font-size: 0.8rem;
-  color: #e67e22;
+  color: #ffeaa7;
   text-align: center;
-  border-left: 3px solid #f39c12;
+  border-left: 3px solid #ffd93d;
+  border: 1px solid rgba(255, 217, 61, 0.2);
 }
+
 /* Блок специальностей */
 /* .specialties-block {
   grid-column: 5;
 } */
-
 .specialties-block h3 {
-  margin-bottom: 15px;
-  color: #2c3e50;
-  border-bottom: 2px solid #1abc9c;
-  padding-bottom: 5px;
+  border-color: #1abc9c;
+  background: linear-gradient(135deg, #1abc9c 0%, transparent 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .specialties-input-container {
@@ -387,12 +445,13 @@
 
 .specialty-input {
   flex: 1;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 8px 10px;
+  border: 1px solid rgba(26, 188, 156, 0.3);
+  border-radius: 8px;
+  padding: 10px 12px;
   font-size: 0.9rem;
   font-family: inherit;
-  background: white;
+  background: rgba(30, 35, 50, 0.8);
+  color: #e8e6e3;
   transition: all 0.2s ease;
 }
 
@@ -400,21 +459,22 @@
   outline: none;
   border-color: #1abc9c;
   box-shadow: 0 0 0 2px rgba(26, 188, 156, 0.2);
+  background: rgba(35, 40, 55, 0.9);
 }
 
 .specialty-input:disabled {
-  background: #f8f9fa;
-  color: #95a5a6;
+  background: rgba(40, 45, 60, 0.6);
+  color: #7f8c8d;
   cursor: not-allowed;
 }
 
 .add-specialty-button {
-  width: 40px;
+  width: 45px;
   border: none;
-  border-radius: 4px;
-  background: #1abc9c;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #1abc9c, #16a085);
   color: white;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -424,12 +484,12 @@
 }
 
 .add-specialty-button:hover:not(:disabled) {
-  background: #16a085;
   transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(26, 188, 156, 0.3);
 }
 
 .add-specialty-button:disabled {
-  background: #bdc3c7;
+  background: rgba(189, 195, 199, 0.3);
   cursor: not-allowed;
   transform: none;
 }
@@ -449,38 +509,40 @@
   justify-content: space-between;
   align-items: center;
   gap: 8px;
-  padding: 8px;
-  background: #f8f9fa;
-  border-radius: 6px;
+  padding: 10px;
+  background: rgba(40, 45, 70, 0.6);
+  border-radius: 10px;
   border-left: 3px solid #1abc9c;
+  border: 1px solid rgba(26, 188, 156, 0.2);
   transition: all 0.2s ease;
 }
 
 .specialty-row:hover {
-  background: #e8f6f3;
+  background: rgba(26, 188, 156, 0.1);
 }
 
 .specialty-name-input {
   flex: 1;
   border: 1px solid transparent;
-  border-radius: 3px;
-  padding: 4px 6px;
+  border-radius: 6px;
+  padding: 6px 8px;
   font-size: 0.85rem;
   font-family: inherit;
   background: transparent;
+  color: #e8e6e3;
   transition: all 0.2s ease;
   min-width: 0;
 }
 
 .specialty-name-input:focus {
   outline: none;
-  border-color: #1abc9c;
-  background: white;
-  box-shadow: 0 0 0 1px rgba(26, 188, 156, 0.3);
+  border-color: rgba(26, 188, 156, 0.4);
+  background: rgba(30, 35, 50, 0.8);
+  box-shadow: 0 0 0 1px rgba(26, 188, 156, 0.2);
 }
 
 .specialty-name-input:hover {
-  border-color: #ccc;
+  border-color: rgba(26, 188, 156, 0.3);
 }
 
 .specialty-controls {
@@ -493,8 +555,8 @@
 .specialty-dice {
   cursor: pointer;
   transition: all 0.2s ease;
-  border-radius: 3px;
-  padding: 2px;
+  border-radius: 6px;
+  padding: 4px;
 }
 
 .specialty-dice:hover {
@@ -503,13 +565,13 @@
 }
 
 .remove-specialty-button {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border: none;
   border-radius: 50%;
-  background: #e74c3c;
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
   color: white;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
@@ -519,8 +581,8 @@
 }
 
 .remove-specialty-button:hover {
-  background: #c0392b;
   transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
 }
 
 .no-specialties-message {
@@ -540,13 +602,14 @@
 }
 
 .specialties-hint {
-  padding: 10px;
-  background: #e8f6f3;
-  border-radius: 6px;
+  padding: 12px;
+  background: rgba(26, 188, 156, 0.15);
+  border-radius: 8px;
   font-size: 0.8rem;
-  color: #16a085;
+  color: #76ecc8;
   text-align: center;
   border-left: 3px solid #1abc9c;
+  border: 1px solid rgba(26, 188, 156, 0.2);
 }
 
 /* Стили для скроллбара в списке специальностей */
