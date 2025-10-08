@@ -4,11 +4,11 @@ import DiceIcon from './DiceIcon';
 
 const CharacterSheet = () => {
   const [attributes, setAttributes] = useState({
-    'Атлетизм': 'd6',
+    'Атлетизм': 'd4',
     'Координация': 'd6',
-    'Хитрость': 'd6',
-    'Эрудиция': 'd6',
-    'Чутьё': 'd6',
+    'Хитрость': 'd8',
+    'Эрудиция': 'd10',
+    'Чутьё': 'd12',
     'Вера': 'd6'
   });
 
@@ -19,7 +19,7 @@ const CharacterSheet = () => {
   const [effectDie, setEffectDie] = useState('d4');
   const [rollHistory, setRollHistory] = useState([]);
 
-  // Добавление куба в пул (левый клик)
+  // Добавление куба в пул (клик по атрибуту)
   const addToDicePool = (attributeName, diceType) => {
     const newDice = {
       id: Date.now() + Math.random(),
@@ -31,9 +31,8 @@ const CharacterSheet = () => {
     setDicePool(prev => [...prev, newDice]);
   };
 
-  // Удаление куба из пула (правый клик)
-  const removeFromDicePool = (diceId, event) => {
-    event.preventDefault();
+  // Удаление куба из пула (клик по кубу в пуле)
+  const removeFromDicePool = (diceId) => {
     setDicePool(prev => prev.filter(dice => dice.id !== diceId));
   };
 
@@ -79,19 +78,18 @@ const CharacterSheet = () => {
   };
 
   // Обработчик кликов по результатам броска
-  const handleResultDiceClick = (diceId, event) => {
+  const handleResultDiceClick = (diceId) => {
     const dice = rollResults.find(d => d.id === diceId);
     if (!dice || dice.isOne) return; // Нельзя выбирать кубы с 1
 
-    if (event.button === 0) { // Левый клик - добавить в выбранные
-      if (!selectedDice.includes(diceId)) {
-        const newSelected = [...selectedDice, diceId];
-        setSelectedDice(newSelected);
-        updateResultAndEffect(newSelected);
-      }
-    } else if (event.button === 2) { // Правый клик - удалить из выбранных
-      event.preventDefault();
+    if (selectedDice.includes(diceId)) {
+      // Удаляем из выбранных
       const newSelected = selectedDice.filter(id => id !== diceId);
+      setSelectedDice(newSelected);
+      updateResultAndEffect(newSelected);
+    } else {
+      // Добавляем в выбранные
+      const newSelected = [...selectedDice, diceId];
       setSelectedDice(newSelected);
       updateResultAndEffect(newSelected);
     }
@@ -134,18 +132,8 @@ const CharacterSheet = () => {
   };
 
   // Обработчик кликов по атрибутам
-  const handleAttributeClick = (attributeName, diceType, event) => {
-    if (event.button === 0) { // Левый клик
-      addToDicePool(attributeName, diceType);
-    } else if (event.button === 2) { // Правый клик
-      const diceToRemove = dicePool
-        .filter(dice => dice.attribute === attributeName)
-        .pop();
-      
-      if (diceToRemove) {
-        removeFromDicePool(diceToRemove.id, event);
-      }
-    }
+  const handleAttributeClick = (attributeName, diceType) => {
+    addToDicePool(attributeName, diceType);
   };
 
   // Очистка пула
@@ -206,15 +194,15 @@ const CharacterSheet = () => {
         
         <div className="dice-pool">
           {dicePool.length === 0 ? (
-            <p className="empty-pool-message">Кликайте левой кнопкой по атрибутам чтобы добавить кубы в пул</p>
+            <p className="empty-pool-message">Кликайте по атрибутам чтобы добавить кубы в пул</p>
           ) : (
             <div className="dice-pool-list">
               {dicePool.map(dice => (
                 <div 
                   key={dice.id} 
                   className="pool-dice-item"
-                  onContextMenu={(e) => removeFromDicePool(dice.id, e)}
-                  title={`Правый клик для удаления\n${dice.attribute}: ${dice.type}`}
+                  onClick={() => removeFromDicePool(dice.id)}
+                  title={`Клик чтобы удалить\n${dice.attribute}: ${dice.type}`}
                 >
                   <DiceIcon 
                     type={dice.type} 
@@ -265,11 +253,11 @@ const CharacterSheet = () => {
                     <div 
                       key={dice.id} 
                       className={`result-dice-item ${isSelected ? 'selected' : ''} ${isInactive ? 'inactive' : ''}`}
-                      onMouseDown={(e) => handleResultDiceClick(dice.id, e)}
+                      onClick={() => handleResultDiceClick(dice.id)}
                       title={
                         isInactive 
                           ? 'Выпала 1 - нельзя выбрать' 
-                          : `Левый клик - добавить в результат\nПравый клик - убрать из результата`
+                          : `Клик для ${isSelected ? 'исключения из' : 'добавления в'} результат`
                       }
                     >
                       <DiceIcon 
@@ -280,8 +268,8 @@ const CharacterSheet = () => {
                       <div className="dice-info">
                         <div className="dice-attribute">{dice.attribute}</div>
                         <div className="dice-roll">{dice.rolledValue}</div>
-                        {isSelected && <div className="selected-indicator">✓</div>}
-                        {isInactive && <div className="inactive-indicator">✗</div>}
+                        {isSelected && <div className="selected-indicator">✓ В результате</div>}
+                        {isInactive && <div className="inactive-indicator">✗ Неактивен</div>}
                       </div>
                     </div>
                   );
@@ -291,7 +279,7 @@ const CharacterSheet = () => {
 
             {/* Подсказка */}
             <div className="results-hint">
-              💡 Кликайте по кубам: левая кнопка - добавить в результат, правая - убрать
+              💡 Кликайте по кубам чтобы добавить/убрать их из результата
             </div>
           </div>
         )}

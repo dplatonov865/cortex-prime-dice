@@ -623,3 +623,68 @@ body {
     min-width: auto;
   }
 }
+
+/* Обновленные стили для пула кубов */
+.pool-dice-item {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pool-dice-item:hover {
+  border-color: #e74c3c;
+  background: #ffeaea;
+  transform: scale(1.05);
+}
+
+/* Обновленные стили для кубов в результатах */
+.result-dice-item {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.result-dice-item:not(.inactive):hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.result-dice-item.selected:hover {
+  border-left-color: #c3e6cb;
+  background: #c3e6cb;
+}
+
+/* Обновленные индикаторы */
+.selected-indicator {
+  color: #28a745;
+  font-weight: bold;
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
+
+.inactive-indicator {
+  color: #dc3545;
+  font-weight: bold;
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
+
+/* Обновленные подсказки */
+.attribute-hint {
+  margin-top: 15px;
+  padding: 10px;
+  background: #e3f2fd;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: #1565c0;
+  text-align: center;
+  border-left: 3px solid #2196f3;
+}
+
+.results-hint {
+  padding: 12px;
+  background: #e3f2fd;
+  border-radius: 6px;
+  border-left: 3px solid #2196f3;
+  font-size: 0.9rem;
+  color: #1565c0;
+  text-align: center;
+}

@@ -2,8 +2,8 @@ import React from 'react';
 import DiceIcon from './DiceIcon';
 
 const AttributeBlock = ({ attributes, onAttributeClick }) => {
-  const handleAttributeInteraction = (attributeName, diceType, event) => {
-    onAttributeClick(attributeName, diceType, event);
+  const handleAttributeClick = (attributeName, diceType) => {
+    onAttributeClick(attributeName, diceType);
   };
 
   return (
@@ -14,8 +14,8 @@ const AttributeBlock = ({ attributes, onAttributeClick }) => {
           <div 
             key={name} 
             className="attribute-row"
-            onMouseDown={(e) => handleAttributeInteraction(name, diceType, e)}
-            title="Левый клик - добавить в пул\nПравый клик - удалить из пула"
+            onClick={() => handleAttributeClick(name, diceType)}
+            title="Клик чтобы добавить куб в пул"
           >
             <span className="attribute-name">{name}</span>
             <DiceIcon 
@@ -27,7 +27,7 @@ const AttributeBlock = ({ attributes, onAttributeClick }) => {
         ))}
       </div>
       <div className="attribute-hint">
-        💡 Левый клик - добавить, правый - удалить
+        💡 Кликайте по атрибутам чтобы добавить кубы в пул
       </div>
     </div>
   );
