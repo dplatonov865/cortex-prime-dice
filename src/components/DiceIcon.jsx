@@ -12,6 +12,19 @@ const DiceIcon = ({ type, value, onClick, clickable = false }) => {
       position: 'relative',
     };
 
+    // Специальный стиль для ранга "0"
+    if (type === '0') {
+      return {
+        ...baseStyles,
+        width: '24px',
+        height: '24px',
+        backgroundColor: '#95a5a6',
+        borderRadius: '50%',
+        color: 'white',
+        fontSize: '12px',
+      };
+    }
+
     const typeStyles = {
       d4: {
         width: '24px',
@@ -45,10 +58,9 @@ const DiceIcon = ({ type, value, onClick, clickable = false }) => {
         width: '26px',
         height: '26px',
         backgroundColor: '#9d4edd',
-        // Правильный десятиугольник (decagon)
         clipPath: 'polygon(50% 0%, 80% 10%, 95% 35%, 95% 65%, 80% 90%, 50% 100%, 20% 90%, 5% 65%, 5% 35%, 20% 10%)',
         color: 'white',
-        fontSize: '12px', // Чуть меньше текст для лучшего отображения
+        fontSize: '12px',
       },
     };
 
@@ -66,7 +78,7 @@ const DiceIcon = ({ type, value, onClick, clickable = false }) => {
       style={getDiceStyles()}
       onClick={handleClick}
       className={clickable ? 'dice-clickable' : ''}
-      title={`Бросок ${type}`}
+      title={type === '0' ? 'Отсутствует' : `Бросок ${type}`}
     >
       {value}
     </span>

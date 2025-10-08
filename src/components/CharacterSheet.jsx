@@ -1,25 +1,34 @@
 import React, { useState } from 'react';
 import AttributeBlock from './AttributeBlock';
 import RoleBlock from './RoleBlock';
+import ComplicationBlock from './ComplicationBlock';
 import DiceIcon from './DiceIcon';
 
 const CharacterSheet = () => {
   const [attributes, setAttributes] = useState({
-    'Атлетизм': 'd4',
+    'Атлетизм': 'd6',
     'Координация': 'd6',
-    'Хитрость': 'd8',
-    'Эрудиция': 'd10',
-    'Чутьё': 'd12',
+    'Хитрость': 'd6',
+    'Эрудиция': 'd6',
+    'Чутьё': 'd6',
     'Вера': 'd6'
   });
 
   const [roles, setRoles] = useState({
-    'Солдат': 'd4',
+    'Солдат': 'd6',
     'Дипломат': 'd6',
-    'Эксперт': 'd8',
-    'Мастер': 'd10',
-    'Преступник': 'd12',
-    'Детектив': 'd6'
+    'Эксперт': 'd6',
+    'Мастер': 'd6',
+    'Преступник': 'd6'
+  });
+
+  const [complications, setComplications] = useState({
+    'Ослабление': '0',
+    'Раскоординированность': '0',
+    'Подозрительность': '0',
+    'Забывчивость': '0',
+    'Рассеянность': '0',
+    'Неуверенность': '0'
   });
 
   const [dicePool, setDicePool] = useState([]);
@@ -29,14 +38,17 @@ const CharacterSheet = () => {
   const [effectDie, setEffectDie] = useState('d4');
   const [rollHistory, setRollHistory] = useState([]);
 
-  // Добавление куба в пул (клик по атрибуту или роли)
+  // Добавление куба в пул (клик по атрибуту, роли или осложнению)
   const addToDicePool = (name, diceType, category) => {
+    // Не добавляем осложнения с рангом "0"
+    if (diceType === '0') return;
+    
     const newDice = {
       id: Date.now() + Math.random(),
       name: name,
       type: diceType,
-      value: parseInt(diceType.replace('d', '')),
-      category: category // 'attribute' или 'role'
+      value: diceType === '0' ? '0' : parseInt(diceType.replace('d', '')),
+      category: category // 'attribute', 'role' или 'complication'
     };
     
     setDicePool(prev => [...prev, newDice]);
@@ -52,8 +64,8 @@ const CharacterSheet = () => {
     if (dicePool.length === 0) return;
 
     const results = dicePool.map(dice => {
-      const diceValue = parseInt(dice.type.replace('d', ''));
-      const rolledValue = Math.floor(Math.random() * diceValue) + 1;
+      const diceValue = dice.type === '0' ? 0 : parseInt(dice.type.replace('d', ''));
+      const rolledValue = diceValue === 0 ? 0 : Math.floor(Math.random() * diceValue) + 1;
       
       return {
         ...dice,
@@ -91,7 +103,7 @@ const CharacterSheet = () => {
   // Обработчик кликов по результатам броска
   const handleResultDiceClick = (diceId) => {
     const dice = rollResults.find(d => d.id === diceId);
-    if (!dice || dice.isOne) return; // Нельзя выбирать кубы с 1
+    if (!dice || dice.isOne || dice.rolledValue === 0) return; // Нельзя выбирать кубы с 1 или 0
 
     if (selectedDice.includes(diceId)) {
       // Удаляем из выбранных
@@ -122,9 +134,9 @@ const CharacterSheet = () => {
 
   // Вычисление куба эффекта
   const calculateEffectDie = (results, selectedIds) => {
-    // Доступные кубы: не выбранные и не единицы
+    // Доступные кубы: не выбранные и не единицы и не нули
     const availableDice = results.filter(dice => 
-      !selectedIds.includes(dice.id) && !dice.isOne
+      !selectedIds.includes(dice.id) && !dice.isOne && dice.rolledValue !== 0
     );
 
     if (availableDice.length === 0) {
@@ -152,6 +164,19 @@ const CharacterSheet = () => {
     addToDicePool(roleName, diceType, 'role');
   };
 
+  // Обработчик кликов по осложнениям
+  const handleComplicationClick = (complicationName, diceType) => {
+    addToDicePool(complicationName, diceType, 'complication');
+  };
+
+  // Обработчик изменения ранга осложнения
+  const handleComplicationChange = (complicationName, newRank) => {
+    setComplications(prev => ({
+      ...prev,
+      [complicationName]: newRank
+    }));
+  };
+
   // Очистка пула
   const clearDicePool = () => {
     setDicePool([]);
@@ -170,10 +195,11 @@ const CharacterSheet = () => {
           onRoleClick={handleRoleClick}
         />
         
-        <div className="block empty-block">
-          <h3>Блок 3</h3>
-          <p>Здесь будет дополнительная информация</p>
-        </div>
+        <ComplicationBlock 
+          complications={complications} 
+          onComplicationClick={handleComplicationClick}
+          onComplicationChange={handleComplicationChange}
+        />
         
         <div className="block empty-block">
           <h3>Блок 4</h3>
@@ -210,7 +236,7 @@ const CharacterSheet = () => {
         
         <div className="dice-pool">
           {dicePool.length === 0 ? (
-            <p className="empty-pool-message">Кликайте по атрибутам или ролям чтобы добавить кубы в пул</p>
+            <p className="empty-pool-message">Кликайте по атрибутам, ролям или осложнениям чтобы добавить кубы в пул</p>
           ) : (
             <div className="dice-pool-list">
               {dicePool.map(dice => (
@@ -218,16 +244,16 @@ const CharacterSheet = () => {
                   key={dice.id} 
                   className="pool-dice-item"
                   onClick={() => removeFromDicePool(dice.id)}
-                  title={`Клик чтобы удалить\n${dice.category === 'attribute' ? 'Атрибут' : 'Роль'}: ${dice.name} (${dice.type})`}
+                  title={`Клик чтобы удалить\n${dice.category === 'attribute' ? 'Атрибут' : dice.category === 'role' ? 'Роль' : 'Осложнение'}: ${dice.name} (${dice.type})`}
                 >
                   <DiceIcon 
                     type={dice.type} 
-                    value={dice.value}
+                    value={dice.type === '0' ? '0' : dice.value}
                     clickable={false}
                   />
                   <div className="dice-info-small">
                     <span className="dice-category">
-                      {dice.category === 'attribute' ? 'Атрибут' : 'Роль'}
+                      {dice.category === 'attribute' ? 'Атрибут' : dice.category === 'role' ? 'Роль' : 'Осложнение'}
                     </span>
                     <span className="dice-name">{dice.name}</span>
                   </div>
@@ -268,7 +294,7 @@ const CharacterSheet = () => {
               <div className="results-dice">
                 {rollResults.map(dice => {
                   const isSelected = selectedDice.includes(dice.id);
-                  const isInactive = dice.isOne;
+                  const isInactive = dice.isOne || dice.rolledValue === 0;
                   
                   return (
                     <div 
@@ -277,7 +303,7 @@ const CharacterSheet = () => {
                       onClick={() => handleResultDiceClick(dice.id)}
                       title={
                         isInactive 
-                          ? 'Выпала 1 - нельзя выбрать' 
+                          ? dice.rolledValue === 0 ? 'Ранг 0 - нельзя выбрать' : 'Выпала 1 - нельзя выбрать'
                           : `Клик для ${isSelected ? 'исключения из' : 'добавления в'} результат`
                       }
                     >
@@ -288,12 +314,14 @@ const CharacterSheet = () => {
                       />
                       <div className="dice-info">
                         <div className="dice-category-small">
-                          {dice.category === 'attribute' ? 'Атрибут' : 'Роль'}
+                          {dice.category === 'attribute' ? 'Атрибут' : dice.category === 'role' ? 'Роль' : 'Осложнение'}
                         </div>
                         <div className="dice-name">{dice.name}</div>
                         <div className="dice-roll">{dice.rolledValue}</div>
                         {isSelected && <div className="selected-indicator">✓ В результате</div>}
-                        {isInactive && <div className="inactive-indicator">✗ Неактивен</div>}
+                        {isInactive && <div className="inactive-indicator">
+                          {dice.rolledValue === 0 ? '✗ Ранг 0' : '✗ Неактивен'}
+                        </div>}
                       </div>
                     </div>
                   );

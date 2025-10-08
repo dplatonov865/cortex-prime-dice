@@ -793,3 +793,154 @@ body {
     grid-column: 1;
   }
 }
+/* Стили для блока осложнений */
+.complications-block {
+  grid-column: 3;
+}
+
+.complications-block h3 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+  border-bottom: 2px solid #e74c3c;
+  padding-bottom: 5px;
+}
+
+.complications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.complication-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.complication-row:hover {
+  background: #ffebee !important;
+  transform: translateX(5px);
+}
+
+.complication-row:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.complication-name {
+  font-weight: 600;
+  color: #2c3e50;
+  flex: 1;
+}
+
+.complication-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-left: 10px;
+}
+
+.rank-button {
+  width: 20px;
+  height: 16px;
+  border: none;
+  background: #34495e;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+.rank-button:hover:not(:disabled) {
+  background: #2c3e50;
+  transform: scale(1.1);
+}
+
+.rank-button:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.increase-button {
+  border-radius: 2px 2px 0 0;
+}
+
+.decrease-button {
+  border-radius: 0 0 2px 2px;
+}
+
+.complication-dice {
+  margin: 2px 0;
+}
+
+.complication-hint {
+  margin-top: 15px;
+  padding: 10px;
+  background: #ffebee;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: #c62828;
+  text-align: center;
+  border-left: 3px solid #e74c3c;
+}
+
+/* Адаптивность для блоков */
+@media (max-width: 1024px) {
+  .main-columns {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .attributes-block {
+    grid-column: 1;
+  }
+  
+  .roles-block {
+    grid-column: 2;
+  }
+  
+  .complications-block {
+    grid-column: 3;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-columns {
+    grid-template-columns: 1fr;
+  }
+  
+  .attributes-block,
+  .roles-block,
+  .complications-block {
+    grid-column: 1;
+  }
+  
+  .complication-controls {
+    flex-direction: row;
+    gap: 5px;
+  }
+  
+  .rank-button {
+    width: 16px;
+    height: 20px;
+  }
+  
+  .increase-button {
+    border-radius: 2px 0 0 2px;
+  }
+  
+  .decrease-button {
+    border-radius: 0 2px 2px 0;
+  }
+}
