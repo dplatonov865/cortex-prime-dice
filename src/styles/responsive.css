@@ -1,10 +1,14 @@
 /* Адаптивность для больших экранов */
-@media (max-width: 1024px) {
+@media (max-width: 1440px) {
     .main-columns {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(5, minmax(250px, 1fr));
     }
 
-    .attributes-block {
+    .character-sheet {
+        max-width: 1600px;
+    }
+
+    /* .attributes-block {
         grid-column: 1;
     }
 
@@ -22,6 +26,24 @@
 
     .specialties-block {
         grid-column: 2;
+    } */
+}
+
+@media (min-width: 1200px) and (max-width: 1439px) {
+    .main-columns {
+        grid-template-columns: repeat(4, minmax(250px, 1fr));
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .main-columns {
+        grid-template-columns: repeat(3, minmax(250px, 1fr));
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .main-columns {
+        grid-template-columns: repeat(2, minmax(250px, 1fr));
     }
 }
 
@@ -36,7 +58,7 @@
     }
 
     .character-sheet {
-        padding: 0 10px;
+        padding: 0 15px;
     }
 
     .attributes-block,
@@ -121,8 +143,14 @@
         padding: 10px;
     }
 
+    .character-sheet {
+        padding: 0 10px;
+    }
+
     .block {
         padding: 15px;
+        min-height: auto;
+        /* Убираем фиксированную высоту на мобильных */
     }
 
     .pool-controls {

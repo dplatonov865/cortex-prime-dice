@@ -1,4 +1,3 @@
-/* Импорт всех стилевых модулей */
 @import './base.css';
 @import './layout.css';
 @import './components/blocks.css';

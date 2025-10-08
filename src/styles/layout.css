@@ -1,13 +1,15 @@
 .character-sheet {
-  max-width: 1200px;
+  max-width: 1400px; /* Увеличим максимальную ширину */
   margin: 0 auto;
+  padding: 0 20px; /* Добавим отступы по бокам */
 }
 
 .main-columns {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Адаптивная сетка */
   gap: 20px;
   margin-bottom: 20px;
+  justify-content: center; /* Центрируем блоки */
 }
 
 .block {
@@ -17,4 +19,14 @@
   box-shadow: 0 8px 32px rgba(0,0,0,0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255,255,255,0.2);
+  min-height: 300px; /* Минимальная высота для выравнивания */
+}
+
+/* Убираем явное указание grid-column для блоков, так как используем auto-fit */
+.attributes-block,
+.roles-block,
+.complications-block,
+.distinctions-block,
+.specialties-block {
+  /* grid-column удаляем - будет определяться автоматически */
 }
