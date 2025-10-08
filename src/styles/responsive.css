@@ -19,6 +19,10 @@
     .distinctions-block {
         grid-column: 1;
     }
+
+    .specialties-block {
+        grid-column: 2;
+    }
 }
 
 /* Адаптивность для планшетов */
@@ -38,7 +42,8 @@
     .attributes-block,
     .roles-block,
     .complications-block,
-    .distinctions-block {
+    .distinctions-block,
+    .specialties-block {
         grid-column: 1;
     }
 
@@ -96,6 +101,17 @@
     .distinction-dice {
         width: 100%;
         justify-content: flex-start;
+    }
+
+    .specialty-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .specialty-controls {
+        width: 100%;
+        justify-content: space-between;
     }
 }
 
@@ -159,5 +175,18 @@
     .distinction-input {
         font-size: 0.85rem;
         padding: 5px 6px;
+    }
+
+    .specialties-input-container {
+        flex-direction: column;
+    }
+
+    .add-specialty-button {
+        width: 100%;
+        height: 35px;
+    }
+
+    .specialty-controls {
+        gap: 10px;
     }
 }

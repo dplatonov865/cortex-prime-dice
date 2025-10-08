@@ -3,6 +3,7 @@ import AttributeBlock from '../components/AttributeBlock';
 import RoleBlock from '../components/RoleBlock';
 import ComplicationBlock from '../components/ComplicationBlock';
 import DistinctionBlock from '../components/DistinctionBlock';
+import SpecialtiesBlock from '../components/SpecialtiesBlock';
 import DicePoolBlock from '../components/DicePoolBlock';
 import ResultsBlock from '../components/ResultsBlock';
 import { useDicePool } from '../hooks/useDicePool';
@@ -49,6 +50,13 @@ const CharacterSheet = () => {
     }
   });
 
+  const [specialties, setSpecialties] = useState({
+    // Начальные примеры
+    '1': { name: 'Стрельба из пистолета' },
+    '2': { name: 'Вождение автомобиля' },
+    '3': { name: 'Первая помощь' }
+  });
+
   // Хуки для управления логикой
   const { dicePool, addToDicePool, removeFromDicePool, clearDicePool, setDicePool } = useDicePool();
   const { 
@@ -78,7 +86,11 @@ const CharacterSheet = () => {
     addToDicePool(distinctionName, diceType, `distinction: ${category}`);
   };
 
-  // Обработчики изменения рангов
+  const handleSpecialtyClick = (specialtyName, diceType) => {
+    addToDicePool(specialtyName, diceType, 'specialty');
+  };
+
+  // Обработчики изменения данных
   const handleAttributeChange = (attributeName, newRank) => {
     setAttributes(prev => ({
       ...prev,
@@ -100,7 +112,6 @@ const CharacterSheet = () => {
     }));
   };
 
-  // Обработчик изменения отличий
   const handleDistinctionChange = (category, newName) => {
     setDistinctions(prev => ({
       ...prev,
@@ -109,6 +120,27 @@ const CharacterSheet = () => {
         name: newName
       }
     }));
+  };
+
+  const handleSpecialtiesChange = (action, id, name) => {
+    if (action === 'add') {
+      const newId = Date.now().toString();
+      setSpecialties(prev => ({
+        ...prev,
+        [newId]: { name }
+      }));
+    } else if (action === 'remove') {
+      setSpecialties(prev => {
+        const newSpecialties = { ...prev };
+        delete newSpecialties[id];
+        return newSpecialties;
+      });
+    } else if (action === 'edit') {
+      setSpecialties(prev => ({
+        ...prev,
+        [id]: { name }
+      }));
+    }
   };
 
   // Обработчик броска
@@ -143,10 +175,11 @@ const CharacterSheet = () => {
           onDistinctionChange={handleDistinctionChange}
         />
         
-        <div className="block empty-block">
-          <h3>Блок 5</h3>
-          <p>Здесь будет дополнительная информация</p>
-        </div>
+        <SpecialtiesBlock 
+          specialties={specialties} 
+          onSpecialtyClick={handleSpecialtyClick}
+          onSpecialtiesChange={handleSpecialtiesChange}
+        />
       </div>
       
       {/* Блок 6: Текущий пул кубов */}
