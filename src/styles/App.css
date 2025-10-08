@@ -688,3 +688,108 @@ body {
   color: #1565c0;
   text-align: center;
 }
+/* Стили для блока ролей */
+.roles-block {
+  grid-column: 2;
+}
+
+.roles-block h3 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+  border-bottom: 2px solid #9b59b6;
+  padding-bottom: 5px;
+}
+
+.roles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.role-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.role-row:hover {
+  background: #f3e5f5 !important;
+  transform: translateX(5px);
+}
+
+.role-name {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.role-hint {
+  margin-top: 15px;
+  padding: 10px;
+  background: #f3e5f5;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: #7b1fa2;
+  text-align: center;
+  border-left: 3px solid #9b59b6;
+}
+
+/* Стили для информации о кубах в пуле и результатах */
+.dice-info-small {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.dice-category {
+  font-size: 0.7rem;
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+.dice-name {
+  font-size: 0.8rem;
+  color: #2c3e50;
+  text-align: center;
+  max-width: 80px;
+  word-break: break-word;
+  font-weight: 500;
+}
+
+.dice-category-small {
+  font-size: 0.75rem;
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+/* Адаптивность для блоков */
+@media (max-width: 1024px) {
+  .main-columns {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .attributes-block {
+    grid-column: 1;
+  }
+  
+  .roles-block {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-columns {
+    grid-template-columns: 1fr;
+  }
+  
+  .attributes-block,
+  .roles-block {
+    grid-column: 1;
+  }
+}

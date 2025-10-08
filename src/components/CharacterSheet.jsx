@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import AttributeBlock from './AttributeBlock';
+import RoleBlock from './RoleBlock';
 import DiceIcon from './DiceIcon';
 
 const CharacterSheet = () => {
@@ -12,6 +13,15 @@ const CharacterSheet = () => {
     'Вера': 'd6'
   });
 
+  const [roles, setRoles] = useState({
+    'Солдат': 'd4',
+    'Дипломат': 'd6',
+    'Эксперт': 'd8',
+    'Мастер': 'd10',
+    'Преступник': 'd12',
+    'Детектив': 'd6'
+  });
+
   const [dicePool, setDicePool] = useState([]);
   const [rollResults, setRollResults] = useState([]);
   const [selectedDice, setSelectedDice] = useState([]);
@@ -19,13 +29,14 @@ const CharacterSheet = () => {
   const [effectDie, setEffectDie] = useState('d4');
   const [rollHistory, setRollHistory] = useState([]);
 
-  // Добавление куба в пул (клик по атрибуту)
-  const addToDicePool = (attributeName, diceType) => {
+  // Добавление куба в пул (клик по атрибуту или роли)
+  const addToDicePool = (name, diceType, category) => {
     const newDice = {
       id: Date.now() + Math.random(),
-      attribute: attributeName,
+      name: name,
       type: diceType,
-      value: parseInt(diceType.replace('d', ''))
+      value: parseInt(diceType.replace('d', '')),
+      category: category // 'attribute' или 'role'
     };
     
     setDicePool(prev => [...prev, newDice]);
@@ -133,7 +144,12 @@ const CharacterSheet = () => {
 
   // Обработчик кликов по атрибутам
   const handleAttributeClick = (attributeName, diceType) => {
-    addToDicePool(attributeName, diceType);
+    addToDicePool(attributeName, diceType, 'attribute');
+  };
+
+  // Обработчик кликов по ролям
+  const handleRoleClick = (roleName, diceType) => {
+    addToDicePool(roleName, diceType, 'role');
   };
 
   // Очистка пула
@@ -149,10 +165,10 @@ const CharacterSheet = () => {
           onAttributeClick={handleAttributeClick}
         />
         
-        <div className="block empty-block">
-          <h3>Блок 2</h3>
-          <p>Здесь будет дополнительная информация</p>
-        </div>
+        <RoleBlock 
+          roles={roles} 
+          onRoleClick={handleRoleClick}
+        />
         
         <div className="block empty-block">
           <h3>Блок 3</h3>
@@ -194,7 +210,7 @@ const CharacterSheet = () => {
         
         <div className="dice-pool">
           {dicePool.length === 0 ? (
-            <p className="empty-pool-message">Кликайте по атрибутам чтобы добавить кубы в пул</p>
+            <p className="empty-pool-message">Кликайте по атрибутам или ролям чтобы добавить кубы в пул</p>
           ) : (
             <div className="dice-pool-list">
               {dicePool.map(dice => (
@@ -202,14 +218,19 @@ const CharacterSheet = () => {
                   key={dice.id} 
                   className="pool-dice-item"
                   onClick={() => removeFromDicePool(dice.id)}
-                  title={`Клик чтобы удалить\n${dice.attribute}: ${dice.type}`}
+                  title={`Клик чтобы удалить\n${dice.category === 'attribute' ? 'Атрибут' : 'Роль'}: ${dice.name} (${dice.type})`}
                 >
                   <DiceIcon 
                     type={dice.type} 
                     value={dice.value}
                     clickable={false}
                   />
-                  <span className="dice-attribute">{dice.attribute}</span>
+                  <div className="dice-info-small">
+                    <span className="dice-category">
+                      {dice.category === 'attribute' ? 'Атрибут' : 'Роль'}
+                    </span>
+                    <span className="dice-name">{dice.name}</span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -266,7 +287,10 @@ const CharacterSheet = () => {
                         clickable={!isInactive}
                       />
                       <div className="dice-info">
-                        <div className="dice-attribute">{dice.attribute}</div>
+                        <div className="dice-category-small">
+                          {dice.category === 'attribute' ? 'Атрибут' : 'Роль'}
+                        </div>
+                        <div className="dice-name">{dice.name}</div>
                         <div className="dice-roll">{dice.rolledValue}</div>
                         {isSelected && <div className="selected-indicator">✓ В результате</div>}
                         {isInactive && <div className="inactive-indicator">✗ Неактивен</div>}
