@@ -4,16 +4,19 @@ import DiceIcon from './DiceIcon';
 
 const CharacterSheet = () => {
   const [attributes, setAttributes] = useState({
-    'Атлетизм': 'd4',
+    'Атлетизм': 'd6',
     'Координация': 'd6',
-    'Хитрость': 'd8',
-    'Эрудиция': 'd10',
-    'Чутьё': 'd12',
+    'Хитрость': 'd6',
+    'Эрудиция': 'd6',
+    'Чутьё': 'd6',
     'Вера': 'd6'
   });
 
   const [dicePool, setDicePool] = useState([]);
   const [rollResults, setRollResults] = useState([]);
+  const [selectedDice, setSelectedDice] = useState([]);
+  const [result, setResult] = useState(0);
+  const [effectDie, setEffectDie] = useState('d4');
   const [rollHistory, setRollHistory] = useState([]);
 
   // Добавление куба в пул (левый клик)
@@ -30,7 +33,7 @@ const CharacterSheet = () => {
 
   // Удаление куба из пула (правый клик)
   const removeFromDicePool = (diceId, event) => {
-    event.preventDefault(); // Предотвращаем контекстное меню
+    event.preventDefault();
     setDicePool(prev => prev.filter(dice => dice.id !== diceId));
   };
 
@@ -40,32 +43,94 @@ const CharacterSheet = () => {
 
     const results = dicePool.map(dice => {
       const diceValue = parseInt(dice.type.replace('d', ''));
-      const result = Math.floor(Math.random() * diceValue) + 1;
+      const rolledValue = Math.floor(Math.random() * diceValue) + 1;
       
       return {
         ...dice,
-        id: Date.now() + Math.random(), // Новый ID для результата
-        rolledValue: result,
+        id: Date.now() + Math.random(),
+        rolledValue: rolledValue,
+        isOne: rolledValue === 1,
+        isSelected: false, // Изначально все не выбраны
         timestamp: new Date().toLocaleTimeString()
       };
     });
 
-    // Сохраняем результаты
+    // Сбрасываем выбранные кубы и результаты
     setRollResults(results);
+    setSelectedDice([]);
+    setResult(0);
+    setEffectDie('d4');
     
+    // Автоматически вычисляем эффект после броска
+    calculateEffectDie(results, []);
+
     // Добавляем в историю
     setRollHistory(prev => [
       {
         id: Date.now(),
         results: results,
-        total: results.reduce((sum, dice) => sum + dice.rolledValue, 0),
         timestamp: new Date().toLocaleTimeString()
       },
-      ...prev.slice(0, 9) // Храним последние 10 бросков
+      ...prev.slice(0, 4) // Храним последние 5 бросков
     ]);
 
     // Очищаем пул
     setDicePool([]);
+  };
+
+  // Обработчик кликов по результатам броска
+  const handleResultDiceClick = (diceId, event) => {
+    const dice = rollResults.find(d => d.id === diceId);
+    if (!dice || dice.isOne) return; // Нельзя выбирать кубы с 1
+
+    if (event.button === 0) { // Левый клик - добавить в выбранные
+      if (!selectedDice.includes(diceId)) {
+        const newSelected = [...selectedDice, diceId];
+        setSelectedDice(newSelected);
+        updateResultAndEffect(newSelected);
+      }
+    } else if (event.button === 2) { // Правый клик - удалить из выбранных
+      event.preventDefault();
+      const newSelected = selectedDice.filter(id => id !== diceId);
+      setSelectedDice(newSelected);
+      updateResultAndEffect(newSelected);
+    }
+  };
+
+  // Обновление результата и куба эффекта
+  const updateResultAndEffect = (selectedIds) => {
+    // Вычисляем сумму выбранных кубов
+    const sum = selectedIds.reduce((total, diceId) => {
+      const dice = rollResults.find(d => d.id === diceId);
+      return total + (dice ? dice.rolledValue : 0);
+    }, 0);
+    
+    setResult(sum);
+    
+    // Вычисляем куб эффекта
+    calculateEffectDie(rollResults, selectedIds);
+  };
+
+  // Вычисление куба эффекта
+  const calculateEffectDie = (results, selectedIds) => {
+    // Доступные кубы: не выбранные и не единицы
+    const availableDice = results.filter(dice => 
+      !selectedIds.includes(dice.id) && !dice.isOne
+    );
+
+    if (availableDice.length === 0) {
+      setEffectDie('d4');
+      return;
+    }
+
+    // Находим куб с наибольшим номиналом
+    const maxDie = availableDice.reduce((max, dice) => {
+      const diceValue = parseInt(dice.type.replace('d', ''));
+      const maxValue = parseInt(max.type.replace('d', ''));
+      return diceValue > maxValue ? dice : max;
+    }, availableDice[0]);
+
+    setEffectDie(maxDie.type);
   };
 
   // Обработчик кликов по атрибутам
@@ -73,7 +138,6 @@ const CharacterSheet = () => {
     if (event.button === 0) { // Левый клик
       addToDicePool(attributeName, diceType);
     } else if (event.button === 2) { // Правый клик
-      // Удаляем последний куб этого атрибута из пула
       const diceToRemove = dicePool
         .filter(dice => dice.attribute === attributeName)
         .pop();
@@ -173,27 +237,61 @@ const CharacterSheet = () => {
           <p className="no-results-message">Здесь будут отображаться результаты бросков</p>
         ) : (
           <div className="current-results">
-            <div className="results-total">
-              <strong>Общая сумма: </strong>
-              <span className="total-value">
-                {rollResults.reduce((sum, dice) => sum + dice.rolledValue, 0)}
-              </span>
+            {/* Строки с результатом и кубом эффекта */}
+            <div className="result-stats">
+              <div className="result-stat">
+                <strong>Результат:</strong>
+                <span className="result-value">{result}</span>
+              </div>
+              <div className="result-stat">
+                <strong>Куб эффекта:</strong>
+                <DiceIcon 
+                  type={effectDie} 
+                  value={effectDie.replace('d', '')}
+                  clickable={false}
+                />
+              </div>
             </div>
-            
-            <div className="results-dice">
-              {rollResults.map(dice => (
-                <div key={dice.id} className="result-dice-item">
-                  <DiceIcon 
-                    type={dice.type} 
-                    value={dice.rolledValue}
-                    clickable={false}
-                  />
-                  <div className="dice-info">
-                    <div className="dice-attribute">{dice.attribute}</div>
-                    <div className="dice-roll">{dice.rolledValue}</div>
-                  </div>
-                </div>
-              ))}
+
+            {/* Выпавшие кубы */}
+            <div className="results-section">
+              <h4>Выпавшие значения:</h4>
+              <div className="results-dice">
+                {rollResults.map(dice => {
+                  const isSelected = selectedDice.includes(dice.id);
+                  const isInactive = dice.isOne;
+                  
+                  return (
+                    <div 
+                      key={dice.id} 
+                      className={`result-dice-item ${isSelected ? 'selected' : ''} ${isInactive ? 'inactive' : ''}`}
+                      onMouseDown={(e) => handleResultDiceClick(dice.id, e)}
+                      title={
+                        isInactive 
+                          ? 'Выпала 1 - нельзя выбрать' 
+                          : `Левый клик - добавить в результат\nПравый клик - убрать из результата`
+                      }
+                    >
+                      <DiceIcon 
+                        type={dice.type} 
+                        value={dice.rolledValue}
+                        clickable={!isInactive}
+                      />
+                      <div className="dice-info">
+                        <div className="dice-attribute">{dice.attribute}</div>
+                        <div className="dice-roll">{dice.rolledValue}</div>
+                        {isSelected && <div className="selected-indicator">✓</div>}
+                        {isInactive && <div className="inactive-indicator">✗</div>}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Подсказка */}
+            <div className="results-hint">
+              💡 Кликайте по кубам: левая кнопка - добавить в результат, правая - убрать
             </div>
           </div>
         )}
@@ -205,7 +303,6 @@ const CharacterSheet = () => {
             <div className="history-list">
               {rollHistory.map(roll => (
                 <div key={roll.id} className="history-item">
-                  <span className="history-total">{roll.total}</span>
                   <span className="history-time">{roll.timestamp}</span>
                   <div className="history-dice">
                     {roll.results.map((dice, index) => (
