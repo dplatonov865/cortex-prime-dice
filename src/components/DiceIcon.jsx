@@ -38,15 +38,17 @@ const DiceIcon = ({ type, value, onClick, clickable = false }) => {
         width: '24px',
         height: '24px',
         backgroundColor: '#4d96ff',
-        clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
+        clipPath: 'polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%)',
         color: 'white',
       },
       d12: {
-        width: '24px',
-        height: '24px',
+        width: '26px',
+        height: '26px',
         backgroundColor: '#9d4edd',
-        clipPath: 'polygon(50% 0%, 85% 10%, 100% 40%, 85% 70%, 50% 100%, 15% 70%, 0% 40%, 15% 10%)',
+        // Правильный десятиугольник (decagon)
+        clipPath: 'polygon(50% 0%, 80% 10%, 95% 35%, 95% 65%, 80% 90%, 50% 100%, 20% 90%, 5% 65%, 5% 35%, 20% 10%)',
         color: 'white',
+        fontSize: '12px', // Чуть меньше текст для лучшего отображения
       },
     };
 
