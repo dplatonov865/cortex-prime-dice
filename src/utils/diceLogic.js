@@ -1,3 +1,28 @@
+// Порядок рангов для осложнений
+export const RANK_ORDER = ['0', 'd4', 'd6', 'd8', 'd10', 'd12'];
+
+// Получение следующего ранга
+export const getNextRank = (currentRank) => {
+  const currentIndex = RANK_ORDER.indexOf(currentRank);
+  return currentIndex < RANK_ORDER.length - 1 ? RANK_ORDER[currentIndex + 1] : currentRank;
+};
+
+// Получение предыдущего ранга
+export const getPreviousRank = (currentRank) => {
+  const currentIndex = RANK_ORDER.indexOf(currentRank);
+  return currentIndex > 0 ? RANK_ORDER[currentIndex - 1] : currentRank;
+};
+
+// Проверка, можно ли повысить ранг
+export const canIncreaseRank = (currentRank) => {
+  return RANK_ORDER.indexOf(currentRank) < RANK_ORDER.length - 1;
+};
+
+// Проверка, можно ли понизить ранг
+export const canDecreaseRank = (currentRank) => {
+  return RANK_ORDER.indexOf(currentRank) > 0;
+};
+
 // Вычисление куба эффекта
 export const calculateEffectDie = (results, selectedIds, setEffectDie) => {
   // Доступные кубы: не выбранные и не единицы и не нули
@@ -18,19 +43,4 @@ export const calculateEffectDie = (results, selectedIds, setEffectDie) => {
   }, availableDice[0]);
 
   setEffectDie(maxDie.type);
-};
-
-// Порядок рангов для осложнений
-export const RANK_ORDER = ['0', 'd4', 'd6', 'd8', 'd10', 'd12'];
-
-// Получение следующего ранга
-export const getNextRank = (currentRank) => {
-  const currentIndex = RANK_ORDER.indexOf(currentRank);
-  return currentIndex < RANK_ORDER.length - 1 ? RANK_ORDER[currentIndex + 1] : currentRank;
-};
-
-// Получение предыдущего ранга
-export const getPreviousRank = (currentRank) => {
-  const currentIndex = RANK_ORDER.indexOf(currentRank);
-  return currentIndex > 0 ? RANK_ORDER[currentIndex - 1] : currentRank;
 };

@@ -1,21 +1,18 @@
 import React from 'react';
 import DiceIcon from './DiceIcon';
+import { RANK_ORDER, getNextRank, getPreviousRank } from '../utils/diceLogic';
 
 const ComplicationBlock = ({ complications, onComplicationClick, onComplicationChange }) => {
-  const rankOrder = ['0', 'd4', 'd6', 'd8', 'd10', 'd12'];
-  
   const handleIncrease = (complicationName, currentRank) => {
-    const currentIndex = rankOrder.indexOf(currentRank);
-    if (currentIndex < rankOrder.length - 1) {
-      const newRank = rankOrder[currentIndex + 1];
+    const newRank = getNextRank(currentRank);
+    if (newRank !== currentRank) {
       onComplicationChange(complicationName, newRank);
     }
   };
 
   const handleDecrease = (complicationName, currentRank) => {
-    const currentIndex = rankOrder.indexOf(currentRank);
-    if (currentIndex > 0) {
-      const newRank = rankOrder[currentIndex - 1];
+    const newRank = getPreviousRank(currentRank);
+    if (newRank !== currentRank) {
       onComplicationChange(complicationName, newRank);
     }
   };
@@ -37,38 +34,38 @@ const ComplicationBlock = ({ complications, onComplicationClick, onComplicationC
           >
             <span className="complication-name">{name}</span>
             
-            <div className="complication-controls">
-              <button
-                className="rank-button increase-button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleIncrease(name, diceType);
-                }}
-                disabled={diceType === 'd12'}
-                title="Повысить ранг"
-              >
-                ▲
-              </button>
+            <div className="complication-controls-right">
+              <DiceIcon 
+                type={diceType} 
+                value={diceType === '0' ? '0' : diceType.replace('d', '')}
+                clickable={false}
+              />
               
-              <div className="complication-dice">
-                <DiceIcon 
-                  type={diceType} 
-                  value={diceType === '0' ? '0' : diceType.replace('d', '')}
-                  clickable={false}
-                />
+              <div className="rank-buttons-horizontal">
+                <button
+                  className="rank-button decrease-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDecrease(name, diceType);
+                  }}
+                  disabled={diceType === '0'}
+                  title="Понизить ранг"
+                >
+                  ◀
+                </button>
+                
+                <button
+                  className="rank-button increase-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleIncrease(name, diceType);
+                  }}
+                  disabled={diceType === 'd12'}
+                  title="Повысить ранг"
+                >
+                  ▶
+                </button>
               </div>
-              
-              <button
-                className="rank-button decrease-button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDecrease(name, diceType);
-                }}
-                disabled={diceType === '0'}
-                title="Понизить ранг"
-              >
-                ▼
-              </button>
             </div>
           </div>
         ))}

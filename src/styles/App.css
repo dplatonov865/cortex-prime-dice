@@ -944,3 +944,86 @@ body {
     border-radius: 0 2px 2px 0;
   }
 }
+/* Обновленные стили для блока осложнений с горизонтальным расположением кнопок */
+.complication-controls-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 10px;
+}
+
+.rank-buttons-horizontal {
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+}
+
+.rank-buttons-horizontal .rank-button {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: #34495e;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.rank-buttons-horizontal .rank-button:hover:not(:disabled) {
+  background: #2c3e50;
+  transform: scale(1.1);
+}
+
+.rank-buttons-horizontal .rank-button:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.rank-buttons-horizontal .decrease-button {
+  border-radius: 3px 0 0 3px;
+}
+
+.rank-buttons-horizontal .increase-button {
+  border-radius: 0 3px 3px 0;
+}
+
+/* Адаптивность для новых кнопок */
+@media (max-width: 768px) {
+  .complication-controls-right {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .rank-buttons-horizontal {
+    gap: 1px;
+  }
+  
+  .rank-buttons-horizontal .rank-button {
+    width: 22px;
+    height: 22px;
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 480px) {
+  .complication-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .complication-controls-right {
+    width: 100%;
+    justify-content: space-between;
+    margin-left: 0;
+  }
+  
+  .rank-buttons-horizontal {
+    gap: 4px;
+  }
+}
