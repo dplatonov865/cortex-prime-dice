@@ -1,0 +1,8 @@
+/* Импорт всех стилевых модулей */
+@import './base.css';
+@import './layout.css';
+@import './components/blocks.css';
+@import './components/dice.css';
+@import './components/buttons.css';
+@import './components/results.css';
+@import './responsive.css';

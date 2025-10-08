@@ -1,0 +1,51 @@
+/* Кнопки управления пулом */
+.pool-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.roll-button, .clear-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.roll-button {
+  background: #27ae60;
+  color: white;
+}
+
+.roll-button:hover:not(:disabled) {
+  background: #219653;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+}
+
+.roll-button:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.clear-button {
+  background: #e74c3c;
+  color: white;
+}
+
+.clear-button:hover:not(:disabled) {
+  background: #c0392b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.clear-button:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
