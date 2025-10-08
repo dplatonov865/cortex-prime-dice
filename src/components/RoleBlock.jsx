@@ -1,7 +1,22 @@
 import React from 'react';
 import DiceIcon from './DiceIcon';
+import { RANK_ORDER, getNextRank, getPreviousRank } from '../utils/diceLogic';
 
-const RoleBlock = ({ roles, onRoleClick }) => {
+const RoleBlock = ({ roles, onRoleClick, onRoleChange }) => {
+  const handleIncrease = (roleName, currentRank) => {
+    const newRank = getNextRank(currentRank);
+    if (newRank !== currentRank && onRoleChange) {
+      onRoleChange(roleName, newRank);
+    }
+  };
+
+  const handleDecrease = (roleName, currentRank) => {
+    const newRank = getPreviousRank(currentRank);
+    if (newRank !== currentRank && onRoleChange) {
+      onRoleChange(roleName, newRank);
+    }
+  };
+
   const handleRoleClick = (roleName, diceType) => {
     onRoleClick(roleName, diceType);
   };
@@ -18,11 +33,40 @@ const RoleBlock = ({ roles, onRoleClick }) => {
             title="Клик чтобы добавить куб в пул"
           >
             <span className="role-name">{name}</span>
-            <DiceIcon 
-              type={diceType} 
-              value={diceType.replace('d', '')}
-              clickable={false}
-            />
+            
+            <div className="role-controls">
+              <DiceIcon 
+                type={diceType} 
+                value={diceType.replace('d', '')}
+                clickable={false}
+              />
+              
+              <div className="rank-buttons-vertical">
+                <button
+                  className="rank-button increase-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleIncrease(name, diceType);
+                  }}
+                  disabled={diceType === 'd12'}
+                  title="Повысить ранг"
+                >
+                  ▲
+                </button>
+                
+                <button
+                  className="rank-button decrease-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDecrease(name, diceType);
+                  }}
+                  disabled={diceType === 'd4'}
+                  title="Понизить ранг"
+                >
+                  ▼
+                </button>
+              </div>
+            </div>
           </div>
         ))}
       </div>

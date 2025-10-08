@@ -60,6 +60,21 @@ const CharacterSheet = () => {
     addToDicePool(complicationName, diceType, 'complication');
   };
 
+  // Обработчики изменения рангов
+  const handleAttributeChange = (attributeName, newRank) => {
+    setAttributes(prev => ({
+      ...prev,
+      [attributeName]: newRank
+    }));
+  };
+
+  const handleRoleChange = (roleName, newRank) => {
+    setRoles(prev => ({
+      ...prev,
+      [roleName]: newRank
+    }));
+  };
+
   const handleComplicationChange = (complicationName, newRank) => {
     setComplications(prev => ({
       ...prev,
@@ -78,11 +93,13 @@ const CharacterSheet = () => {
         <AttributeBlock 
           attributes={attributes} 
           onAttributeClick={handleAttributeClick}
+          onAttributeChange={handleAttributeChange}
         />
         
         <RoleBlock 
           roles={roles} 
           onRoleClick={handleRoleClick}
+          onRoleChange={handleRoleChange}
         />
         
         <ComplicationBlock 

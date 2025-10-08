@@ -1027,3 +1027,79 @@ body {
     gap: 4px;
   }
 }
+/* Стили для управления атрибутами и ролями */
+.attribute-controls,
+.role-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rank-buttons-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.rank-buttons-vertical .rank-button {
+  width: 20px;
+  height: 16px;
+  border: none;
+  background: #34495e;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+.rank-buttons-vertical .rank-button:hover:not(:disabled) {
+  background: #2c3e50;
+  transform: scale(1.1);
+}
+
+.rank-buttons-vertical .rank-button:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.rank-buttons-vertical .increase-button {
+  border-radius: 2px 2px 0 0;
+}
+
+.rank-buttons-vertical .decrease-button {
+  border-radius: 0 0 2px 2px;
+}
+
+/* Адаптивность для вертикальных кнопок */
+@media (max-width: 768px) {
+  .attribute-controls,
+  .role-controls {
+    gap: 6px;
+  }
+  
+  .rank-buttons-vertical .rank-button {
+    width: 18px;
+    height: 14px;
+    font-size: 7px;
+  }
+}
+
+@media (max-width: 480px) {
+  .attribute-row,
+  .role-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .attribute-controls,
+  .role-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

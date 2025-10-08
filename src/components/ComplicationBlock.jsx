@@ -51,7 +51,7 @@ const ComplicationBlock = ({ complications, onComplicationClick, onComplicationC
                   disabled={diceType === '0'}
                   title="Понизить ранг"
                 >
-                  ◀
+                  ▼
                 </button>
                 
                 <button
@@ -63,7 +63,7 @@ const ComplicationBlock = ({ complications, onComplicationClick, onComplicationC
                   disabled={diceType === 'd12'}
                   title="Повысить ранг"
                 >
-                  ▶
+                  ▲
                 </button>
               </div>
             </div>
