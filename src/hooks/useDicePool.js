@@ -5,7 +5,12 @@ export const useDicePool = () => {
 
   // Добавление куба в пул
   const addToDicePool = (name, diceType, category) => {
-    // Не добавляем осложнения с рангом "0"
+    // Не добавляем осложнения с рангом "0" или не d4
+    if (category === 'complication' && diceType !== 'd4') {
+      return;
+    }
+    
+    // Для остальных категорий проверяем только 0
     if (diceType === '0') return;
     
     const newDice = {

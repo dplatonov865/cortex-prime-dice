@@ -1,7 +1,7 @@
 /* Блок атрибутов */
-.attributes-block {
+/* .attributes-block {
   grid-column: 1;
-}
+} */
 
 .attributes-block h3 {
   margin-bottom: 15px;
@@ -50,9 +50,9 @@
 }
 
 /* Блок ролей */
-.roles-block {
+/* .roles-block {
   grid-column: 2;
-}
+} */
 
 .roles-block h3 {
   margin-bottom: 15px;
@@ -101,9 +101,9 @@
 }
 
 /* Блок осложнений */
-.complications-block {
+/* .complications-block {
   grid-column: 3;
-}
+} */
 
 .complications-block h3 {
   margin-bottom: 15px;
@@ -135,10 +135,31 @@
   transform: translateX(5px);
 }
 
+/* Стили для неактивных осложнений (ранг не d4) */
+.complication-row.complication-disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.complication-row.complication-disabled:hover {
+  background: #f8f9fa !important;
+  transform: none;
+}
+
+.complication-row.complication-disabled .complication-name {
+  color: #7f8c8d;
+}
+
 .complication-name {
   font-weight: 600;
   color: #2c3e50;
   flex: 1;
+}
+
+.complication-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .complication-hint {
@@ -152,6 +173,16 @@
   border-left: 3px solid #e74c3c;
 }
 
+/* Индикатор доступности для кубов осложнений */
+.complication-disabled .dice-clickable {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.complication-disabled .dice-clickable:hover {
+  transform: none;
+  filter: none;
+}
 /* Пустые блоки */
 .empty-block {
   display: flex;
@@ -245,9 +276,9 @@
   font-weight: 500;
 }
 /* Блок отличий */
-.distinctions-block {
+/* .distinctions-block {
   grid-column: 4;
-}
+} */
 
 .distinctions-block h3 {
   margin-bottom: 15px;
@@ -337,9 +368,9 @@
   border-left: 3px solid #f39c12;
 }
 /* Блок специальностей */
-.specialties-block {
+/* .specialties-block {
   grid-column: 5;
-}
+} */
 
 .specialties-block h3 {
   margin-bottom: 15px;
