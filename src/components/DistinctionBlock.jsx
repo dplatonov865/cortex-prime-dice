@@ -1,9 +1,19 @@
 import React from 'react';
 import DiceIcon from './DiceIcon';
 
-const DistinctionBlock = ({ distinctions, onDistinctionClick }) => {
+const DistinctionBlock = ({ distinctions, onDistinctionClick, onDistinctionChange }) => {
   const handleDistinctionClick = (distinctionName, diceType, category) => {
     onDistinctionClick(distinctionName, diceType, category);
+  };
+
+  const handleNameChange = (category, newName) => {
+    onDistinctionChange(category, newName);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.target.blur();
+    }
   };
 
   return (
@@ -12,9 +22,17 @@ const DistinctionBlock = ({ distinctions, onDistinctionClick }) => {
       <div className="distinctions-list">
         {Object.entries(distinctions).map(([category, distinction]) => (
           <div key={category} className="distinction-category">
-            <h4 className="distinction-title">{category}</h4>
+            <h4 className="distinction-title">{getCategoryTitle(category)}</h4>
             <div className="distinction-row">
-              <span className="distinction-name">{distinction.name}</span>
+              <input
+                type="text"
+                className="distinction-input"
+                value={distinction.name}
+                onChange={(e) => handleNameChange(category, e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Введите отличительную черту..."
+                maxLength={30}
+              />
               
               <div className="distinction-dice">
                 <div 
@@ -22,7 +40,7 @@ const DistinctionBlock = ({ distinctions, onDistinctionClick }) => {
                   onClick={() => handleDistinctionClick(
                     distinction.name, 
                     'd8', 
-                    `${category} (d8)`
+                    `${getCategoryTitle(category)} (d8)`
                   )}
                   title="Клик чтобы добавить d8 в пул"
                 >
@@ -38,7 +56,7 @@ const DistinctionBlock = ({ distinctions, onDistinctionClick }) => {
                   onClick={() => handleDistinctionClick(
                     distinction.name, 
                     'd4', 
-                    `${category} (d4)`
+                    `${getCategoryTitle(category)} (d4)`
                   )}
                   title="Клик чтобы добавить d4 в пул"
                 >
@@ -54,10 +72,20 @@ const DistinctionBlock = ({ distinctions, onDistinctionClick }) => {
         ))}
       </div>
       <div className="distinction-hint">
-        💡 Кликайте по кубам чтобы добавить их в пул
+        💡 Кликайте по кубам чтобы добавить их в пул. Текст можно редактировать.
       </div>
     </div>
   );
+};
+
+// Функция для получения заголовка категории
+const getCategoryTitle = (category) => {
+  const titles = {
+    'past': 'Прошлое',
+    'trait': 'Характеристика',
+    'value': 'Ценность'
+  };
+  return titles[category] || category;
 };
 
 export default DistinctionBlock;

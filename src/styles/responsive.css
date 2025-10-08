@@ -89,6 +89,10 @@
         gap: 8px;
     }
 
+    .distinction-input {
+        width: 100%;
+    }
+
     .distinction-dice {
         width: 100%;
         justify-content: flex-start;
@@ -150,5 +154,10 @@
 
     .distinction-dice {
         gap: 6px;
+    }
+
+    .distinction-input {
+        font-size: 0.85rem;
+        padding: 5px 6px;
     }
 }

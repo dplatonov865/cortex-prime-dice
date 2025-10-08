@@ -38,13 +38,13 @@ const CharacterSheet = () => {
   });
 
   const [distinctions, setDistinctions] = useState({
-    'Прошлое': {
+    'past': {
       name: 'Ботаник'
     },
-    'Архетип': {
+    'trait': {
       name: 'Хладнокровный'
     },
-    'Ценность': {
+    'value': {
       name: 'Дружба'
     }
   });
@@ -100,6 +100,17 @@ const CharacterSheet = () => {
     }));
   };
 
+  // Обработчик изменения отличий
+  const handleDistinctionChange = (category, newName) => {
+    setDistinctions(prev => ({
+      ...prev,
+      [category]: {
+        ...prev[category],
+        name: newName
+      }
+    }));
+  };
+
   // Обработчик броска
   const handleRollDice = () => {
     rollDicePool(dicePool, setDicePool);
@@ -129,6 +140,7 @@ const CharacterSheet = () => {
         <DistinctionBlock 
           distinctions={distinctions} 
           onDistinctionClick={handleDistinctionClick}
+          onDistinctionChange={handleDistinctionChange}
         />
         
         <div className="block empty-block">
