@@ -13,7 +13,7 @@ export const useDicePool = () => {
       name: name,
       type: diceType,
       value: diceType === '0' ? '0' : parseInt(diceType.replace('d', '')),
-      category: category // 'attribute', 'role' или 'complication'
+      category: category // 'attribute', 'role', 'complication', или 'distinction: [категория]'
     };
     
     setDicePool(prev => [...prev, newDice]);

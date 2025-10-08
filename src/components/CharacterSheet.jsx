@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AttributeBlock from '../components/AttributeBlock';
 import RoleBlock from '../components/RoleBlock';
 import ComplicationBlock from '../components/ComplicationBlock';
+import DistinctionBlock from '../components/DistinctionBlock';
 import DicePoolBlock from '../components/DicePoolBlock';
 import ResultsBlock from '../components/ResultsBlock';
 import { useDicePool } from '../hooks/useDicePool';
@@ -23,7 +24,8 @@ const CharacterSheet = () => {
     'Дипломат': 'd6',
     'Эксперт': 'd6',
     'Мастер': 'd6',
-    'Преступник': 'd6'
+    'Преступник': 'd6',
+    'Детектив': 'd6'
   });
 
   const [complications, setComplications] = useState({
@@ -33,6 +35,18 @@ const CharacterSheet = () => {
     'Забывчивость': '0',
     'Рассеянность': '0',
     'Неуверенность': '0'
+  });
+
+  const [distinctions, setDistinctions] = useState({
+    'Прошлое': {
+      name: 'Ботаник'
+    },
+    'Архетип': {
+      name: 'Хладнокровный'
+    },
+    'Ценность': {
+      name: 'Дружба'
+    }
   });
 
   // Хуки для управления логикой
@@ -58,6 +72,10 @@ const CharacterSheet = () => {
 
   const handleComplicationClick = (complicationName, diceType) => {
     addToDicePool(complicationName, diceType, 'complication');
+  };
+
+  const handleDistinctionClick = (distinctionName, diceType, category) => {
+    addToDicePool(distinctionName, diceType, `distinction: ${category}`);
   };
 
   // Обработчики изменения рангов
@@ -108,10 +126,10 @@ const CharacterSheet = () => {
           onComplicationChange={handleComplicationChange}
         />
         
-        <div className="block empty-block">
-          <h3>Блок 4</h3>
-          <p>Здесь будет дополнительная информация</p>
-        </div>
+        <DistinctionBlock 
+          distinctions={distinctions} 
+          onDistinctionClick={handleDistinctionClick}
+        />
         
         <div className="block empty-block">
           <h3>Блок 5</h3>

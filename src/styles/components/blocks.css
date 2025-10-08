@@ -244,3 +244,79 @@
   word-break: break-word;
   font-weight: 500;
 }
+/* Блок отличий */
+.distinctions-block {
+  grid-column: 4;
+}
+
+.distinctions-block h3 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+  border-bottom: 2px solid #f39c12;
+  padding-bottom: 5px;
+}
+
+.distinctions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.distinction-category {
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 3px solid #f39c12;
+}
+
+.distinction-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #e67e22;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.distinction-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.distinction-name {
+  font-weight: 500;
+  color: #2c3e50;
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.distinction-dice {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.distinction-dice-item {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  padding: 2px;
+}
+
+.distinction-dice-item:hover {
+  transform: scale(1.1);
+  background: rgba(243, 156, 18, 0.1);
+}
+
+.distinction-hint {
+  margin-top: 15px;
+  padding: 10px;
+  background: #fff9e6;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: #e67e22;
+  text-align: center;
+  border-left: 3px solid #f39c12;
+}
