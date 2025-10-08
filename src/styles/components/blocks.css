@@ -567,3 +567,52 @@
 .specialties-list::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
 }
+.category-used {
+  opacity: 0.8;
+  position: relative;
+}
+
+.category-used::before {
+  content: "✓ В ПУЛЕ";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #27ae60;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  z-index: 1;
+}
+
+.row-disabled {
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}
+
+.row-disabled:hover {
+  transform: none !important;
+  background: #f8f9fa !important;
+}
+
+.dice-disabled {
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}
+
+.dice-disabled:hover {
+  transform: none !important;
+  background: transparent !important;
+}
+
+/* Отключаем кнопки в использованных блоках */
+.category-used .rank-button:disabled {
+  background: #95a5a6;
+}
+
+.category-used input:disabled {
+  background: #ecf0f1;
+  color: #7f8c8d;
+  cursor: not-allowed;
+}

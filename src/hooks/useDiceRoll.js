@@ -9,7 +9,7 @@ export const useDiceRoll = () => {
   const [rollHistory, setRollHistory] = useState([]);
 
   // Бросок всех кубов в пуле
-  const rollDicePool = (dicePool, setDicePool) => {
+  const rollDicePool = (dicePool, setDicePool, clearUsedCategories) => {
     if (dicePool.length === 0) return;
 
     const results = dicePool.map(dice => {
@@ -45,8 +45,11 @@ export const useDiceRoll = () => {
       ...prev.slice(0, 4)
     ]);
 
-    // Очищаем пул
+    // Очищаем пул и сбрасываем использованные категории
     setDicePool([]);
+    if (clearUsedCategories) {
+      clearUsedCategories();
+    }
   };
 
   // Обработчик кликов по результатам броска

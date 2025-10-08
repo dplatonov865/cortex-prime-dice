@@ -51,14 +51,23 @@ const CharacterSheet = () => {
   });
 
   const [specialties, setSpecialties] = useState({
-    // Начальные примеры
     '1': { name: 'Стрельба из пистолета' },
     '2': { name: 'Вождение автомобиля' },
     '3': { name: 'Первая помощь' }
   });
 
   // Хуки для управления логикой
-  const { dicePool, addToDicePool, removeFromDicePool, clearDicePool, setDicePool } = useDicePool();
+  const { 
+    dicePool, 
+    usedCategories,
+    addToDicePool, 
+    removeFromDicePool, 
+    clearDicePool, 
+    clearUsedCategories,
+    isCategoryAvailable,
+    setDicePool 
+  } = useDicePool();
+  
   const { 
     rollResults, 
     selectedDice, 
@@ -145,7 +154,7 @@ const CharacterSheet = () => {
 
   // Обработчик броска
   const handleRollDice = () => {
-    rollDicePool(dicePool, setDicePool);
+    rollDicePool(dicePool, setDicePool, clearUsedCategories);
   };
 
   return (
@@ -155,30 +164,35 @@ const CharacterSheet = () => {
           attributes={attributes} 
           onAttributeClick={handleAttributeClick}
           onAttributeChange={handleAttributeChange}
+          isCategoryAvailable={isCategoryAvailable}
         />
         
         <RoleBlock 
           roles={roles} 
           onRoleClick={handleRoleClick}
           onRoleChange={handleRoleChange}
+          isCategoryAvailable={isCategoryAvailable}
         />
         
         <ComplicationBlock 
           complications={complications} 
           onComplicationClick={handleComplicationClick}
           onComplicationChange={handleComplicationChange}
+          isCategoryAvailable={isCategoryAvailable}
         />
         
         <DistinctionBlock 
           distinctions={distinctions} 
           onDistinctionClick={handleDistinctionClick}
           onDistinctionChange={handleDistinctionChange}
+          isCategoryAvailable={isCategoryAvailable}
         />
         
         <SpecialtiesBlock 
           specialties={specialties} 
           onSpecialtyClick={handleSpecialtyClick}
           onSpecialtiesChange={handleSpecialtiesChange}
+          isCategoryAvailable={isCategoryAvailable}
         />
       </div>
       

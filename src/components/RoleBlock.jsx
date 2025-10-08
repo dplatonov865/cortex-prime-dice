@@ -1,8 +1,8 @@
 import React from 'react';
 import DiceIcon from './DiceIcon';
-import { ATTRIBUTE_RANK_ORDER, getNextRank, getPreviousRank } from '../utils/diceLogic';
+import { getNextRank, getPreviousRank } from '../utils/diceLogic';
 
-const RoleBlock = ({ roles, onRoleClick, onRoleChange }) => {
+const RoleBlock = ({ roles, onRoleClick, onRoleChange, isCategoryAvailable }) => {
   const handleIncrease = (roleName, currentRank) => {
     const newRank = getNextRank(currentRank);
     if (newRank !== currentRank && onRoleChange) {
@@ -18,19 +18,28 @@ const RoleBlock = ({ roles, onRoleClick, onRoleChange }) => {
   };
 
   const handleRoleClick = (roleName, diceType) => {
+    if (isCategoryAvailable && !isCategoryAvailable('role')) {
+      return;
+    }
     onRoleClick(roleName, diceType);
   };
 
+  const isBlockAvailable = isCategoryAvailable ? isCategoryAvailable('role') : true;
+
   return (
-    <div className="block roles-block">
+    <div className={`block roles-block ${!isBlockAvailable ? 'category-used' : ''}`}>
       <h3>Роли</h3>
       <div className="roles-list">
         {Object.entries(roles).map(([name, diceType]) => (
           <div 
             key={name} 
-            className="role-row"
+            className={`role-row ${!isBlockAvailable ? 'row-disabled' : ''}`}
             onClick={() => handleRoleClick(name, diceType)}
-            title="Клик чтобы добавить куб в пул"
+            title={
+              !isBlockAvailable 
+                ? 'Уже используется роль из этого набора' 
+                : 'Клик чтобы добавить куб в пул'
+            }
           >
             <span className="role-name">{name}</span>
             
@@ -38,7 +47,7 @@ const RoleBlock = ({ roles, onRoleClick, onRoleChange }) => {
               <DiceIcon 
                 type={diceType} 
                 value={diceType.replace('d', '')}
-                clickable={false}
+                clickable={isBlockAvailable}
               />
               
               <div className="rank-buttons-vertical">
@@ -48,7 +57,7 @@ const RoleBlock = ({ roles, onRoleClick, onRoleChange }) => {
                     e.stopPropagation();
                     handleIncrease(name, diceType);
                   }}
-                  disabled={diceType === 'd12'}
+                  disabled={diceType === 'd12' || !isBlockAvailable}
                   title="Повысить ранг"
                 >
                   ▲
@@ -60,7 +69,7 @@ const RoleBlock = ({ roles, onRoleClick, onRoleChange }) => {
                     e.stopPropagation();
                     handleDecrease(name, diceType);
                   }}
-                  disabled={diceType === 'd4'}
+                  disabled={diceType === 'd4' || !isBlockAvailable}
                   title="Понизить ранг"
                 >
                   ▼
@@ -71,7 +80,10 @@ const RoleBlock = ({ roles, onRoleClick, onRoleChange }) => {
         ))}
       </div>
       <div className="role-hint">
-        💡 Кликайте по ролям чтобы добавить кубы в пул
+        {!isBlockAvailable 
+          ? '⚡ Роль уже используется в пуле' 
+          : '💡 Кликайте по ролям чтобы добавить кубы в пул'
+        }
       </div>
     </div>
   );

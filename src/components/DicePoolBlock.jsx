@@ -69,7 +69,12 @@ const getCategoryLabel = (category) => {
     case 'attribute': return 'Атрибут';
     case 'role': return 'Роль';
     case 'complication': return 'Осложнение';
-    default: return category;
+    case 'specialty': return 'Специальность';
+    default: 
+      if (category.startsWith('distinction:')) {
+        return 'Отличие';
+      }
+      return category;
   }
 };
 

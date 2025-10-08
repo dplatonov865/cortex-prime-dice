@@ -2,7 +2,7 @@ import React from 'react';
 import DiceIcon from './DiceIcon';
 import { getNextComplicationRank, getPreviousComplicationRank } from '../utils/diceLogic';
 
-const ComplicationBlock = ({ complications, onComplicationClick, onComplicationChange }) => {
+const ComplicationBlock = ({ complications, onComplicationClick, onComplicationChange, isCategoryAvailable }) => {
   const handleIncrease = (complicationName, currentRank) => {
     const newRank = getNextComplicationRank(currentRank);
     if (newRank !== currentRank) {
@@ -18,26 +18,35 @@ const ComplicationBlock = ({ complications, onComplicationClick, onComplicationC
   };
 
   const handleComplicationClick = (complicationName, diceType) => {
+    // Проверяем доступность категории
+    if (isCategoryAvailable && !isCategoryAvailable('complication')) {
+      return;
+    }
+    
     // Разрешаем добавление в пул только если ранг d4
     if (diceType === 'd4') {
       onComplicationClick(complicationName, diceType);
     }
   };
 
+  const isBlockAvailable = isCategoryAvailable ? isCategoryAvailable('complication') : true;
+
   return (
-    <div className="block complications-block">
+    <div className={`block complications-block ${!isBlockAvailable ? 'category-used' : ''}`}>
       <h3>Осложнения</h3>
       <div className="complications-list">
         {Object.entries(complications).map(([name, diceType]) => {
-          const isClickable = diceType === 'd4';
+          const isClickable = diceType === 'd4' && isBlockAvailable;
           
           return (
             <div 
               key={name} 
-              className={`complication-row ${!isClickable ? 'complication-disabled' : ''}`}
+              className={`complication-row ${!isClickable ? 'complication-disabled' : ''} ${!isBlockAvailable ? 'row-disabled' : ''}`}
               onClick={() => handleComplicationClick(name, diceType)}
               title={
-                diceType === '0' 
+                !isBlockAvailable 
+                  ? 'Уже используется осложнение из этого набора'
+                  : diceType === '0' 
                   ? 'Осложнение отсутствует' 
                   : diceType === 'd4'
                   ? 'Клик чтобы добавить куб в пул'
@@ -60,7 +69,7 @@ const ComplicationBlock = ({ complications, onComplicationClick, onComplicationC
                       e.stopPropagation();
                       handleIncrease(name, diceType);
                     }}
-                    disabled={diceType === 'd12'}
+                    disabled={diceType === 'd12' || !isBlockAvailable}
                     title="Повысить ранг"
                   >
                     ▲
@@ -72,7 +81,7 @@ const ComplicationBlock = ({ complications, onComplicationClick, onComplicationC
                       e.stopPropagation();
                       handleDecrease(name, diceType);
                     }}
-                    disabled={diceType === '0'}
+                    disabled={diceType === '0' || !isBlockAvailable}
                     title="Понизить ранг"
                   >
                     ▼
@@ -84,7 +93,10 @@ const ComplicationBlock = ({ complications, onComplicationClick, onComplicationC
         })}
       </div>
       <div className="complication-hint">
-        💡 В пул можно добавлять только осложнения с рангом d4
+        {!isBlockAvailable 
+          ? '⚡ Осложнение уже используется в пуле' 
+          : '💡 В пул можно добавлять только осложнения с рангом d4'
+        }
       </div>
     </div>
   );
