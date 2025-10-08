@@ -828,11 +828,6 @@ body {
   transform: translateX(5px);
 }
 
-.complication-row:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
 .complication-name {
   font-weight: 600;
   color: #2c3e50;
@@ -841,10 +836,40 @@ body {
 
 .complication-controls {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 2px;
-  margin-left: 10px;
+  gap: 8px;
+}
+
+/* Убираем старые стили для горизонтальных кнопок и используем общие для вертикальных */
+.complication-hint {
+  margin-top: 15px;
+  padding: 10px;
+  background: #ffebee;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: #c62828;
+  text-align: center;
+  border-left: 3px solid #e74c3c;
+}
+
+/* Адаптивность для блока осложнений */
+@media (max-width: 768px) {
+  .complication-controls {
+    gap: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .complication-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .complication-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
 }
 
 .rank-button {
@@ -1099,6 +1124,106 @@ body {
   
   .attribute-controls,
   .role-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+/* Общие стили для управления атрибутами, ролями и осложнениями */
+.attribute-controls,
+.role-controls,
+.complication-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rank-buttons-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.rank-buttons-vertical .rank-button {
+  width: 20px;
+  height: 16px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+/* Цвета для разных блоков */
+.attributes-block .rank-button {
+  background: #3498db;
+}
+
+.attributes-block .rank-button:hover:not(:disabled) {
+  background: #2980b9;
+}
+
+.roles-block .rank-button {
+  background: #9b59b6;
+}
+
+.roles-block .rank-button:hover:not(:disabled) {
+  background: #8e44ad;
+}
+
+.complications-block .rank-button {
+  background: #e74c3c;
+}
+
+.complications-block .rank-button:hover:not(:disabled) {
+  background: #c0392b;
+}
+
+/* Общие стили для disabled состояний */
+.rank-buttons-vertical .rank-button:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.rank-buttons-vertical .increase-button {
+  border-radius: 2px 2px 0 0;
+}
+
+.rank-buttons-vertical .decrease-button {
+  border-radius: 0 0 2px 2px;
+}
+
+/* Адаптивность для вертикальных кнопок */
+@media (max-width: 768px) {
+  .attribute-controls,
+  .role-controls,
+  .complication-controls {
+    gap: 6px;
+  }
+  
+  .rank-buttons-vertical .rank-button {
+    width: 18px;
+    height: 14px;
+    font-size: 7px;
+  }
+}
+
+@media (max-width: 480px) {
+  .attribute-row,
+  .role-row,
+  .complication-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .attribute-controls,
+  .role-controls,
+  .complication-controls {
     width: 100%;
     justify-content: space-between;
   }

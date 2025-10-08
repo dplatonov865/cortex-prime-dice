@@ -1,26 +1,31 @@
+// Порядок рангов для атрибутов и ролей (без 0)
+export const ATTRIBUTE_RANK_ORDER = ['d4', 'd6', 'd8', 'd10', 'd12'];
+
 // Порядок рангов для осложнений
-export const RANK_ORDER = ['0', 'd4', 'd6', 'd8', 'd10', 'd12'];
+export const COMPLICATION_RANK_ORDER = ['0', 'd4', 'd6', 'd8', 'd10', 'd12'];
 
-// Получение следующего ранга
+// Получение следующего ранга для атрибутов/ролей
 export const getNextRank = (currentRank) => {
-  const currentIndex = RANK_ORDER.indexOf(currentRank);
-  return currentIndex < RANK_ORDER.length - 1 ? RANK_ORDER[currentIndex + 1] : currentRank;
+  const currentIndex = ATTRIBUTE_RANK_ORDER.indexOf(currentRank);
+  return currentIndex < ATTRIBUTE_RANK_ORDER.length - 1 ? ATTRIBUTE_RANK_ORDER[currentIndex + 1] : currentRank;
 };
 
-// Получение предыдущего ранга
+// Получение предыдущего ранга для атрибутов/ролей
 export const getPreviousRank = (currentRank) => {
-  const currentIndex = RANK_ORDER.indexOf(currentRank);
-  return currentIndex > 0 ? RANK_ORDER[currentIndex - 1] : currentRank;
+  const currentIndex = ATTRIBUTE_RANK_ORDER.indexOf(currentRank);
+  return currentIndex > 0 ? ATTRIBUTE_RANK_ORDER[currentIndex - 1] : currentRank;
 };
 
-// Проверка, можно ли повысить ранг
-export const canIncreaseRank = (currentRank) => {
-  return RANK_ORDER.indexOf(currentRank) < RANK_ORDER.length - 1;
+// Получение следующего ранга для осложнений
+export const getNextComplicationRank = (currentRank) => {
+  const currentIndex = COMPLICATION_RANK_ORDER.indexOf(currentRank);
+  return currentIndex < COMPLICATION_RANK_ORDER.length - 1 ? COMPLICATION_RANK_ORDER[currentIndex + 1] : currentRank;
 };
 
-// Проверка, можно ли понизить ранг
-export const canDecreaseRank = (currentRank) => {
-  return RANK_ORDER.indexOf(currentRank) > 0;
+// Получение предыдущего ранга для осложнений
+export const getPreviousComplicationRank = (currentRank) => {
+  const currentIndex = COMPLICATION_RANK_ORDER.indexOf(currentRank);
+  return currentIndex > 0 ? COMPLICATION_RANK_ORDER[currentIndex - 1] : currentRank;
 };
 
 // Вычисление куба эффекта

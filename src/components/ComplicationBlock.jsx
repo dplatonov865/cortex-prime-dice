@@ -1,17 +1,17 @@
 import React from 'react';
 import DiceIcon from './DiceIcon';
-import { RANK_ORDER, getNextRank, getPreviousRank } from '../utils/diceLogic';
+import { getNextComplicationRank, getPreviousComplicationRank } from '../utils/diceLogic';
 
 const ComplicationBlock = ({ complications, onComplicationClick, onComplicationChange }) => {
   const handleIncrease = (complicationName, currentRank) => {
-    const newRank = getNextRank(currentRank);
+    const newRank = getNextComplicationRank(currentRank);
     if (newRank !== currentRank) {
       onComplicationChange(complicationName, newRank);
     }
   };
 
   const handleDecrease = (complicationName, currentRank) => {
-    const newRank = getPreviousRank(currentRank);
+    const newRank = getPreviousComplicationRank(currentRank);
     if (newRank !== currentRank) {
       onComplicationChange(complicationName, newRank);
     }
@@ -34,26 +34,14 @@ const ComplicationBlock = ({ complications, onComplicationClick, onComplicationC
           >
             <span className="complication-name">{name}</span>
             
-            <div className="complication-controls-right">
+            <div className="complication-controls">
               <DiceIcon 
                 type={diceType} 
                 value={diceType === '0' ? '0' : diceType.replace('d', '')}
                 clickable={false}
               />
               
-              <div className="rank-buttons-horizontal">
-                <button
-                  className="rank-button decrease-button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDecrease(name, diceType);
-                  }}
-                  disabled={diceType === '0'}
-                  title="Понизить ранг"
-                >
-                  ▼
-                </button>
-                
+              <div className="rank-buttons-vertical">
                 <button
                   className="rank-button increase-button"
                   onClick={(e) => {
@@ -64,6 +52,18 @@ const ComplicationBlock = ({ complications, onComplicationClick, onComplicationC
                   title="Повысить ранг"
                 >
                   ▲
+                </button>
+                
+                <button
+                  className="rank-button decrease-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDecrease(name, diceType);
+                  }}
+                  disabled={diceType === '0'}
+                  title="Понизить ранг"
+                >
+                  ▼
                 </button>
               </div>
             </div>

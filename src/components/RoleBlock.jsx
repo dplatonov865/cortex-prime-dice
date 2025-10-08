@@ -1,6 +1,6 @@
 import React from 'react';
 import DiceIcon from './DiceIcon';
-import { RANK_ORDER, getNextRank, getPreviousRank } from '../utils/diceLogic';
+import { ATTRIBUTE_RANK_ORDER, getNextRank, getPreviousRank } from '../utils/diceLogic';
 
 const RoleBlock = ({ roles, onRoleClick, onRoleChange }) => {
   const handleIncrease = (roleName, currentRank) => {
