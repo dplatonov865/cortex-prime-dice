@@ -679,3 +679,157 @@
   color: #7f8c8d;
   cursor: not-allowed;
 }
+
+/* Шапка персонажа */
+.character-header-block {
+  background: rgba(20, 20, 25, 0.95) !important;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(200, 182, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  margin-bottom: 25px;
+  font-family: 'Crimson Text', serif;
+  color: #f0f0f0;
+}
+
+.character-name-section {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.character-name-input {
+  width: 100%;
+  border: none;
+  border-bottom: 3px solid #8a6dff;
+  padding: 15px 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  background: transparent;
+  font-family: 'Playfair Display', serif;
+  color: #f0f0f0;
+  transition: all 0.3s ease;
+}
+
+.character-name-input:focus {
+  outline: none;
+  border-bottom-color: #6dc1ff;
+  box-shadow: 0 4px 12px rgba(138, 109, 255, 0.3);
+}
+
+.character-name-input::placeholder {
+  color: #b8b6b3;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+.character-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+  padding: 20px;
+  background: rgba(40, 45, 70, 0.8);
+  border-radius: 15px;
+  border: 1px solid rgba(138, 109, 255, 0.3);
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #b8b6b3;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: 'Source Code Pro', monospace;
+}
+
+.detail-input {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  font-family: 'Crimson Text', serif;
+  background: rgba(30, 35, 50, 0.8);
+  transition: all 0.2s ease;
+  color: #f0f0f0;
+}
+
+.detail-input:focus {
+  outline: none;
+  border-color: #8a6dff;
+  box-shadow: 0 0 0 2px rgba(138, 109, 255, 0.3);
+  background: rgba(35, 40, 55, 0.9);
+}
+
+.detail-input::placeholder {
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+.detail-input:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.character-description-section {
+  margin-top: 10px;
+}
+
+.description-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #b8b6b3;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: 'Source Code Pro', monospace;
+}
+
+.character-description {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 15px;
+  font-size: 1rem;
+  font-family: 'Crimson Text', serif;
+  background: rgba(30, 35, 50, 0.8);
+  transition: all 0.3s ease;
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.5;
+  color: #f0f0f0;
+}
+
+.character-description:focus {
+  outline: none;
+  border-color: #8a6dff;
+  box-shadow: 0 0 0 2px rgba(138, 109, 255, 0.3);
+  background: rgba(35, 40, 55, 0.9);
+}
+
+.character-description::placeholder {
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+.character-description:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.description-counter {
+  text-align: right;
+  font-size: 0.75rem;
+  color: #7f8c8d;
+  margin-top: 5px;
+  font-family: 'Source Code Pro', monospace;
+}

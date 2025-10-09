@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import CharacterHeader from '../components/CharacterHeader';
 import AttributeBlock from '../components/AttributeBlock';
 import RoleBlock from '../components/RoleBlock';
 import ComplicationBlock from '../components/ComplicationBlock';
@@ -10,6 +11,16 @@ import { useDicePool } from '../hooks/useDicePool';
 import { useDiceRoll } from '../hooks/useDiceRoll';
 
 const CharacterSheet = () => {
+  // Информация о персонаже
+  const [characterInfo, setCharacterInfo] = useState({
+    name: '',
+    player: '',
+    campaign: '',
+    race: '',
+    age: '',
+    description: ''
+  });
+
   // Состояния характеристик
   const [attributes, setAttributes] = useState({
     'Атлетизм': 'd6',
@@ -17,7 +28,7 @@ const CharacterSheet = () => {
     'Хитрость': 'd6',
     'Эрудиция': 'd6',
     'Чутьё': 'd6',
-    'Вера': 'd6'
+    'Убеждённость': 'd6'
   });
 
   const [roles, setRoles] = useState({
@@ -35,7 +46,7 @@ const CharacterSheet = () => {
     'Подозрительность': '0',
     'Забывчивость': '0',
     'Рассеянность': '0',
-    'Неуверенность': '0'
+    'Сомнения': '0'
   });
 
   const [distinctions, setDistinctions] = useState({
@@ -77,6 +88,14 @@ const CharacterSheet = () => {
     rollDicePool, 
     handleResultDiceClick 
   } = useDiceRoll();
+
+  // Обработчик изменения информации о персонаже
+  const handleCharacterInfoChange = (field, value) => {
+    setCharacterInfo(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
 
   // Обработчики кликов
   const handleAttributeClick = (attributeName, diceType) => {
@@ -159,6 +178,13 @@ const CharacterSheet = () => {
 
   return (
     <div className="character-sheet">
+      {/* Шапка персонажа */}
+      <CharacterHeader 
+        characterInfo={characterInfo}
+        onCharacterInfoChange={handleCharacterInfoChange}
+      />
+      
+      {/* Основные блоки характеристик */}
       <div className="main-columns">
         <AttributeBlock 
           attributes={attributes} 

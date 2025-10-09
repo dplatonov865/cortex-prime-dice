@@ -135,6 +135,25 @@
         width: 100%;
         justify-content: space-between;
     }
+
+    .character-header-block {
+        padding: 20px;
+    }
+
+    .character-name-input {
+        font-size: 2rem;
+        padding: 12px 0;
+    }
+
+    .character-details-grid {
+        grid-template-columns: 1fr;
+        padding: 15px;
+    }
+
+    .character-description {
+        min-height: 80px;
+        font-size: 0.9rem;
+    }
 }
 
 /* Адаптивность для мобильных */
@@ -216,5 +235,27 @@
 
     .specialty-controls {
         gap: 10px;
+    }
+
+    .character-header-block {
+        padding: 15px;
+    }
+
+    .character-name-input {
+        font-size: 1.5rem;
+    }
+
+    .character-details-grid {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .detail-input {
+        padding: 8px 10px;
+    }
+
+    .character-description {
+        padding: 12px;
+        min-height: 70px;
     }
 }
