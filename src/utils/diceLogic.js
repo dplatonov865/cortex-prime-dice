@@ -29,14 +29,14 @@ export const getPreviousComplicationRank = (currentRank) => {
 };
 
 // Вычисление куба эффекта
-export const calculateEffectDie = (results, selectedIds, setEffectDie) => {
+export const calculateEffectDie = (results, selectedIds, setEffectDice) => {
   // Доступные кубы: не выбранные и не единицы и не нули
-  const availableDice = results.filter(dice => 
+  const availableDice = results.filter(dice =>
     !selectedIds.includes(dice.id) && !dice.isOne && dice.rolledValue !== 0
   );
 
   if (availableDice.length === 0) {
-    setEffectDie('d4');
+    setEffectDice(['d4']); // ← МАССИВ
     return;
   }
 
@@ -47,5 +47,5 @@ export const calculateEffectDie = (results, selectedIds, setEffectDie) => {
     return diceValue > maxValue ? dice : max;
   }, availableDice[0]);
 
-  setEffectDie(maxDie.type);
+  setEffectDice([maxDie.type]); // ← МАССИВ
 };

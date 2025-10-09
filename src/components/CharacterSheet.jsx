@@ -56,7 +56,7 @@ const CharacterSheet = () => {
     rollResults,
     selectedDice,
     result,
-    effectDie,
+    effectDice,
     rollHistory,
     rollDicePool,
     handleResultDiceClick,
@@ -64,7 +64,7 @@ const CharacterSheet = () => {
     maxSelectedDice,
     setResult,
     setSelectedDice,
-    setEffectDie
+    setEffectDice
   } = useDiceRoll();
 
   // Функция экспорта
@@ -233,20 +233,49 @@ const CharacterSheet = () => {
   const handleActivateBoostResult = () => {
     if (plotTokens > 0) {
       setActiveEffect('boost_result');
-      setPlotTokens(prev => prev - 1);
+      // setPlotTokens(prev => prev - 1);
     }
   };
 
+  // CharacterSheet.jsx - полностью новая логика для handleActivateBoostEffect
   const handleActivateBoostEffect = () => {
-    if (plotTokens > 0) {
-      setActiveEffect('boost_effect');
-      setPlotTokens(prev => prev - 1);
+    if (plotTokens > 0 && rollResults.length > 0) {
+      // Находим доступные кубы для эффекта (не "1", не в результате, не уже используемые как эффект)
+      const availableForEffect = rollResults.filter(dice =>
+        !dice.isOne &&
+        dice.rolledValue !== 0 &&
+        !selectedDice.includes(dice.id) &&
+        !effectDice.includes(dice.type) // ← проверяем на дублирование
+      );
+
+      if (availableForEffect.length > 0) {
+        // Находим куб с максимальным номиналом среди доступных
+        const bestEffectDie = availableForEffect.reduce((max, dice) => {
+          const diceValue = parseInt(dice.type.replace('d', ''));
+          const maxValue = parseInt(max.type.replace('d', ''));
+          return diceValue > maxValue ? dice : max;
+        }, availableForEffect[0]);
+
+        // ДОБАВЛЯЕМ новый куб эффекта к существующим
+        const newEffectDice = [...effectDice, bestEffectDie.type];
+        setEffectDice(newEffectDice);
+
+        // Тратим жетон
+        // setPlotTokens(prev => prev - 1);
+
+        console.log(`Добавлен куб эффекта ${bestEffectDie.type}! Теперь эффекты: ${newEffectDice.join(', ')}`);
+      } else {
+        alert('Нет доступных кубов для повышения эффекта!');
+      }
     }
   };
+
 
   const deactivateEffect = () => {
-    setActiveEffect(null);
-    deactivateAdditionalDie();
+    if (activeEffect !== 'boost_effect') { // boost_effect теперь мгновенный, не требует деактивации
+      setActiveEffect(null);
+      deactivateAdditionalDie();
+    }
   };
 
   // Обработчик для эффекта повышения результата
@@ -268,13 +297,22 @@ const CharacterSheet = () => {
         setResult(newResult);
 
         // Пересчитываем куб эффекта
-        calculateEffectDie(rollResults, newSelectedDice, setEffectDie);
+        calculateEffectDie(rollResults, newSelectedDice, setEffectDice);
 
         // Деактивируем эффект
         deactivateEffect();
 
         console.log(`Куб "${dice.name}" добавлен в результат! Новый результат: ${newResult}`);
       }
+    }
+  };
+  const handleCancelEffect = () => {
+    if (activeEffect) {
+      // Возвращаем жетон
+      setPlotTokens(prev => prev + 1);
+      // Деактивируем эффект
+      deactivateEffect();
+      console.log(`Эффект ${activeEffect} отменен, жетон возвращен`);
     }
   };
 
@@ -336,6 +374,7 @@ const CharacterSheet = () => {
         onActivateAdditionalDie={handleActivateAdditionalDie}
         onActivateBoostResult={handleActivateBoostResult}
         onActivateBoostEffect={handleActivateBoostEffect}
+        onCancelEffect={handleCancelEffect} // ← ДОБАВИТЬ ЭТОТ ПРОПС
         activeEffect={activeEffect}
       />
 
@@ -350,10 +389,11 @@ const CharacterSheet = () => {
         rollResults={rollResults}
         selectedDice={selectedDice}
         result={result}
-        effectDie={effectDie}
+        effectDice={effectDice}
         rollHistory={rollHistory}
         onResultDiceClick={handleResultDiceClick}
         onBoostResultSelection={handleBoostResultSelection}
+        // onBoostEffectSelection УБРАТЬ - больше не нужно
         canSelectDice={canSelectDice}
         maxSelectedDice={maxSelectedDice}
         activeEffect={activeEffect}
