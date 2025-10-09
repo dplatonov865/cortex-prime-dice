@@ -102,7 +102,7 @@ const ResultsSection = ({
   </div>
 );
 
-// Подкомпонент для отдельного куба результата
+// Подкомпонент для отдельного куба результата - УПРОЩЕННАЯ ВЕРСИЯ
 const ResultDiceItem = ({ dice, isSelected, canSelect, isLimitReached, onClick }) => {
   const isInactive = dice.isOne || dice.rolledValue === 0;
   const isDisabled = !isInactive && !canSelect;
@@ -111,23 +111,21 @@ const ResultDiceItem = ({ dice, isSelected, canSelect, isLimitReached, onClick }
     <div 
       className={`result-dice-item ${isSelected ? 'selected' : ''} ${isInactive ? 'inactive' : ''} ${isDisabled ? 'disabled' : ''}`}
       onClick={onClick}
-      title={getDiceTitle(isInactive, isSelected, isDisabled, isLimitReached)}
+      title={getDiceTitle(isInactive, isSelected, isDisabled, isLimitReached, dice)}
     >
-      <DiceIcon 
-        type={dice.type} 
-        value={dice.rolledValue}
-        clickable={!isInactive && !isDisabled}
-      />
-      <div className="dice-info">
-        <div className="dice-category-small">
-          {getCategoryLabel(dice.category)}
-        </div>
+      <div className="dice-content">
+        <DiceIcon 
+          type={dice.type} 
+          value={dice.rolledValue}
+          clickable={!isInactive && !isDisabled}
+        />
         <div className="dice-name">{dice.name}</div>
-        <div className="dice-roll">{dice.rolledValue}</div>
-        {isSelected && <div className="selected-indicator">✓ В результате</div>}
-        {isInactive && <div className="inactive-indicator">✗ Неактивен</div>}
-        {isDisabled && !isSelected && <div className="disabled-indicator">🔒 Лимит</div>}
       </div>
+      
+      {/* Индикаторы статуса */}
+      {isSelected && <div className="selected-indicator">✓</div>}
+      {isInactive && <div className="inactive-indicator">✗</div>}
+      {isDisabled && !isSelected && <div className="disabled-indicator">🔒</div>}
     </div>
   );
 };
@@ -145,12 +143,14 @@ const RollHistory = ({ rollHistory }) => {
             <span className="history-time">{roll.timestamp}</span>
             <div className="history-dice">
               {roll.results.map((dice, index) => (
-                <DiceIcon 
-                  key={index}
-                  type={dice.type} 
-                  value={dice.rolledValue}
-                  clickable={false}
-                />
+                <div key={index} className="history-dice-item">
+                  <DiceIcon 
+                    type={dice.type} 
+                    value={dice.rolledValue}
+                    clickable={false}
+                  />
+                  <span className="history-dice-name">{dice.name}</span>
+                </div>
               ))}
             </div>
           </div>
@@ -160,26 +160,12 @@ const RollHistory = ({ rollHistory }) => {
   );
 };
 
-// Вспомогательные функции
-const getCategoryLabel = (category) => {
-  switch (category) {
-    case 'attribute': return 'Атрибут';
-    case 'role': return 'Роль';
-    case 'complication': return 'Осложнение';
-    case 'specialty': return 'Специальность';
-    default: 
-      if (category.startsWith('distinction:')) {
-        return 'Отличие';
-      }
-      return category;
-  }
-};
-
-const getDiceTitle = (isInactive, isSelected, isDisabled, isLimitReached) => {
-  if (isInactive) return 'Выпала 1 или ранг 0 - нельзя выбрать';
-  if (isSelected) return 'Клик чтобы убрать из результата';
-  if (isDisabled) return `Достигнут лимит в 2 куба. Уберите один из выбранных чтобы выбрать этот.`;
-  return 'Клик чтобы добавить в результат';
+// Обновленная вспомогательная функция для подсказки
+const getDiceTitle = (isInactive, isSelected, isDisabled, isLimitReached, dice) => {
+  if (isInactive) return `${dice.name}: выпала 1 или ранг 0 - нельзя выбрать`;
+  if (isSelected) return `${dice.name}: клик чтобы убрать из результата`;
+  if (isDisabled) return `${dice.name}: достигнут лимит в 2 куба`;
+  return `${dice.name}: клик чтобы добавить в результат`;
 };
 
 export default ResultsBlock;

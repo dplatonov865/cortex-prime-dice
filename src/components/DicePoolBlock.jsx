@@ -41,18 +41,15 @@ const DicePoolBlock = ({
                 key={dice.id} 
                 className="pool-dice-item"
                 onClick={() => onRemoveFromPool(dice.id)}
-                title={`Клик чтобы удалить\n${getCategoryLabel(dice.category)}: ${dice.name} (${dice.type})`}
+                title={`Клик чтобы удалить: ${dice.name} (${dice.type})`}
               >
-                <DiceIcon 
-                  type={dice.type} 
-                  value={dice.value}
-                  clickable={false}
-                />
-                <div className="dice-info-small">
-                  <span className="dice-category">
-                    {getCategoryLabel(dice.category)}
-                  </span>
-                  <span className="dice-name">{dice.name}</span>
+                <div className="pool-dice-content">
+                  <DiceIcon 
+                    type={dice.type} 
+                    value={dice.value}
+                    clickable={false}
+                  />
+                  <span className="pool-dice-name">{dice.name}</span>
                 </div>
               </div>
             ))}
@@ -61,21 +58,6 @@ const DicePoolBlock = ({
       </div>
     </div>
   );
-};
-
-// Вспомогательная функция для получения метки категории
-const getCategoryLabel = (category) => {
-  switch (category) {
-    case 'attribute': return 'Атрибут';
-    case 'role': return 'Роль';
-    case 'complication': return 'Осложнение';
-    case 'specialty': return 'Специальность';
-    default: 
-      if (category.startsWith('distinction:')) {
-        return 'Отличие';
-      }
-      return category;
-  }
 };
 
 export default DicePoolBlock;
