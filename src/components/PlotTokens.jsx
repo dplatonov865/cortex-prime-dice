@@ -1,17 +1,10 @@
 import React from 'react';
 
 const PlotTokens = ({ tokens, onAddToken, onSpendToken }) => {
-  const handleAddCubeToPool = () => {
+  const handleAction = (actionName) => {
     if (tokens > 0) {
-      onSpendToken('add_to_pool');
-      alert('Жетон потрачен! Добавлен дополнительный куб в пул (заглушка)');
-    }
-  };
-
-  const handleAddCubeToResult = () => {
-    if (tokens > 0) {
-      onSpendToken('add_to_result');
-      alert('Жетон потрачен! Добавлен дополнительный куб в результат (заглушка)');
+      onSpendToken(actionName);
+      alert(`Жетон потрачен! ${actionName} (заглушка)`);
     }
   };
 
@@ -29,26 +22,47 @@ const PlotTokens = ({ tokens, onAddToken, onSpendToken }) => {
       <div className="tokens-actions">
         <button 
           className="token-action-btn"
-          onClick={handleAddCubeToPool}
+          onClick={() => handleAction('Добавить куб в пул')}
           disabled={tokens === 0}
-          title="Добавить дополнительный куб в пул"
         >
           + 🎲 В пул
         </button>
         
         <button 
           className="token-action-btn"
-          onClick={handleAddCubeToResult}
+          onClick={() => handleAction('Добавить куб в результат')}
           disabled={tokens === 0}
-          title="Добавить дополнительный куб в результат"
         >
           + 📊 В результат
         </button>
 
         <button 
+          className="token-action-btn"
+          onClick={() => handleAction('Добавить куб эффекта')}
+          disabled={tokens === 0}
+        >
+          + ⚡ Куб эффекта
+        </button>
+
+        <button 
+          className="token-action-btn"
+          onClick={() => handleAction('Активировать возможность')}
+          disabled={tokens === 0}
+        >
+          🔄 Возможность
+        </button>
+
+        <button 
+          className="token-action-btn"
+          onClick={() => handleAction('Другое действие')}
+          disabled={tokens === 0}
+        >
+          ❓ Другое
+        </button>
+
+        <button 
           className="add-token-btn"
           onClick={onAddToken}
-          title="Добавить жетон сюжета"
         >
           + Жетон
         </button>

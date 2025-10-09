@@ -899,6 +899,7 @@
 .import-button:active {
   transform: translateY(0);
 }
+
 /* Блок жетонов сюжета */
 .plot-tokens-block {
   grid-column: 5;
@@ -944,21 +945,24 @@
 }
 
 .tokens-actions {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
   margin-bottom: 10px;
 }
 
-.token-action-btn, .add-token-btn {
-  padding: 10px;
+.token-action-btn,
+.add-token-btn {
+  padding: 10px 8px;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   /* font-family: 'Source Code Pro', monospace; */
   font-family: inherit;
+  font-size: 0.85rem;
+  min-height: 44px;
 }
 
 .token-action-btn {
@@ -973,6 +977,7 @@
 .add-token-btn {
   background: #27ae60;
   color: white;
+  grid-column: 1 / -1;
   margin-top: 5px;
 }
 
