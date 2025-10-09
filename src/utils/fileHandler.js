@@ -43,7 +43,8 @@ export const validateCharacterData = (data) => {
     'roles',
     'complications',
     'distinctions',
-    'specialties'
+    'specialties',
+    'plotTokens'
   ];
   
   return requiredFields.every(field => data.hasOwnProperty(field));

@@ -69,6 +69,7 @@ const CharacterSheet = () => {
       complications,
       distinctions,
       specialties,
+      plotTokens,
       exportDate: new Date().toISOString(),
       version: '1.0'
     };
@@ -94,6 +95,7 @@ const CharacterSheet = () => {
         setComplications(data.complications || DEFAULT_COMPLICATIONS);
         setDistinctions(data.distinctions || DEFAULT_DISTINCTIONS);
         setSpecialties(data.specialties || DEFAULT_SPECIALTIES);
+        setPlotTokens(data.plotTokens || 1);
 
         // Очищаем пул и результаты
         clearDicePool();
