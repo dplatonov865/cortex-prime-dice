@@ -5,7 +5,7 @@
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 20px;
-  box-shadow: 
+  box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.4),
     0 2px 8px rgba(200, 182, 255, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -135,7 +135,7 @@
   background: rgba(40, 45, 70, 0.8);
   border-radius: 12px;
   border-left: 4px solid #3498db;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
   cursor: pointer;
   border: 1px solid rgba(52, 152, 219, 0.4);
@@ -147,7 +147,7 @@
 
 .result-dice-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   border-color: rgba(52, 152, 219, 0.6);
 }
 
@@ -168,7 +168,7 @@
 
 .result-dice-item.inactive:hover {
   transform: none;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .result-dice-item.inactive .dice-roll {
@@ -186,7 +186,8 @@
   flex-direction: column;
   gap: 6px;
   flex: 1;
-  min-width: 0; /* Для правильного переноса текста */
+  min-width: 0;
+  /* Для правильного переноса текста */
 }
 
 .dice-category-small {
@@ -349,4 +350,54 @@
 
 .history-list::-webkit-scrollbar-thumb:hover {
   background: rgba(168, 168, 168, 0.7);
+}
+
+.result-stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.selection-counter {
+  font-size: 0.8rem;
+  color: #8a6dff;
+  background: rgba(138, 109, 255, 0.1);
+  padding: 2px 8px;
+  border-radius: 10px;
+  /* font-family: 'Source Code Pro', monospace; */
+  font-family: inherit;
+  font-weight: 500;
+}
+
+.result-dice-item.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: rgba(149, 165, 166, 0.4) !important;
+}
+
+.result-dice-item.disabled:hover {
+  transform: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+.disabled-indicator {
+  color: #95a5a6;
+  font-weight: bold;
+  font-size: 0.75rem;
+  margin-top: 4px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  /* font-family: 'Source Code Pro', monospace; */
+  font-family: inherit;
+}
+
+.limit-warning {
+  margin-top: 8px;
+  padding: 6px 10px;
+  background: rgba(231, 76, 60, 0.1);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  border-radius: 6px;
+  color: #e74c3c;
+  font-size: 0.8rem;
+  font-weight: 500;
 }

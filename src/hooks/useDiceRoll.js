@@ -8,6 +8,8 @@ export const useDiceRoll = () => {
   const [effectDie, setEffectDie] = useState('d4');
   const [rollHistory, setRollHistory] = useState([]);
 
+  const MAX_SELECTED_DICE = 2; // Максимум 2 куба можно выбрать
+
   // Бросок всех кубов в пуле
   const rollDicePool = (dicePool, setDicePool, clearUsedCategories) => {
     if (dicePool.length === 0) return;
@@ -57,17 +59,33 @@ export const useDiceRoll = () => {
     const dice = rollResults.find(d => d.id === diceId);
     if (!dice || dice.isOne || dice.rolledValue === 0) return;
 
-    if (selectedDice.includes(diceId)) {
+    // Проверяем, достигнут ли лимит выбранных кубов
+    const isAtLimit = selectedDice.length >= MAX_SELECTED_DICE;
+    const isAlreadySelected = selectedDice.includes(diceId);
+
+    if (isAlreadySelected) {
       // Удаляем из выбранных
       const newSelected = selectedDice.filter(id => id !== diceId);
       setSelectedDice(newSelected);
       updateResultAndEffect(newSelected);
-    } else {
-      // Добавляем в выбранные
+    } else if (!isAtLimit) {
+      // Добавляем в выбранные, если не достигнут лимит
       const newSelected = [...selectedDice, diceId];
       setSelectedDice(newSelected);
       updateResultAndEffect(newSelected);
     }
+    // Если достигнут лимит и куб не выбран - ничего не делаем
+  };
+
+  // Проверка, можно ли выбрать куб
+  const canSelectDice = (diceId) => {
+    const dice = rollResults.find(d => d.id === diceId);
+    if (!dice || dice.isOne || dice.rolledValue === 0) return false;
+    
+    const isAlreadySelected = selectedDice.includes(diceId);
+    const isAtLimit = selectedDice.length >= MAX_SELECTED_DICE;
+    
+    return isAlreadySelected || !isAtLimit;
   };
 
   // Обновление результата и куба эффекта
@@ -92,6 +110,8 @@ export const useDiceRoll = () => {
     rollHistory,
     rollDicePool,
     handleResultDiceClick,
+    canSelectDice,
+    maxSelectedDice: MAX_SELECTED_DICE,
     setRollResults,
     setSelectedDice,
     setResult,

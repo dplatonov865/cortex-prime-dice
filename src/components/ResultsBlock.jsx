@@ -7,7 +7,9 @@ const ResultsBlock = ({
   result, 
   effectDie, 
   rollHistory, 
-  onResultDiceClick 
+  onResultDiceClick,
+  canSelectDice,
+  maxSelectedDice
 }) => {
   return (
     <div className="bottom-block results-block">
@@ -18,18 +20,30 @@ const ResultsBlock = ({
       ) : (
         <div className="current-results">
           {/* Строки с результатом и кубом эффекта */}
-          <ResultStats result={result} effectDie={effectDie} />
+          <ResultStats 
+            result={result} 
+            effectDie={effectDie} 
+            selectedCount={selectedDice.length}
+            maxSelected={maxSelectedDice}
+          />
           
           {/* Выпавшие кубы */}
           <ResultsSection 
             rollResults={rollResults}
             selectedDice={selectedDice}
             onResultDiceClick={onResultDiceClick}
+            canSelectDice={canSelectDice}
+            maxSelectedDice={maxSelectedDice}
           />
 
           {/* Подсказка */}
           <div className="results-hint">
-            💡 Кликайте по кубам чтобы добавить/убрать их из результата
+            💡 Можно выбрать до {maxSelectedDice} кубов для подсчёта суммы. Кликайте по кубам чтобы добавить/убрать их из результата.
+            {selectedDice.length >= maxSelectedDice && (
+              <div className="limit-warning">
+                ⚠️ Достигнут лимит в {maxSelectedDice} куба
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -41,10 +55,15 @@ const ResultsBlock = ({
 };
 
 // Подкомпонент для статистики результатов
-const ResultStats = ({ result, effectDie }) => (
+const ResultStats = ({ result, effectDie, selectedCount, maxSelected }) => (
   <div className="result-stats">
     <div className="result-stat">
-      <strong>Результат:</strong>
+      <div className="result-stat-header">
+        <strong>Результат:</strong>
+        <span className="selection-counter">
+          {selectedCount}/{maxSelected}
+        </span>
+      </div>
       <span className="result-value">{result}</span>
     </div>
     <div className="result-stat">
@@ -59,7 +78,13 @@ const ResultStats = ({ result, effectDie }) => (
 );
 
 // Подкомпонент для секции с результатами
-const ResultsSection = ({ rollResults, selectedDice, onResultDiceClick }) => (
+const ResultsSection = ({ 
+  rollResults, 
+  selectedDice, 
+  onResultDiceClick, 
+  canSelectDice,
+  maxSelectedDice 
+}) => (
   <div className="results-section">
     <h4>Выпавшие значения:</h4>
     <div className="results-dice">
@@ -68,6 +93,8 @@ const ResultsSection = ({ rollResults, selectedDice, onResultDiceClick }) => (
           key={dice.id}
           dice={dice}
           isSelected={selectedDice.includes(dice.id)}
+          canSelect={canSelectDice ? canSelectDice(dice.id) : true}
+          isLimitReached={selectedDice.length >= maxSelectedDice}
           onClick={() => onResultDiceClick(dice.id)}
         />
       ))}
@@ -76,19 +103,20 @@ const ResultsSection = ({ rollResults, selectedDice, onResultDiceClick }) => (
 );
 
 // Подкомпонент для отдельного куба результата
-const ResultDiceItem = ({ dice, isSelected, onClick }) => {
+const ResultDiceItem = ({ dice, isSelected, canSelect, isLimitReached, onClick }) => {
   const isInactive = dice.isOne || dice.rolledValue === 0;
+  const isDisabled = !isInactive && !canSelect;
   
   return (
     <div 
-      className={`result-dice-item ${isSelected ? 'selected' : ''} ${isInactive ? 'inactive' : ''}`}
+      className={`result-dice-item ${isSelected ? 'selected' : ''} ${isInactive ? 'inactive' : ''} ${isDisabled ? 'disabled' : ''}`}
       onClick={onClick}
-      title={getDiceTitle(isInactive, isSelected)}
+      title={getDiceTitle(isInactive, isSelected, isDisabled, isLimitReached)}
     >
       <DiceIcon 
         type={dice.type} 
         value={dice.rolledValue}
-        clickable={!isInactive}
+        clickable={!isInactive && !isDisabled}
       />
       <div className="dice-info">
         <div className="dice-category-small">
@@ -97,9 +125,8 @@ const ResultDiceItem = ({ dice, isSelected, onClick }) => {
         <div className="dice-name">{dice.name}</div>
         <div className="dice-roll">{dice.rolledValue}</div>
         {isSelected && <div className="selected-indicator">✓ В результате</div>}
-        {isInactive && <div className="inactive-indicator">
-          {dice.rolledValue === 0 ? '✗ Ранг 0' : '✗ Неактивен'}
-        </div>}
+        {isInactive && <div className="inactive-indicator">✗ Неактивен</div>}
+        {isDisabled && !isSelected && <div className="disabled-indicator">🔒 Лимит</div>}
       </div>
     </div>
   );
@@ -139,13 +166,20 @@ const getCategoryLabel = (category) => {
     case 'attribute': return 'Атрибут';
     case 'role': return 'Роль';
     case 'complication': return 'Осложнение';
-    default: return category;
+    case 'specialty': return 'Специальность';
+    default: 
+      if (category.startsWith('distinction:')) {
+        return 'Отличие';
+      }
+      return category;
   }
 };
 
-const getDiceTitle = (isInactive, isSelected) => {
+const getDiceTitle = (isInactive, isSelected, isDisabled, isLimitReached) => {
   if (isInactive) return 'Выпала 1 или ранг 0 - нельзя выбрать';
-  return `Клик для ${isSelected ? 'исключения из' : 'добавления в'} результат`;
+  if (isSelected) return 'Клик чтобы убрать из результата';
+  if (isDisabled) return `Достигнут лимит в 2 куба. Уберите один из выбранных чтобы выбрать этот.`;
+  return 'Клик чтобы добавить в результат';
 };
 
 export default ResultsBlock;

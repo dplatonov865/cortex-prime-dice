@@ -69,25 +69,27 @@ const CharacterSheet = () => {
   });
 
   // Хуки для управления логикой
-  const { 
-    dicePool, 
+  const {
+    dicePool,
     usedCategories,
-    addToDicePool, 
-    removeFromDicePool, 
-    clearDicePool, 
+    addToDicePool,
+    removeFromDicePool,
+    clearDicePool,
     clearUsedCategories,
     isCategoryAvailable,
-    setDicePool 
+    setDicePool
   } = useDicePool();
-  
-  const { 
-    rollResults, 
-    selectedDice, 
-    result, 
-    effectDie, 
-    rollHistory, 
-    rollDicePool, 
-    handleResultDiceClick 
+
+  const {
+    rollResults,
+    selectedDice,
+    result,
+    effectDie,
+    rollHistory,
+    rollDicePool,
+    handleResultDiceClick,
+    canSelectDice,
+    maxSelectedDice
   } = useDiceRoll();
 
   // Функция экспорта
@@ -102,7 +104,7 @@ const CharacterSheet = () => {
       exportDate: new Date().toISOString(),
       version: '1.0'
     };
-    
+
     exportCharacter(characterData);
   };
 
@@ -110,12 +112,12 @@ const CharacterSheet = () => {
   const handleImportCharacter = async (file) => {
     try {
       const data = await importCharacter(file);
-      
+
       if (!validateCharacterData(data)) {
         alert('Неверный формат файла персонажа');
         return;
       }
-      
+
       // Подтверждение импорта
       if (window.confirm('Вы уверены, что хотите загрузить этого персонажа? Текущие данные будут потеряны.')) {
         setCharacterInfo(data.characterInfo || {});
@@ -124,10 +126,10 @@ const CharacterSheet = () => {
         setComplications(data.complications || {});
         setDistinctions(data.distinctions || {});
         setSpecialties(data.specialties || {});
-        
+
         // Очищаем пул и результаты
         clearDicePool();
-        
+
         alert('Персонаж успешно загружен!');
       }
     } catch (error) {
@@ -225,51 +227,51 @@ const CharacterSheet = () => {
   return (
     <div className="character-sheet">
       {/* Шапка персонажа */}
-      <CharacterHeader 
+      <CharacterHeader
         characterInfo={characterInfo}
         onCharacterInfoChange={handleCharacterInfoChange}
         onExportCharacter={handleExportCharacter}
         onImportCharacter={handleImportCharacter}
       />
-      
+
       {/* Основные блоки характеристик */}
       <div className="main-columns">
-        <AttributeBlock 
-          attributes={attributes} 
+        <AttributeBlock
+          attributes={attributes}
           onAttributeClick={handleAttributeClick}
           onAttributeChange={handleAttributeChange}
           isCategoryAvailable={isCategoryAvailable}
         />
-        
-        <RoleBlock 
-          roles={roles} 
+
+        <RoleBlock
+          roles={roles}
           onRoleClick={handleRoleClick}
           onRoleChange={handleRoleChange}
           isCategoryAvailable={isCategoryAvailable}
         />
-        
-        <ComplicationBlock 
-          complications={complications} 
+
+        <ComplicationBlock
+          complications={complications}
           onComplicationClick={handleComplicationClick}
           onComplicationChange={handleComplicationChange}
           isCategoryAvailable={isCategoryAvailable}
         />
-        
-        <DistinctionBlock 
-          distinctions={distinctions} 
+
+        <DistinctionBlock
+          distinctions={distinctions}
           onDistinctionClick={handleDistinctionClick}
           onDistinctionChange={handleDistinctionChange}
           isCategoryAvailable={isCategoryAvailable}
         />
-        
-        <SpecialtiesBlock 
-          specialties={specialties} 
+
+        <SpecialtiesBlock
+          specialties={specialties}
           onSpecialtyClick={handleSpecialtyClick}
           onSpecialtiesChange={handleSpecialtiesChange}
           isCategoryAvailable={isCategoryAvailable}
         />
       </div>
-      
+
       {/* Блок 6: Текущий пул кубов */}
       <DicePoolBlock
         dicePool={dicePool}
@@ -277,7 +279,7 @@ const CharacterSheet = () => {
         onRollDice={handleRollDice}
         onClearPool={clearDicePool}
       />
-      
+
       {/* Блок 7: Результаты броска */}
       <ResultsBlock
         rollResults={rollResults}
@@ -286,6 +288,8 @@ const CharacterSheet = () => {
         effectDie={effectDie}
         rollHistory={rollHistory}
         onResultDiceClick={handleResultDiceClick}
+        canSelectDice={canSelectDice}
+        maxSelectedDice={maxSelectedDice}
       />
     </div>
   );
