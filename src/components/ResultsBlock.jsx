@@ -8,63 +8,73 @@ const ResultsBlock = ({
   effectDie, 
   rollHistory, 
   onResultDiceClick,
+  onBoostResultSelection,
   canSelectDice,
-  maxSelectedDice
+  maxSelectedDice,
+  activeEffect
 }) => {
+  
+  const handleDiceClick = (diceId) => {
+    if (activeEffect === 'boost_result') {
+      onBoostResultSelection(diceId);
+    } else {
+      onResultDiceClick(diceId);
+    }
+  };
+
+  const isBoostResultActive = activeEffect === 'boost_result';
+
   return (
-    <div className="bottom-block results-block">
-      <h3>Результаты броска</h3>
+    <div className={`bottom-block results-block ${isBoostResultActive ? 'boost-result-active' : ''}`}>
+      <h3>Результаты броска {isBoostResultActive && '⚡'}</h3>
       
       {rollResults.length === 0 ? (
         <p className="empty-pool-message">Здесь будут отображаться результаты бросков</p>
       ) : (
         <div className="current-results">
-          {/* Строки с результатом и кубом эффекта */}
           <ResultStats 
             result={result} 
             effectDie={effectDie} 
             selectedCount={selectedDice.length}
             maxSelected={maxSelectedDice}
+            isBoostResultActive={isBoostResultActive}
           />
           
-          {/* Выпавшие кубы - ТЕПЕРЬ ТАК ЖЕ КАК В ПУЛЕ */}
           <ResultsSection 
             rollResults={rollResults}
             selectedDice={selectedDice}
-            onResultDiceClick={onResultDiceClick}
+            onDiceClick={handleDiceClick}
             canSelectDice={canSelectDice}
             maxSelectedDice={maxSelectedDice}
+            activeEffect={activeEffect}
           />
 
-          {/* Подсказка */}
           <div className="results-hint">
-            💡 Можно выбрать до {maxSelectedDice} кубов для подсчёта суммы. Кликайте по кубам чтобы добавить/убрать их из результата.
-            {selectedDice.length >= maxSelectedDice && (
-              <div className="limit-warning">
-                ⚠️ Достигнут лимит в {maxSelectedDice} куба
-              </div>
-            )}
+            {getResultsHint(activeEffect, selectedDice.length, maxSelectedDice)}
           </div>
         </div>
       )}
       
-      {/* История бросков */}
       <RollHistory rollHistory={rollHistory} />
     </div>
   );
 };
 
-// Подкомпонент для статистики результатов
-const ResultStats = ({ result, effectDie, selectedCount, maxSelected }) => (
+const ResultStats = ({ result, effectDie, selectedCount, maxSelected, isBoostResultActive }) => (
   <div className="result-stats">
     <div className="result-stat">
       <div className="result-stat-header">
         <strong>Результат:</strong>
-        <span className="selection-counter">
-          {selectedCount}/{maxSelected}
-        </span>
+        {!isBoostResultActive && (
+          <span className="selection-counter">
+            {selectedCount}/{maxSelected}
+          </span>
+        )}
       </div>
-      <span className="result-value">{result}</span>
+      <span className={`result-value ${isBoostResultActive ? 'boost-highlight' : ''}`}>
+        {result}
+        {isBoostResultActive && ' ⚡'}
+      </span>
     </div>
     <div className="result-stat">
       <strong>Куб эффекта:</strong>
@@ -74,68 +84,76 @@ const ResultStats = ({ result, effectDie, selectedCount, maxSelected }) => (
         clickable={false}
       />
     </div>
+    {isBoostResultActive && (
+      <div className="boost-result-notice">
+        🎯 Выберите куб для увеличения результата
+      </div>
+    )}
   </div>
 );
 
-// Подкомпонент для секции с результатами
 const ResultsSection = ({ 
   rollResults, 
   selectedDice, 
-  onResultDiceClick, 
+  onDiceClick, 
   canSelectDice,
-  maxSelectedDice 
-}) => (
-  <div className="results-section">
-    <h4>Выпавшие значения:</h4>
-    <div className="dice-pool">
-      <div className="dice-pool-list">
-        {rollResults.map(dice => (
-          <ResultDiceItem
-            key={dice.id}
-            dice={dice}
-            isSelected={selectedDice.includes(dice.id)}
-            canSelect={canSelectDice ? canSelectDice(dice.id) : true}
-            isLimitReached={selectedDice.length >= maxSelectedDice}
-            onClick={() => onResultDiceClick(dice.id)}
-          />
-        ))}
+  maxSelectedDice,
+  activeEffect
+}) => {
+  const isBoostResultActive = activeEffect === 'boost_result';
+
+  return (
+    <div className="results-section">
+      <h4>Выпавшие значения:</h4>
+      <div className="dice-pool">
+        <div className="dice-pool-list">
+          {rollResults.map(dice => (
+            <ResultDiceItem
+              key={dice.id}
+              dice={dice}
+              isSelected={selectedDice.includes(dice.id)}
+              canSelect={canSelectDice ? canSelectDice(dice.id) : true}
+              isLimitReached={selectedDice.length >= maxSelectedDice}
+              isBoostResultActive={isBoostResultActive}
+              onClick={() => onDiceClick(dice.id)}
+            />
+          ))}
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
-// Подкомпонент для отдельного куба результата - УБРАНО ДУБЛИРОВАНИЕ
-const ResultDiceItem = ({ dice, isSelected, canSelect, isLimitReached, onClick }) => {
+const ResultDiceItem = ({ dice, isSelected, canSelect, isLimitReached, isBoostResultActive, onClick }) => {
   const isInactive = dice.isOne || dice.rolledValue === 0;
-  const isDisabled = !isInactive && !canSelect;
+  const isDisabled = !isInactive && !canSelect && !isBoostResultActive;
+  const isBoostSelectable = isBoostResultActive && !isInactive && !isSelected;
   
   return (
     <div 
-      className={`pool-dice-item ${isSelected ? 'selected' : ''} ${isInactive ? 'inactive' : ''} ${isDisabled ? 'disabled' : ''}`}
+      className={`pool-dice-item ${isSelected ? 'selected' : ''} ${isInactive ? 'inactive' : ''} ${isDisabled ? 'disabled' : ''} ${isBoostSelectable ? 'boost-selectable' : ''}`}
       onClick={onClick}
-      title={getDiceTitle(isInactive, isSelected, isDisabled, isLimitReached)}
+      title={getDiceTitle(isInactive, isSelected, isDisabled, isLimitReached, isBoostResultActive)}
     >
       <DiceIcon 
         type={dice.type} 
         value={dice.rolledValue}
-        clickable={!isInactive && !isDisabled}
+        clickable={!isInactive && (!isDisabled || isBoostSelectable)}
       />
       <div className="dice-info-small">
         <span className="dice-category">
           {getCategoryLabel(dice.category)}
         </span>
         <span className="dice-name">{dice.name}</span>
-        {/* УБРАНА строка с дублирующим значением: <div className="dice-roll">{dice.rolledValue}</div> */}
       </div>
-      {/* Индикаторы статусов */}
       {isSelected && <div className="selected-indicator">✓</div>}
       {isInactive && <div className="inactive-indicator">✗</div>}
-      {isDisabled && !isSelected && <div className="disabled-indicator">🔒</div>}
+      {isDisabled && !isSelected && !isBoostResultActive && <div className="disabled-indicator">🔒</div>}
+      {isBoostSelectable && <div className="boost-indicator">⚡</div>}
     </div>
   );
 };
 
-// Подкомпонент для истории бросков
 const RollHistory = ({ rollHistory }) => {
   if (rollHistory.length === 0) return null;
 
@@ -163,7 +181,6 @@ const RollHistory = ({ rollHistory }) => {
   );
 };
 
-// Вспомогательные функции
 const getCategoryLabel = (category) => {
   switch (category) {
     case 'attribute': return 'Атрибут';
@@ -178,11 +195,27 @@ const getCategoryLabel = (category) => {
   }
 };
 
-const getDiceTitle = (isInactive, isSelected, isDisabled, isLimitReached) => {
+const getDiceTitle = (isInactive, isSelected, isDisabled, isLimitReached, isBoostResultActive) => {
+  if (isBoostResultActive) {
+    if (isInactive) return 'Выпала 1 или ранг 0 - нельзя выбрать';
+    if (isSelected) return 'Уже выбран в результате';
+    return 'Клик чтобы увеличить результат на это значение';
+  }
+  
   if (isInactive) return 'Выпала 1 или ранг 0 - нельзя выбрать';
   if (isSelected) return 'Клик чтобы убрать из результата';
   if (isDisabled) return `Достигнут лимит в 2 куба. Уберите один из выбранных чтобы выбрать этот.`;
   return 'Клик чтобы добавить в результат';
+};
+
+const getResultsHint = (activeEffect, selectedCount, maxSelectedDice) => {
+  if (activeEffect === 'boost_result') {
+    return '💡 Выберите любой куб (кроме 1) чтобы увеличить результат. Можно выбрать только один куб.';
+  }
+  
+  return `💡 Можно выбрать до ${maxSelectedDice} кубов для подсчёта суммы. Кликайте по кубам чтобы добавить/убрать их из результата.${
+    selectedCount >= maxSelectedDice ? '\n⚠️ Достигнут лимит в 2 куба' : ''
+  }`;
 };
 
 export default ResultsBlock;

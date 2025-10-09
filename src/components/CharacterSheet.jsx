@@ -10,6 +10,7 @@ import ResultsBlock from './ResultsBlock';
 import PlotTokens from './PlotTokens';
 import { useDicePool } from '../hooks/useDicePool';
 import { useDiceRoll } from '../hooks/useDiceRoll';
+import { calculateEffectDie } from '../utils/diceLogic';
 import { exportCharacter, importCharacter, validateCharacterData } from '../utils/fileHandler';
 import {
   DEFAULT_CHARACTER_INFO,
@@ -32,6 +33,9 @@ const CharacterSheet = () => {
   const [distinctions, setDistinctions] = useState(DEFAULT_DISTINCTIONS);
   const [specialties, setSpecialties] = useState(DEFAULT_SPECIALTIES);
   const [plotTokens, setPlotTokens] = useState(1);
+
+  // Состояние активного эффекта
+  const [activeEffect, setActiveEffect] = useState(null);
 
   // Хуки для управления логикой
   const {
@@ -57,7 +61,10 @@ const CharacterSheet = () => {
     rollDicePool,
     handleResultDiceClick,
     canSelectDice,
-    maxSelectedDice
+    maxSelectedDice,
+    setResult,
+    setSelectedDice,
+    setEffectDie
   } = useDiceRoll();
 
   // Функция экспорта
@@ -86,7 +93,6 @@ const CharacterSheet = () => {
         return;
       }
 
-      // Подтверждение импорта
       if (window.confirm('Вы уверены, что хотите загрузить этого персонажа? Текущие данные будут потеряны.')) {
         setCharacterInfo(data.characterInfo || DEFAULT_CHARACTER_INFO);
         setAttributes(data.attributes || DEFAULT_ATTRIBUTES);
@@ -94,10 +100,7 @@ const CharacterSheet = () => {
         setComplications(data.complications || DEFAULT_COMPLICATIONS);
         setDistinctions(data.distinctions || DEFAULT_DISTINCTIONS);
         setSpecialties(data.specialties || DEFAULT_SPECIALTIES);
-
-        // Очищаем пул и результаты
         clearDicePool();
-
         alert('Персонаж успешно загружен!');
       }
     } catch (error) {
@@ -111,7 +114,6 @@ const CharacterSheet = () => {
 
   const handleSpendToken = (action) => {
     setPlotTokens(prev => Math.max(0, prev - 1));
-    // Здесь будет логика для разных действий
   };
 
   // Обработчик изменения информации о персонаже
@@ -122,47 +124,47 @@ const CharacterSheet = () => {
     }));
   };
 
-  // Обработчики кликов с поддержкой бонусного режима
+  // Обработчики кликов с поддержкой эффектов
   const handleAttributeClick = (attributeName, diceType) => {
-    if (additionalDieEffect) {
+    if (activeEffect === 'additional_die') {
       addToDicePool(attributeName, diceType, 'attribute');
-      deactivateAdditionalDie();
+      deactivateEffect();
     } else {
       addToDicePool(attributeName, diceType, 'attribute');
     }
   };
 
   const handleRoleClick = (roleName, diceType) => {
-    if (additionalDieEffect) {
+    if (activeEffect === 'additional_die') {
       addToDicePool(roleName, diceType, 'role');
-      deactivateAdditionalDie();
+      deactivateEffect();
     } else {
       addToDicePool(roleName, diceType, 'role');
     }
   };
 
   const handleComplicationClick = (complicationName, diceType) => {
-    if (additionalDieEffect) {
+    if (activeEffect === 'additional_die') {
       addToDicePool(complicationName, diceType, 'complication');
-      deactivateAdditionalDie();
+      deactivateEffect();
     } else {
       addToDicePool(complicationName, diceType, 'complication');
     }
   };
 
   const handleDistinctionClick = (distinctionName, diceType, category) => {
-    if (additionalDieEffect) {
+    if (activeEffect === 'additional_die') {
       addToDicePool(distinctionName, diceType, `distinction: ${category}`);
-      deactivateAdditionalDie();
+      deactivateEffect();
     } else {
       addToDicePool(distinctionName, diceType, `distinction: ${category}`);
     }
   };
 
   const handleSpecialtyClick = (specialtyName, diceType) => {
-    if (additionalDieEffect) {
+    if (activeEffect === 'additional_die') {
       addToDicePool(specialtyName, diceType, 'specialty');
-      deactivateAdditionalDie();
+      deactivateEffect();
     } else {
       addToDicePool(specialtyName, diceType, 'specialty');
     }
@@ -220,16 +222,64 @@ const CharacterSheet = () => {
     rollDicePool(dicePool, setDicePool, clearUsedCategories);
   };
 
-  // Активация бонусного режима через жетон
+  // Функции управления эффектами
   const handleActivateAdditionalDie = () => {
     if (plotTokens > 0) {
+      setActiveEffect('additional_die');
       activateAdditionalDie();
+    }
+  };
+
+  const handleActivateBoostResult = () => {
+    if (plotTokens > 0) {
+      setActiveEffect('boost_result');
+      setPlotTokens(prev => prev - 1);
+    }
+  };
+
+  const handleActivateBoostEffect = () => {
+    if (plotTokens > 0) {
+      setActiveEffect('boost_effect');
+      setPlotTokens(prev => prev - 1);
+    }
+  };
+
+  const deactivateEffect = () => {
+    setActiveEffect(null);
+    deactivateAdditionalDie();
+  };
+
+  // Обработчик для эффекта повышения результата
+  const handleBoostResultSelection = (diceId) => {
+    if (activeEffect === 'boost_result') {
+      const dice = rollResults.find(d => d.id === diceId);
+      if (dice && !dice.isOne && dice.rolledValue !== 0 && !selectedDice.includes(diceId)) {
+
+        // Создаем новый массив выбранных кубов с добавленным кубом
+        const newSelectedDice = [...selectedDice, diceId];
+        setSelectedDice(newSelectedDice);
+
+        // Пересчитываем сумму ВСЕХ выбранных кубов
+        const newResult = newSelectedDice.reduce((total, id) => {
+          const selectedDice = rollResults.find(d => d.id === id);
+          return total + (selectedDice ? selectedDice.rolledValue : 0);
+        }, 0);
+
+        setResult(newResult);
+
+        // Пересчитываем куб эффекта
+        calculateEffectDie(rollResults, newSelectedDice, setEffectDie);
+
+        // Деактивируем эффект
+        deactivateEffect();
+
+        console.log(`Куб "${dice.name}" добавлен в результат! Новый результат: ${newResult}`);
+      }
     }
   };
 
   return (
     <div className="character-sheet">
-      {/* Шапка персонажа */}
       <CharacterHeader
         characterInfo={characterInfo}
         onCharacterInfoChange={handleCharacterInfoChange}
@@ -237,14 +287,13 @@ const CharacterSheet = () => {
         onImportCharacter={handleImportCharacter}
       />
 
-      {/* Основные блоки характеристик */}
       <div className="main-columns">
         <AttributeBlock
           attributes={attributes}
           onAttributeClick={handleAttributeClick}
           onAttributeChange={handleAttributeChange}
           isCategoryAvailable={isCategoryAvailable}
-          additionalDieEffect={additionalDieEffect}
+          additionalDieEffect={activeEffect === 'additional_die'}
         />
 
         <RoleBlock
@@ -252,7 +301,7 @@ const CharacterSheet = () => {
           onRoleClick={handleRoleClick}
           onRoleChange={handleRoleChange}
           isCategoryAvailable={isCategoryAvailable}
-          additionalDieEffect={additionalDieEffect}
+          additionalDieEffect={activeEffect === 'additional_die'}
         />
 
         <ComplicationBlock
@@ -260,7 +309,7 @@ const CharacterSheet = () => {
           onComplicationClick={handleComplicationClick}
           onComplicationChange={handleComplicationChange}
           isCategoryAvailable={isCategoryAvailable}
-          additionalDieEffect={additionalDieEffect}
+          additionalDieEffect={activeEffect === 'additional_die'}
         />
 
         <DistinctionBlock
@@ -268,7 +317,7 @@ const CharacterSheet = () => {
           onDistinctionClick={handleDistinctionClick}
           onDistinctionChange={handleDistinctionChange}
           isCategoryAvailable={isCategoryAvailable}
-          additionalDieEffect={additionalDieEffect}
+          additionalDieEffect={activeEffect === 'additional_die'}
         />
 
         <SpecialtiesBlock
@@ -276,7 +325,7 @@ const CharacterSheet = () => {
           onSpecialtyClick={handleSpecialtyClick}
           onSpecialtiesChange={handleSpecialtiesChange}
           isCategoryAvailable={isCategoryAvailable}
-          additionalDieEffect={additionalDieEffect}
+          additionalDieEffect={activeEffect === 'additional_die'}
         />
       </div>
 
@@ -284,11 +333,12 @@ const CharacterSheet = () => {
         tokens={plotTokens}
         onAddToken={handleAddToken}
         onSpendToken={handleSpendToken}
-        onActivateAdditionalDie={handleActivateAdditionalDie} // ← ИСПРАВИТЬ ЭТУ СТРОКУ
-        additionalDieEffect={additionalDieEffect}
+        onActivateAdditionalDie={handleActivateAdditionalDie}
+        onActivateBoostResult={handleActivateBoostResult}
+        onActivateBoostEffect={handleActivateBoostEffect}
+        activeEffect={activeEffect}
       />
 
-      {/* Блок 6: Текущий пул кубов */}
       <DicePoolBlock
         dicePool={dicePool}
         onRemoveFromPool={removeFromDicePool}
@@ -296,7 +346,6 @@ const CharacterSheet = () => {
         onClearPool={clearDicePool}
       />
 
-      {/* Блок 7: Результаты броска */}
       <ResultsBlock
         rollResults={rollResults}
         selectedDice={selectedDice}
@@ -304,8 +353,10 @@ const CharacterSheet = () => {
         effectDie={effectDie}
         rollHistory={rollHistory}
         onResultDiceClick={handleResultDiceClick}
+        onBoostResultSelection={handleBoostResultSelection}
         canSelectDice={canSelectDice}
         maxSelectedDice={maxSelectedDice}
+        activeEffect={activeEffect}
       />
     </div>
   );

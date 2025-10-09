@@ -3,25 +3,22 @@ import { useState } from 'react';
 export const useDicePool = () => {
   const [dicePool, setDicePool] = useState([]);
   const [usedCategories, setUsedCategories] = useState(new Set());
-  const [additionalDieEffect, setBonusMode] = useState(false);
+  const [additionalDieEffect, setAdditionalDieEffect] = useState(false);
 
   // Добавление куба в пул
   const addToDicePool = (name, diceType, category) => {
-    // В бонусном режиме игнорируем проверки использованных категорий
+    // В режиме дополнительного куба игнорируем проверки использованных категорий
     if (!additionalDieEffect) {
       const mainCategory = getMainCategory(category);
       
-      // Проверяем, не использована ли уже эта категория
       if (usedCategories.has(mainCategory)) {
         return;
       }
 
-      // Не добавляем осложнения с рангом "0" или не d4
       if (category === 'complication' && diceType !== 'd4') {
         return;
       }
       
-      // Для остальных категорий проверяем только 0
       if (diceType === '0') return;
     }
     
@@ -32,12 +29,11 @@ export const useDicePool = () => {
       value: diceType === '0' ? '0' : parseInt(diceType.replace('d', '')),
       category: category,
       mainCategory: getMainCategory(category),
-      isBonus: additionalDieEffect // помечаем бонусные кубы
+      isBonus: additionalDieEffect
     };
     
     setDicePool(prev => [...prev, newDice]);
     
-    // В обычном режиме добавляем категорию в использованные
     if (!additionalDieEffect) {
       setUsedCategories(prev => new Set([...prev, getMainCategory(category)]));
     }
@@ -48,7 +44,6 @@ export const useDicePool = () => {
     const diceToRemove = dicePool.find(dice => dice.id === diceId);
     if (diceToRemove) {
       setDicePool(prev => prev.filter(dice => dice.id !== diceId));
-      // Удаляем категорию из использованных только если это не бонусный куб
       if (!diceToRemove.isBonus) {
         setUsedCategories(prev => {
           const newUsed = new Set(prev);
@@ -63,13 +58,13 @@ export const useDicePool = () => {
   const clearDicePool = () => {
     setDicePool([]);
     setUsedCategories(new Set());
-    setBonusMode(false);
+    setAdditionalDieEffect(false);
   };
 
-  // Сброс использованных категорий (после броска)
+  // Сброс использованных категорий
   const clearUsedCategories = () => {
     setUsedCategories(new Set());
-    setBonusMode(false);
+    setAdditionalDieEffect(false);
   };
 
   // Получение основной категории
@@ -80,23 +75,22 @@ export const useDicePool = () => {
     return category;
   };
 
-  // Проверка, доступна ли категория для добавления
+  // Проверка доступности категории
   const isCategoryAvailable = (category) => {
-    // В бонусном режиме все категории доступны (кроме осложнений с неправильным рангом)
     if (additionalDieEffect) return true;
     
     const mainCategory = getMainCategory(category);
     return !usedCategories.has(mainCategory);
   };
 
-  // Активация бонусного режима
+  // Активация режима дополнительного куба
   const activateAdditionalDie = () => {
-    setBonusMode(true);
+    setAdditionalDieEffect(true);
   };
 
-  // Деактивация бонусного режима
+  // Деактивация режима дополнительного куба
   const deactivateAdditionalDie = () => {
-    setBonusMode(false);
+    setAdditionalDieEffect(false);
   };
 
   return {
