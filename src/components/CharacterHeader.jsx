@@ -1,57 +1,78 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
-const CharacterHeader = ({ characterInfo, onCharacterInfoChange }) => {
+const CharacterHeader = ({ 
+  characterInfo, 
+  onCharacterInfoChange,
+  onExportCharacter,
+  onImportCharacter 
+}) => {
+  const fileInputRef = useRef(null);
+
   const handleChange = (field, value) => {
     onCharacterInfoChange(field, value);
   };
 
+  const handleExportClick = () => {
+    onExportCharacter();
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileSelect = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      onImportCharacter(file);
+    }
+    // Сбрасываем значение input чтобы можно было выбрать тот же файл снова
+    event.target.value = '';
+  };
+
   return (
     <div className="character-header-block">
-      <div className="character-name-section">
-        <input
-          type="text"
-          className="character-name-input"
-          value={characterInfo.name}
-          onChange={(e) => handleChange('name', e.target.value)}
-          placeholder="Имя персонажа"
-          maxLength={50}
-        />
+      {/* Скрытый input для импорта */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileSelect}
+        accept=".json"
+        style={{ display: 'none' }}
+      />
+      
+      <div className="character-header-top">
+        
+        <div className="character-actions">
+          <button 
+            className="export-button"
+            onClick={handleExportClick}
+            title="Экспортировать лист персонажа"
+          >
+            💾 Экспорт
+          </button>
+          <button 
+            className="import-button"
+            onClick={handleImportClick}
+            title="Импортировать лист персонажа"
+          >
+            📂 Импорт
+          </button>
+        </div>
       </div>
       
       <div className="character-details-grid">
+      
+        {/* <div className="character-name-section"> */}
         <div className="detail-item">
-          <label className="detail-label">Игрок</label>
+          <label className="detail-label">Имя</label>
           <input
             type="text"
+            // className="character-name-input"
             className="detail-input"
-            value={characterInfo.player}
-            onChange={(e) => handleChange('player', e.target.value)}
-            placeholder="Ваше имя"
-            maxLength={30}
-          />
-        </div>
-        
-        <div className="detail-item">
-          <label className="detail-label">Кампания</label>
-          <input
-            type="text"
-            className="detail-input"
-            value={characterInfo.campaign}
-            onChange={(e) => handleChange('campaign', e.target.value)}
-            placeholder="Название кампании"
-            maxLength={40}
-          />
-        </div>
-        
-        <div className="detail-item">
-          <label className="detail-label">Раса</label>
-          <input
-            type="text"
-            className="detail-input"
-            value={characterInfo.race}
-            onChange={(e) => handleChange('race', e.target.value)}
-            placeholder="Раса/происхождение"
-            maxLength={25}
+            value={characterInfo.name}
+            onChange={(e) => handleChange('name', e.target.value)}
+            placeholder="Имя персонажа"
+            maxLength={50}
           />
         </div>
         

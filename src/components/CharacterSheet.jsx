@@ -9,6 +9,7 @@ import DicePoolBlock from '../components/DicePoolBlock';
 import ResultsBlock from '../components/ResultsBlock';
 import { useDicePool } from '../hooks/useDicePool';
 import { useDiceRoll } from '../hooks/useDiceRoll';
+import { exportCharacter, importCharacter, validateCharacterData } from '../utils/fileHandler';
 
 const CharacterSheet = () => {
   // Информация о персонаже
@@ -88,6 +89,51 @@ const CharacterSheet = () => {
     rollDicePool, 
     handleResultDiceClick 
   } = useDiceRoll();
+
+  // Функция экспорта
+  const handleExportCharacter = () => {
+    const characterData = {
+      characterInfo,
+      attributes,
+      roles,
+      complications,
+      distinctions,
+      specialties,
+      exportDate: new Date().toISOString(),
+      version: '1.0'
+    };
+    
+    exportCharacter(characterData);
+  };
+
+  // Функция импорта
+  const handleImportCharacter = async (file) => {
+    try {
+      const data = await importCharacter(file);
+      
+      if (!validateCharacterData(data)) {
+        alert('Неверный формат файла персонажа');
+        return;
+      }
+      
+      // Подтверждение импорта
+      if (window.confirm('Вы уверены, что хотите загрузить этого персонажа? Текущие данные будут потеряны.')) {
+        setCharacterInfo(data.characterInfo || {});
+        setAttributes(data.attributes || {});
+        setRoles(data.roles || {});
+        setComplications(data.complications || {});
+        setDistinctions(data.distinctions || {});
+        setSpecialties(data.specialties || {});
+        
+        // Очищаем пул и результаты
+        clearDicePool();
+        
+        alert('Персонаж успешно загружен!');
+      }
+    } catch (error) {
+      alert(`Ошибка при импорте: ${error.message}`);
+    }
+  };
 
   // Обработчик изменения информации о персонаже
   const handleCharacterInfoChange = (field, value) => {
@@ -182,6 +228,8 @@ const CharacterSheet = () => {
       <CharacterHeader 
         characterInfo={characterInfo}
         onCharacterInfoChange={handleCharacterInfoChange}
+        onExportCharacter={handleExportCharacter}
+        onImportCharacter={handleImportCharacter}
       />
       
       {/* Основные блоки характеристик */}

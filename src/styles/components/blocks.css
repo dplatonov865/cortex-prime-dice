@@ -833,3 +833,47 @@
   margin-top: 5px;
   font-family: 'Source Code Pro', monospace;
 }
+/* Кнопки экспорта/импорта в шапке */
+.character-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  gap: 20px;
+}
+
+.character-name-section {
+  flex: 1;
+}
+
+.character-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.export-button, .import-button {
+  padding: 10px 16px;
+  border: 1px solid rgba(138, 109, 255, 0.4);
+  border-radius: 8px;
+  background: rgba(138, 109, 255, 0.1);
+  color: #8a6dff;
+  font-family: 'Source Code Pro', monospace;
+  font-weight: 500;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.export-button:hover, .import-button:hover {
+  background: rgba(138, 109, 255, 0.2);
+  border-color: rgba(138, 109, 255, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(138, 109, 255, 0.3);
+}
+
+.export-button:active, .import-button:active {
+  transform: translateY(0);
+}
