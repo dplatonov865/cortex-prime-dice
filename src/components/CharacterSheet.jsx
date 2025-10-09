@@ -45,7 +45,8 @@ const CharacterSheet = () => {
     clearDicePool,
     clearUsedCategories,
     isCategoryAvailable,
-    setDicePool
+    setDicePool,
+    activateBonusMode
   } = useDicePool();
 
   const {
@@ -243,18 +244,19 @@ const CharacterSheet = () => {
         />
       </div>
 
+
+      <PlotTokens
+        tokens={plotTokens}
+        onAddToken={handleAddToken}
+        onSpendToken={handleSpendToken}
+        onAddToPool={activateBonusMode} // Передаем метод активации
+      />
       {/* Блок 6: Текущий пул кубов */}
       <DicePoolBlock
         dicePool={dicePool}
         onRemoveFromPool={removeFromDicePool}
         onRollDice={handleRollDice}
         onClearPool={clearDicePool}
-      />
-
-      <PlotTokens
-        tokens={plotTokens}
-        onAddToken={handleAddToken}
-        onSpendToken={handleSpendToken}
       />
       {/* Блок 7: Результаты броска */}
       <ResultsBlock
