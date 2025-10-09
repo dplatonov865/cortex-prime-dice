@@ -241,11 +241,6 @@ const CharacterSheet = () => {
           onSpecialtiesChange={handleSpecialtiesChange}
           isCategoryAvailable={isCategoryAvailable}
         />
-        <PlotTokens
-          tokens={plotTokens}
-          onAddToken={handleAddToken}
-          onSpendToken={handleSpendToken}
-        />
       </div>
 
       {/* Блок 6: Текущий пул кубов */}
@@ -256,6 +251,11 @@ const CharacterSheet = () => {
         onClearPool={clearDicePool}
       />
 
+      <PlotTokens
+        tokens={plotTokens}
+        onAddToken={handleAddToken}
+        onSpendToken={handleSpendToken}
+      />
       {/* Блок 7: Результаты броска */}
       <ResultsBlock
         rollResults={rollResults}
