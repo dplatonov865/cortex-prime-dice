@@ -702,7 +702,8 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   padding: 30px;
   margin-bottom: 25px;
-  font-family: 'Crimson Text', serif;
+  /* font-family: 'Crimson Text', serif; */
+  font-family: inherit;
   color: #f0f0f0;
 }
 
@@ -720,7 +721,8 @@
   font-weight: 700;
   text-align: center;
   background: transparent;
-  font-family: 'Playfair Display', serif;
+  /* font-family: 'Playfair Display', serif; */
+  font-family: inherit;
   color: #f0f0f0;
   transition: all 0.3s ease;
 }
@@ -760,7 +762,8 @@
   color: #b8b6b3;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  font-family: 'Source Code Pro', monospace;
+  /* font-family: 'Source Code Pro', monospace; */
+  font-family: inherit;
 }
 
 .detail-input {
@@ -768,7 +771,8 @@
   border-radius: 8px;
   padding: 10px 12px;
   font-size: 0.95rem;
-  font-family: 'Crimson Text', serif;
+  /* font-family: 'Crimson Text', serif; */
+  font-family: inherit;
   background: rgba(30, 35, 50, 0.8);
   transition: all 0.2s ease;
   color: #f0f0f0;
@@ -802,7 +806,8 @@
   margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  font-family: 'Source Code Pro', monospace;
+  /* font-family: 'Source Code Pro', monospace; */
+  font-family: inherit;
 }
 
 .character-description {
@@ -811,7 +816,8 @@
   border-radius: 12px;
   padding: 15px;
   font-size: 1rem;
-  font-family: 'Crimson Text', serif;
+  /* font-family: 'Crimson Text', serif; */
+  font-family: inherit;
   background: rgba(30, 35, 50, 0.8);
   transition: all 0.3s ease;
   resize: vertical;
@@ -841,7 +847,8 @@
   font-size: 0.75rem;
   color: #7f8c8d;
   margin-top: 5px;
-  font-family: 'Source Code Pro', monospace;
+  /* font-family: 'Source Code Pro', monospace; */
+  font-family: inherit;
 }
 
 /* Кнопки экспорта/импорта в шапке */
@@ -870,7 +877,8 @@
   border-radius: 8px;
   background: rgba(138, 109, 255, 0.1);
   color: #8a6dff;
-  font-family: 'Source Code Pro', monospace;
+  /* font-family: 'Source Code Pro', monospace; */
+  font-family: inherit;
   font-weight: 500;
   font-size: 0.85rem;
   cursor: pointer;
