@@ -1,10 +1,10 @@
 import React from 'react';
 
-const PlotTokens = ({ tokens, onAddToken, onSpendToken }) => {
+const PlotTokens = ({ tokens, onAddToken, onSpendToken, onAddToPool, bonusMode }) => {
   const handleAddCubeToPool = () => {
-    if (tokens > 0) {
+    if (tokens > 0 && !bonusMode) {
       onSpendToken('add_to_pool');
-      alert('Жетон потрачен! Добавлен дополнительный куб в пул (заглушка)');
+      onAddToPool();
     }
   };
 
@@ -16,22 +16,33 @@ const PlotTokens = ({ tokens, onAddToken, onSpendToken }) => {
   };
 
   return (
-    <div className="plot-tokens-block">
-      <h3>Жетоны сюжета</h3>
+    <div className={`plot-tokens-block ${bonusMode ? 'bonus-mode-active' : ''}`}>
+      <h3>Жетоны сюжета {bonusMode && '🎯'}</h3>
       
       <div className="tokens-display">
         <div className="tokens-count">
           <span className="tokens-label">Доступно:</span>
           <span className="tokens-value">{tokens}</span>
         </div>
+        {bonusMode && (
+          <div className="bonus-mode-indicator">
+            🎯 Режим дополнительного куба активен
+          </div>
+        )}
       </div>
 
       <div className="tokens-actions">
         <button 
           className="token-action-btn"
           onClick={handleAddCubeToPool}
-          disabled={tokens === 0}
-          title="Добавить дополнительный куб в пул"
+          disabled={tokens === 0 || bonusMode}
+          title={
+            bonusMode 
+              ? "Режим уже активен" 
+              : tokens === 0 
+                ? "Недостаточно жетонов" 
+                : "Добавить дополнительный куб в пул"
+          }
         >
           + 🎲 В пул
         </button>
@@ -55,7 +66,10 @@ const PlotTokens = ({ tokens, onAddToken, onSpendToken }) => {
       </div>
 
       <div className="tokens-hint">
-        💡 Используйте жетоны сюжета для особых действий
+        {bonusMode 
+          ? '💡 Выберите любой трейт для добавления в пул (игнорируя ограничения)' 
+          : '💡 Используйте жетоны сюжета для особых действий'
+        }
       </div>
     </div>
   );

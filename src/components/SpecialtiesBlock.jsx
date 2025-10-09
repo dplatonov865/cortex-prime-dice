@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import DiceIcon from './DiceIcon';
 
-const SpecialtiesBlock = ({ specialties, onSpecialtyClick, onSpecialtiesChange, isCategoryAvailable }) => {
+const SpecialtiesBlock = ({ specialties, onSpecialtyClick, onSpecialtiesChange, isCategoryAvailable, additionalDieEffect = false }) => {
   const [newSpecialty, setNewSpecialty] = useState('');
 
   const handleSpecialtyClick = (specialtyName, diceType) => {
-    if (isCategoryAvailable && !isCategoryAvailable('specialty')) {
+    if (isCategoryAvailable && !isCategoryAvailable('specialty') && !additionalDieEffect) {
       return;
     }
     onSpecialtyClick(specialtyName, diceType);
@@ -13,7 +13,7 @@ const SpecialtiesBlock = ({ specialties, onSpecialtyClick, onSpecialtiesChange, 
 
   const handleAddSpecialty = () => {
     if (newSpecialty.trim() && Object.keys(specialties).length < 10 && 
-        (!isCategoryAvailable || isCategoryAvailable('specialty'))) {
+        ((isCategoryAvailable && isCategoryAvailable('specialty')) || additionalDieEffect)) {
       onSpecialtiesChange('add', null, newSpecialty.trim());
       setNewSpecialty('');
     }
@@ -34,10 +34,11 @@ const SpecialtiesBlock = ({ specialties, onSpecialtyClick, onSpecialtiesChange, 
   };
 
   const isBlockAvailable = isCategoryAvailable ? isCategoryAvailable('specialty') : true;
-  const canAddNew = isBlockAvailable && Object.keys(specialties).length < 10;
+  const finalAvailability = isBlockAvailable || additionalDieEffect;
+  const canAddNew = finalAvailability && Object.keys(specialties).length < 10;
 
   return (
-    <div className={`block specialties-block ${!isBlockAvailable ? 'category-used' : ''}`}>
+    <div className={`block specialties-block ${!finalAvailability ? 'category-used' : ''} ${additionalDieEffect ? 'bonus-mode' : ''}`}>
       <h3>Специальности и ресурсы</h3>
       
       <div className="specialties-input-container">
@@ -63,7 +64,7 @@ const SpecialtiesBlock = ({ specialties, onSpecialtyClick, onSpecialtiesChange, 
 
       <div className="specialties-list">
         {Object.entries(specialties).map(([id, specialty]) => (
-          <div key={id} className={`specialty-row ${!isBlockAvailable ? 'row-disabled' : ''}`}>
+          <div key={id} className={`specialty-row ${!finalAvailability ? 'row-disabled' : ''}`}>
             <input
               type="text"
               className="specialty-name-input"
@@ -74,23 +75,25 @@ const SpecialtiesBlock = ({ specialties, onSpecialtyClick, onSpecialtiesChange, 
               }}
               placeholder="Название специальности..."
               maxLength={30}
-              disabled={!isBlockAvailable}
+              disabled={!finalAvailability}
             />
             
             <div className="specialty-controls">
               <div 
-                className={`specialty-dice ${!isBlockAvailable ? 'dice-disabled' : ''}`}
+                className={`specialty-dice ${!finalAvailability ? 'dice-disabled' : ''}`}
                 onClick={() => handleSpecialtyClick(specialty.name, 'd6')}
                 title={
-                  !isBlockAvailable 
+                  !finalAvailability 
                     ? 'Уже используется специальность из этого набора'
+                    : additionalDieEffect
+                    ? 'Эффект дополнительного куба: можно добавить в пул'
                     : 'Клик чтобы добавить d6 в пул'
                 }
               >
                 <DiceIcon 
                   type="d6" 
                   value="6"
-                  clickable={isBlockAvailable}
+                  clickable={finalAvailability}
                 />
               </div>
               
@@ -98,7 +101,7 @@ const SpecialtiesBlock = ({ specialties, onSpecialtyClick, onSpecialtiesChange, 
                 className="remove-specialty-button"
                 onClick={() => handleRemoveSpecialty(id)}
                 title="Удалить специальность"
-                disabled={!isBlockAvailable}
+                disabled={!finalAvailability}
               >
                 ×
               </button>
@@ -118,9 +121,11 @@ const SpecialtiesBlock = ({ specialties, onSpecialtyClick, onSpecialtiesChange, 
       </div>
 
       <div className="specialties-hint">
-        {!isBlockAvailable 
-          ? '⚡ Специальность уже используется в пуле' 
-          : '💡 Кликайте по кубам чтобы добавить их в пул. Можно добавлять до 10 специальностей.'
+        {additionalDieEffect 
+          ? '🎯 Эффект дополнительного куба: можно добавить любую специальность' 
+          : !isBlockAvailable 
+            ? '⚡ Специальность уже используется в пуле' 
+            : '💡 Кликайте по кубам чтобы добавить их в пул. Можно добавлять до 10 специальностей.'
         }
       </div>
     </div>

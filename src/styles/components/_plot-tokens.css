@@ -95,6 +95,20 @@
   text-align: center;
 }
 
+/* В src/styles/components/_plot-tokens.css */
+.token-action-btn:disabled,
+.add-token-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #cccccc;
+}
+
+.token-action-btn:disabled:hover,
+.add-token-btn:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
 /* Адаптивность для жетонов сюжета */
 @media (max-width: 768px) {
   .plot-tokens-block {
