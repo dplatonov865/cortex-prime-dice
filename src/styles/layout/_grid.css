@@ -1,0 +1,279 @@
+/* Сетка и расположение блоков */
+
+/* Основной контейнер приложения */
+.App {
+  min-height: 100vh;
+  padding: var(--space-xl);
+  width: 100%;
+}
+
+/* Контейнер листа персонажа */
+.character-sheet {
+  max-width: var(--max-width-3xl);
+  margin: 0 auto;
+  padding: 0 var(--space-xl);
+}
+
+/* Основные колонки с блоками */
+.main-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-2xl);
+  margin-bottom: var(--space-2xl);
+  justify-content: center;
+}
+
+/* Базовые стили блоков */
+.block {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--space-2xl);
+  border-radius: var(--radius-2xl);
+  box-shadow: 
+    var(--shadow-lg),
+    0 2px 8px rgba(200, 182, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: all var(--transition-normal);
+  min-height: 320px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Декоративная верхняя линия */
+.block::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(200, 182, 255, 0.3) 50%,
+      transparent 100%);
+}
+
+/* Ховер эффект для блоков */
+.block:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    var(--shadow-xl),
+    0 4px 12px rgba(200, 182, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Специфичные позиции блоков для десктопной версии */
+@media (min-width: 1200px) {
+  .attributes-block {
+    grid-column: 1;
+  }
+
+  .roles-block {
+    grid-column: 2;
+  }
+
+  .complications-block {
+    grid-column: 3;
+  }
+
+  .distinctions-block {
+    grid-column: 1;
+  }
+
+  .specialties-block {
+    grid-column: 2;
+  }
+
+  .plot-tokens-block {
+    grid-column: 5;
+  }
+}
+
+/* Сетка для деталей персонажа */
+.character-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-2xl);
+  padding: var(--space-xl);
+  background: var(--bg-card-light);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-accent);
+}
+
+/* Сетка для действий с жетонами */
+.tokens-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.add-token-btn {
+  grid-column: 1 / -1;
+  margin-top: var(--space-xs);
+}
+
+/* Сетка для кубов в пуле и результатах */
+.dice-pool-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+}
+
+/* Адаптивная сетка для истории бросков */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Сетка для статистики результатов */
+.result-stats {
+  display: flex;
+  gap: var(--space-3xl);
+  margin-bottom: var(--space-xl);
+  padding: var(--space-lg);
+  background: var(--bg-card-light);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(138, 109, 255, 0.2);
+}
+
+/* Flex раскладки для строк */
+.attribute-row,
+.role-row,
+.complication-row,
+.distinction-row,
+.specialty-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+/* Вертикальная раскладка для кнопок рангов */
+.rank-buttons-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+/* Контейнер для ввода специальностей */
+.specialties-input-container {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+/* Шапка блока с элементами управления */
+.block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-xl);
+}
+
+/* Элементы управления атрибутами/ролями */
+.attribute-controls,
+.role-controls,
+.complication-controls,
+.specialty-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* Контейнер для кубиков различий */
+.distinction-dice {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+  flex-shrink: 0;
+  min-width: max-content;
+}
+
+/* Списки элементов */
+.attributes-list,
+.roles-list,
+.complications-list,
+.distinctions-list,
+.specialties-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* Пустые блоки */
+.empty-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 200px;
+  opacity: 0.7;
+}
+
+/* Категория различий */
+.distinction-category {
+  padding: var(--space-lg);
+  background: var(--bg-card-light);
+  border-radius: var(--radius-lg);
+  border-left: 3px solid #ffd93d;
+  border: 1px solid rgba(255, 217, 61, 0.2);
+}
+
+/* Элемент истории */
+.history-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-lg);
+  padding: var(--space-sm);
+  background: rgba(40, 45, 70, 0.4);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(138, 109, 255, 0.1);
+}
+
+/* Статистика результата */
+.result-stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  align-items: center;
+}
+
+.result-stat-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* Элемент куба в пуле */
+.pool-dice-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: rgba(50, 55, 80, 0.8);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-accent);
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  min-width: 150px;
+}
+
+/* Информация о кубе */
+.dice-info-small {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}

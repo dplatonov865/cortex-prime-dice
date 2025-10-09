@@ -1,0 +1,238 @@
+/* Стили для блока результатов броска */
+
+.results-block {
+  margin-bottom: var(--space-2xl);
+  background: var(--bg-card-dark);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-2xl);
+}
+
+.results-block h3 {
+  color: var(--text-secondary);
+  border-bottom: 2px solid var(--accent-primary);
+  padding-bottom: var(--space-sm);
+  margin-bottom: var(--space-xl);
+}
+
+.results-section {
+  margin: var(--space-xl) 0;
+}
+
+.results-section h4 {
+  color: var(--text-muted);
+  margin-bottom: var(--space-lg);
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+/* Контейнер для кубов результатов - ТОЧНО КАК В ПУЛЕ */
+.results-section .dice-pool {
+  min-height: 120px;
+  padding: var(--space-xl);
+  background: var(--bg-card-light);
+  border-radius: var(--radius-xl);
+  border: 2px dashed rgba(138, 109, 255, 0.3);
+}
+
+/* Статистика результатов */
+.result-stats {
+  display: flex;
+  gap: var(--space-3xl);
+  margin-bottom: var(--space-xl);
+  padding: var(--space-lg);
+  background: var(--bg-card-light);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(138, 109, 255, 0.2);
+}
+
+.result-stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  align-items: center;
+}
+
+.result-stat-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.result-stat strong {
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+}
+
+.selection-counter {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  background: rgba(138, 109, 255, 0.2);
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+.result-value {
+  font-size: var(--text-4xl);
+  font-weight: bold;
+  color: var(--accent-primary);
+  text-shadow: 1px 1px 4px rgba(138, 109, 255, 0.3);
+}
+
+/* Статусные индикаторы для кубов результатов */
+.results-section .pool-dice-item {
+  position: relative;
+}
+
+/* Состояния кубов в результатах */
+.results-section .pool-dice-item.selected {
+  border-color: var(--accent-success) !important;
+  background: rgba(39, 174, 96, 0.15) !important;
+}
+
+.results-section .pool-dice-item.inactive {
+  border-color: var(--accent-danger) !important;
+  background: rgba(231, 76, 60, 0.15) !important;
+  cursor: not-allowed !important;
+}
+
+.results-section .pool-dice-item.disabled {
+  border-color: var(--accent-warning) !important;
+  background: rgba(243, 156, 18, 0.15) !important;
+  cursor: not-allowed !important;
+}
+
+/* Подсказка результатов */
+.results-hint {
+  margin-top: var(--space-lg);
+  padding: var(--space-md);
+  background: rgba(138, 109, 255, 0.15);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  color: #b8a9ff;
+  text-align: center;
+  border: 1px solid rgba(138, 109, 255, 0.2);
+}
+
+.limit-warning {
+  margin-top: var(--space-sm);
+  padding: 6px;
+  background: rgba(243, 156, 18, 0.2);
+  border-radius: var(--radius-sm);
+  color: var(--accent-warning);
+  font-weight: 500;
+  font-size: var(--text-xs);
+}
+
+/* История бросков */
+.roll-history-section {
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-xl);
+  border-top: 1px solid rgba(138, 109, 255, 0.2);
+}
+
+.roll-history-section h4 {
+  color: var(--text-muted);
+  margin-bottom: var(--space-lg);
+  font-size: var(--text-lg);
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.history-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-lg);
+  padding: var(--space-sm);
+  background: rgba(40, 45, 70, 0.4);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(138, 109, 255, 0.1);
+}
+
+.history-time {
+  font-size: var(--text-xs);
+  color: var(--text-disabled);
+  min-width: 60px;
+  margin-top: var(--space-xs);
+}
+
+/* Сообщение когда нет результатов */
+.results-section .empty-pool-message {
+  text-align: center;
+  color: var(--text-disabled);
+  font-style: italic;
+  padding: var(--space-3xl) var(--space-xl);
+  font-size: var(--text-lg);
+}
+
+/* Адаптивность для результатов */
+@media (max-width: 768px) {
+  .results-block {
+    padding: var(--space-xl) !important;
+  }
+
+  .results-block h3 {
+    font-size: var(--text-2xl);
+    text-align: center;
+  }
+
+  .result-stats {
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .result-stat {
+    flex-direction: row;
+    text-align: left;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    min-height: auto;
+    justify-content: space-between;
+  }
+
+  .result-value {
+    text-align: center;
+    font-size: var(--text-3xl);
+  }
+
+  .history-item {
+    flex-direction: column;
+    gap: var(--space-sm);
+    text-align: center;
+    padding: var(--space-md);
+  }
+
+  .history-time {
+    min-width: auto;
+  }
+
+  .results-hint {
+    padding: var(--space-md);
+    font-size: var(--text-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .results-block {
+    padding: var(--space-lg) !important;
+  }
+
+  .result-stats {
+    padding: var(--space-md);
+  }
+
+  .result-stat {
+    padding: var(--space-sm);
+  }
+
+  .result-value {
+    font-size: var(--text-2xl);
+  }
+}

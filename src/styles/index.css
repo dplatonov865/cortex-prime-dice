@@ -1,7 +1,35 @@
-@import './base.css';
-@import './layout.css';
-@import './components/blocks.css';
-@import './components/dice.css';
-@import './components/buttons.css';
-@import './components/results.css';
-@import './responsive.css';
+/* Главный файл импорта стилей */
+
+/* Базовые стили */
+@import './base/_reset.css';
+@import './base/_variables.css';
+@import './base/_typography.css';
+@import './base/_utilities.css';
+
+/* Стили layout */
+@import './layout/_grid.css';
+@import './layout/_containers.css';
+@import './layout/_responsive.css';
+
+/* Стили компонентов */
+@import './components/_buttons.css';
+@import './components/_inputs.css';
+@import './components/_character-header.css';
+@import './components/_attributes.css';
+@import './components/_roles.css';
+@import './components/_complications.css';
+@import './components/_distinctions.css';
+@import './components/_specialties.css';
+@import './components/_dice-pool.css';
+@import './components/_plot-tokens.css';
+@import './components/_results.css';
+@import './components/_dice.css';
+
+/* Убедимся, что все переменные загружены */
+:root {
+  /* Дублируем ключевые переменные на случай проблем с импортом */
+  --bg-primary: rgba(5, 8, 15, 0.4);
+  --bg-secondary: rgba(10, 12, 20, 0.3);
+  --text-primary: #f0f0f0;
+  --accent-primary: #8a6dff;
+}

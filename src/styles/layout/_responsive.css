@@ -1,11 +1,13 @@
-/* Адаптивность для больших экранов */
+/* Адаптивные стили для разных размеров экранов */
+
+/* Большие экраны (1440px и меньше) */
 @media (max-width: 1440px) {
     .main-columns {
         grid-template-columns: repeat(5, minmax(250px, 1fr));
     }
 
     .character-sheet {
-        max-width: 1600px;
+        max-width: var(--max-width-3xl);
     }
 
     .attributes-block {
@@ -27,126 +29,101 @@
     .specialties-block {
         grid-column: 2;
     }
-
-    .results-dice {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 12px;
-    }
-
-    .result-dice-item {
-        padding: 12px;
-        min-height: 80px;
-    }
-
-    .dice-roll {
-        font-size: 1.3rem;
-    }
 }
 
+/* Десктопы среднего размера (1200px - 1439px) */
 @media (min-width: 1200px) and (max-width: 1439px) {
     .main-columns {
         grid-template-columns: repeat(4, minmax(250px, 1fr));
     }
 }
 
+/* Планшеты в ландшафтной ориентации (992px - 1199px) */
 @media (min-width: 992px) and (max-width: 1199px) {
     .main-columns {
         grid-template-columns: repeat(3, minmax(250px, 1fr));
     }
 }
 
+/* Планшеты в портретной ориентации (768px - 991px) */
 @media (min-width: 768px) and (max-width: 991px) {
     .main-columns {
         grid-template-columns: repeat(2, minmax(250px, 1fr));
     }
 
     .results-block {
-        padding: 20px !important;
+        padding: var(--space-xl) !important;
     }
 
     .results-block h3 {
-        font-size: 1.3rem;
+        font-size: var(--text-2xl);
         text-align: center;
     }
 
     .result-stats {
-        grid-template-columns: 1fr;
-        gap: 15px;
+        flex-direction: column;
+        gap: var(--space-lg);
     }
 
     .result-stat {
         flex-direction: column;
         text-align: center;
-        gap: 10px;
-        padding: 15px;
+        gap: var(--space-sm);
+        padding: var(--space-md);
         min-height: auto;
     }
 
     .result-value {
         text-align: center;
-        font-size: 1.8rem;
+        font-size: var(--text-3xl);
     }
 
-    .results-dice {
-        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-        gap: 10px;
-    }
-
-    .result-dice-item {
+    .pool-dice-item {
         flex-direction: column;
         text-align: center;
-        gap: 8px;
-        padding: 12px;
+        gap: var(--space-sm);
+        padding: var(--space-md);
         min-height: auto;
     }
 
-    .dice-info {
+    .dice-info-small {
         align-items: center;
-        gap: 4px;
+        gap: var(--space-xs);
     }
 
     .dice-name {
-        font-size: 0.85rem;
-    }
-
-    .dice-roll {
-        font-size: 1.4rem;
+        text-align: center;
     }
 
     .history-item {
         flex-direction: column;
-        gap: 10px;
+        gap: var(--space-sm);
         text-align: center;
-        padding: 12px;
+        padding: var(--space-md);
     }
 
     .history-time {
         min-width: auto;
     }
 
-    .history-dice {
-        justify-content: center;
-        width: 100%;
-    }
-
     .results-hint {
-        padding: 12px;
-        font-size: 0.85rem;
+        padding: var(--space-md);
+        font-size: var(--text-sm);
     }
 }
 
-/* Адаптивность для планшетов */
+/* Планшеты и мобильные (768px и меньше) */
 @media (max-width: 768px) {
     .main-columns {
         grid-template-columns: 1fr;
     }
 
     .app-header h1 {
-        font-size: 2rem;
+        font-size: var(--text-5xl);
     }
 
     .character-sheet {
-        padding: 0 15px;
+        padding: 0 var(--space-lg);
     }
 
     .attributes-block,
@@ -159,7 +136,7 @@
 
     .block-header {
         flex-direction: column;
-        gap: 15px;
+        gap: var(--space-lg);
         align-items: stretch;
     }
 
@@ -167,29 +144,14 @@
         justify-content: center;
     }
 
-    .results-dice {
-        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    }
-
     .dice-pool-list {
         justify-content: center;
-    }
-
-    .results-total {
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
-    }
-
-    .result-stats {
-        grid-template-columns: 1fr;
-        gap: 15px;
     }
 
     .attribute-controls,
     .role-controls,
     .complication-controls {
-        gap: 6px;
+        gap: var(--space-xs);
     }
 
     .rank-buttons-vertical .rank-button {
@@ -201,7 +163,7 @@
     .distinction-row {
         flex-direction: column;
         align-items: flex-start;
-        gap: 8px;
+        gap: var(--space-sm);
     }
 
     .distinction-input {
@@ -216,7 +178,7 @@
     .specialty-row {
         flex-direction: column;
         align-items: flex-start;
-        gap: 8px;
+        gap: var(--space-sm);
     }
 
     .specialty-controls {
@@ -225,63 +187,59 @@
     }
 
     .character-header-block {
-        padding: 20px;
+        padding: var(--space-xl);
     }
 
     .character-name-input {
-        font-size: 2rem;
-        padding: 12px 0;
+        font-size: var(--text-4xl);
+        padding: var(--space-md) 0;
     }
 
     .character-details-grid {
         grid-template-columns: 1fr;
-        padding: 15px;
+        padding: var(--space-lg);
     }
 
     .character-description {
         min-height: 80px;
-        font-size: 0.9rem;
+        font-size: var(--text-base);
     }
 
     .character-header-top {
         flex-direction: column;
         align-items: stretch;
-        gap: 15px;
+        gap: var(--space-lg);
     }
 
     .character-actions {
         justify-content: center;
     }
 
-    @media (max-width: 768px) {
-        .tokens-actions {
-            flex-direction: row;
-            flex-wrap: wrap;
-        }
-
-        .token-action-btn,
-        .add-token-btn {
-            flex: 1;
-            min-width: 120px;
-        }
+    .tokens-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
     }
 
+    .token-action-btn,
+    .add-token-btn {
+        flex: 1;
+        min-width: 120px;
+    }
 }
 
-/* Адаптивность для мобильных */
+/* Мобильные устройства (480px и меньше) */
 @media (max-width: 480px) {
     .App {
-        padding: 10px;
+        padding: var(--space-sm);
     }
 
     .character-sheet {
-        padding: 0 10px;
+        padding: 0 var(--space-sm);
     }
 
     .block {
-        padding: 15px;
+        padding: var(--space-lg);
         min-height: auto;
-        /* Убираем фиксированную высоту на мобильных */
     }
 
     .pool-controls {
@@ -299,13 +257,8 @@
 
     .history-item {
         flex-direction: column;
-        gap: 8px;
+        gap: var(--space-sm);
         align-items: flex-start;
-    }
-
-    .history-dice {
-        width: 100%;
-        justify-content: center;
     }
 
     .attribute-row,
@@ -313,7 +266,7 @@
     .complication-row {
         flex-direction: column;
         align-items: flex-start;
-        gap: 8px;
+        gap: var(--space-sm);
     }
 
     .attribute-controls,
@@ -324,16 +277,16 @@
     }
 
     .distinction-category {
-        padding: 10px;
+        padding: var(--space-md);
     }
 
     .distinction-dice {
-        gap: 6px;
+        gap: var(--space-xs);
     }
 
     .distinction-input {
-        font-size: 0.85rem;
-        padding: 5px 6px;
+        font-size: var(--text-sm);
+        padding: var(--space-xs) var(--space-sm);
     }
 
     .specialties-input-container {
@@ -346,28 +299,28 @@
     }
 
     .specialty-controls {
-        gap: 10px;
+        gap: var(--space-sm);
     }
 
     .character-header-block {
-        padding: 15px;
+        padding: var(--space-lg);
     }
 
     .character-name-input {
-        font-size: 1.5rem;
+        font-size: var(--text-3xl);
     }
 
     .character-details-grid {
-        padding: 10px;
-        gap: 10px;
+        padding: var(--space-md);
+        gap: var(--space-sm);
     }
 
     .detail-input {
-        padding: 8px 10px;
+        padding: var(--space-sm) var(--space-sm);
     }
 
     .character-description {
-        padding: 12px;
+        padding: var(--space-md);
         min-height: 70px;
     }
 
@@ -384,16 +337,76 @@
     .plot-tokens-block {
         position: static !important;
         transform: none !important;
-        margin: 10px 0;
+        margin: var(--space-sm) 0;
     }
 
     .tokens-actions {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 8px;
+        gap: var(--space-sm);
     }
 
     .add-token-btn {
         grid-column: 1 / -1;
+    }
+}
+
+/* Очень маленькие экраны (360px и меньше) */
+@media (max-width: 360px) {
+    .app-header h1 {
+        font-size: var(--text-4xl);
+    }
+
+    .block {
+        padding: var(--space-md);
+    }
+
+    .character-name-input {
+        font-size: var(--text-2xl);
+    }
+
+    .pool-dice-item {
+        min-width: 120px;
+        padding: var(--space-sm);
+    }
+
+    .dice-name {
+        font-size: var(--text-xs);
+        max-width: 100px;
+    }
+}
+
+/* Высокие экраны */
+@media (min-height: 900px) {
+    .character-sheet {
+        min-height: calc(100vh - 100px);
+    }
+
+    .block {
+        min-height: 350px;
+    }
+}
+
+/* Печать */
+@media print {
+    .character-sheet {
+        max-width: none;
+        padding: 0;
+    }
+
+    .block {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        break-inside: avoid;
+    }
+
+    .pool-controls,
+    .character-actions {
+        display: none;
+    }
+
+    .dice-pool,
+    .results-section .dice-pool {
+        border: 1px dashed #ccc;
     }
 }

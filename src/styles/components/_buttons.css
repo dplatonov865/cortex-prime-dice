@@ -1,0 +1,327 @@
+/* Стили для кнопок и элементов управления */
+
+/* Базовые стили кнопок */
+.roll-button,
+.clear-button,
+.export-button,
+.import-button,
+.token-action-btn,
+.add-token-btn,
+.add-specialty-button,
+.remove-specialty-button {
+  padding: var(--space-md) var(--space-xl);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: var(--text-base);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  font-family: inherit;
+}
+
+/* Кнопки управления пулом */
+.pool-controls {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.roll-button {
+  background: var(--gradient-success);
+  color: white;
+  box-shadow: var(--shadow-glow);
+}
+
+.roll-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+}
+
+.roll-button:disabled {
+  background: rgba(149, 165, 166, 0.3);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.clear-button {
+  background: var(--gradient-danger);
+  color: white;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.clear-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+}
+
+.clear-button:disabled {
+  background: rgba(189, 195, 199, 0.3);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Кнопки экспорта/импорта */
+.export-button,
+.import-button {
+  padding: var(--space-sm) var(--space-lg);
+  border: 1px solid rgba(138, 109, 255, 0.4);
+  border-radius: var(--radius-md);
+  background: rgba(138, 109, 255, 0.1);
+  color: var(--accent-primary);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.export-button:hover,
+.import-button:hover {
+  background: rgba(138, 109, 255, 0.2);
+  border-color: rgba(138, 109, 255, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(138, 109, 255, 0.3);
+}
+
+.export-button:active,
+.import-button:active {
+  transform: translateY(0);
+}
+
+/* Кнопки жетонов сюжета */
+.token-action-btn,
+.add-token-btn {
+  padding: var(--space-sm) var(--space-sm);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: var(--text-xs);
+  min-height: 44px;
+}
+
+.token-action-btn {
+  background: var(--accent-info);
+  color: white;
+}
+
+.token-action-btn:hover:not(:disabled) {
+  background: #2980b9;
+}
+
+.add-token-btn {
+  background: var(--accent-success);
+  color: white;
+  grid-column: 1 / -1;
+  margin-top: var(--space-xs);
+}
+
+.add-token-btn:hover {
+  background: #219653;
+}
+
+.token-action-btn:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* Кнопки специальностей */
+.add-specialty-button {
+  width: 45px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #1abc9c, #16a085);
+  color: white;
+  font-size: var(--text-2xl);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-specialty-button:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(26, 188, 156, 0.3);
+}
+
+.add-specialty-button:disabled {
+  background: rgba(189, 195, 199, 0.3);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.remove-specialty-button {
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 50%;
+  background: var(--gradient-danger);
+  color: white;
+  font-size: var(--text-base);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.remove-specialty-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+}
+
+/* Кнопки управления рангами */
+.rank-buttons-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.rank-buttons-vertical .rank-button {
+  width: 20px;
+  height: 16px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  border-radius: 2px;
+  transition: all var(--transition-fast);
+}
+
+/* Цвета для кнопок рангов в разных блоках */
+.attributes-block .rank-button {
+  background: var(--accent-info);
+}
+
+.attributes-block .rank-button:hover:not(:disabled) {
+  background: #2980b9;
+}
+
+.roles-block .rank-button {
+  background: #9b59b6;
+}
+
+.roles-block .rank-button:hover:not(:disabled) {
+  background: #8e44ad;
+}
+
+.complications-block .rank-button {
+  background: var(--accent-danger);
+}
+
+.complications-block .rank-button:hover:not(:disabled) {
+  background: #c0392b;
+}
+
+/* Общие стили для disabled состояний кнопок рангов */
+.rank-buttons-vertical .rank-button:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.rank-buttons-vertical .increase-button {
+  border-radius: 2px 2px 0 0;
+}
+
+.rank-buttons-vertical .decrease-button {
+  border-radius: 0 0 2px 2px;
+}
+
+/* Состояния кнопок */
+.button-primary {
+  background: var(--gradient-primary);
+  color: white;
+}
+
+.button-success {
+  background: var(--gradient-success);
+  color: white;
+}
+
+.button-danger {
+  background: var(--gradient-danger);
+  color: white;
+}
+
+.button-warning {
+  background: var(--gradient-warning);
+  color: white;
+}
+
+/* Размеры кнопок */
+.button-sm {
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--text-xs);
+}
+
+.button-lg {
+  padding: var(--space-lg) var(--space-2xl);
+  font-size: var(--text-lg);
+}
+
+/* Полноширинные кнопки */
+.button-full {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Иконки в кнопках */
+.button-with-icon {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+/* Группы кнопок */
+.button-group {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.button-group .button {
+  border-radius: 0;
+}
+
+.button-group .button:first-child {
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.button-group .button:last-child {
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.button-group .button:only-child {
+  border-radius: var(--radius-md);
+}
+
+/* Анимации для кнопок */
+.button-loading {
+  position: relative;
+  color: transparent;
+}
+
+.button-loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: button-spinner 0.8s linear infinite;
+}
+
+@keyframes button-spinner {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
