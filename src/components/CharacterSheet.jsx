@@ -10,63 +10,28 @@ import ResultsBlock from '../components/ResultsBlock';
 import { useDicePool } from '../hooks/useDicePool';
 import { useDiceRoll } from '../hooks/useDiceRoll';
 import { exportCharacter, importCharacter, validateCharacterData } from '../utils/fileHandler';
+import {
+  DEFAULT_CHARACTER_INFO,
+  DEFAULT_ATTRIBUTES,
+  DEFAULT_ROLES,
+  DEFAULT_COMPLICATIONS,
+  DEFAULT_DISTINCTIONS,
+  DEFAULT_SPECIALTIES,
+  LIMITS
+} from '../constants/characterData';
+
 
 const CharacterSheet = () => {
   // Информация о персонаже
-  const [characterInfo, setCharacterInfo] = useState({
-    name: '',
-    player: '',
-    campaign: '',
-    race: '',
-    age: '',
-    description: ''
-  });
+  const [characterInfo, setCharacterInfo] = useState(DEFAULT_CHARACTER_INFO);
 
   // Состояния характеристик
-  const [attributes, setAttributes] = useState({
-    'Атлетизм': 'd6',
-    'Координация': 'd6',
-    'Хитрость': 'd6',
-    'Эрудиция': 'd6',
-    'Чутьё': 'd6',
-    'Убеждённость': 'd6'
-  });
+  const [attributes, setAttributes] = useState(DEFAULT_ATTRIBUTES);
+  const [roles, setRoles] = useState(DEFAULT_ROLES);
+  const [complications, setComplications] = useState(DEFAULT_COMPLICATIONS);
+  const [distinctions, setDistinctions] = useState(DEFAULT_DISTINCTIONS);
+  const [specialties, setSpecialties] = useState(DEFAULT_SPECIALTIES);
 
-  const [roles, setRoles] = useState({
-    'Солдат': 'd6',
-    'Дипломат': 'd6',
-    'Эксперт': 'd6',
-    'Мастер': 'd6',
-    'Преступник': 'd6',
-    'Детектив': 'd6'
-  });
-
-  const [complications, setComplications] = useState({
-    'Ослабление': '0',
-    'Дезориентация': '0',
-    'Подозрительность': '0',
-    'Забывчивость': '0',
-    'Рассеянность': '0',
-    'Сомнения': '0'
-  });
-
-  const [distinctions, setDistinctions] = useState({
-    'past': {
-      name: 'Ботаник'
-    },
-    'trait': {
-      name: 'Хладнокровный'
-    },
-    'value': {
-      name: 'Дружба'
-    }
-  });
-
-  const [specialties, setSpecialties] = useState({
-    '1': { name: 'Стрельба из пистолета' },
-    '2': { name: 'Вождение автомобиля' },
-    '3': { name: 'Первая помощь' }
-  });
 
   // Хуки для управления логикой
   const {
@@ -120,12 +85,12 @@ const CharacterSheet = () => {
 
       // Подтверждение импорта
       if (window.confirm('Вы уверены, что хотите загрузить этого персонажа? Текущие данные будут потеряны.')) {
-        setCharacterInfo(data.characterInfo || {});
-        setAttributes(data.attributes || {});
-        setRoles(data.roles || {});
-        setComplications(data.complications || {});
-        setDistinctions(data.distinctions || {});
-        setSpecialties(data.specialties || {});
+        setCharacterInfo(data.characterInfo || DEFAULT_CHARACTER_INFO);
+        setAttributes(data.attributes || DEFAULT_ATTRIBUTES);
+        setRoles(data.roles || DEFAULT_ROLES);
+        setComplications(data.complications || DEFAULT_COMPLICATIONS);
+        setDistinctions(data.distinctions || DEFAULT_DISTINCTIONS);
+        setSpecialties(data.specialties || DEFAULT_SPECIALTIES);
 
         // Очищаем пул и результаты
         clearDicePool();
@@ -199,12 +164,9 @@ const CharacterSheet = () => {
   };
 
   const handleSpecialtiesChange = (action, id, name) => {
-    if (action === 'add') {
+    if (action === 'add' && Object.keys(specialties).length < LIMITS.MAX_SPECIALTIES) {
       const newId = Date.now().toString();
-      setSpecialties(prev => ({
-        ...prev,
-        [newId]: { name }
-      }));
+      setSpecialties(prev => ({ ...prev, [newId]: { name } }));
     } else if (action === 'remove') {
       setSpecialties(prev => {
         const newSpecialties = { ...prev };
@@ -212,10 +174,7 @@ const CharacterSheet = () => {
         return newSpecialties;
       });
     } else if (action === 'edit') {
-      setSpecialties(prev => ({
-        ...prev,
-        [id]: { name }
-      }));
+      setSpecialties(prev => ({ ...prev, [id]: { name } }));
     }
   };
 
