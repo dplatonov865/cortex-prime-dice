@@ -2,7 +2,7 @@
 /* .attributes-block {
   grid-column: 1;
 } */
- .block h3 {
+.block h3 {
   margin-bottom: 20px;
   color: #e8e6e3;
   border-bottom: 2px solid;
@@ -175,6 +175,7 @@
   border-left: 3px solid #ff6b6b;
   border: 1px solid rgba(255, 107, 107, 0.2);
 }
+
 /* Стили для неактивных осложнений (ранг не d4) */
 .complication-row.complication-disabled {
   cursor: not-allowed;
@@ -223,6 +224,7 @@
   transform: none;
   filter: none;
 }
+
 /* Пустые блоки */
 .empty-block {
   display: flex;
@@ -327,12 +329,15 @@
   word-break: break-word;
   font-weight: 500;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-}/* Блок отличий */
+}
+
+/* Блок отличий */
 /* .distinctions-block {
   grid-column: 4;
 } */
 
 .distinctions-block h3 {
+  margin-bottom: 15px;
   border-color: #ffd93d;
   background: linear-gradient(135deg, #ffd93d 0%, transparent 100%);
   -webkit-background-clip: text;
@@ -369,6 +374,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 10px;
+  min-height: 40px;
 }
 
 .distinction-input {
@@ -381,6 +387,7 @@
   background: rgba(30, 35, 50, 0.8);
   color: #e8e6e3;
   transition: all 0.2s ease;
+  min-width: 0;
 }
 
 .distinction-input:focus {
@@ -398,6 +405,8 @@
   display: flex;
   gap: 8px;
   align-items: center;
+  flex-shrink: 0;
+  min-width: max-content;
   flex-shrink: 0;
 }
 
@@ -630,6 +639,7 @@
 .specialties-list::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
 }
+
 .category-used {
   opacity: 0.8;
   position: relative;
@@ -686,7 +696,7 @@
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 20px;
-  box-shadow: 
+  box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.4),
     0 2px 8px rgba(200, 182, 255, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -833,6 +843,7 @@
   margin-top: 5px;
   font-family: 'Source Code Pro', monospace;
 }
+
 /* Кнопки экспорта/импорта в шапке */
 .character-header-top {
   display: flex;
@@ -852,7 +863,8 @@
   flex-shrink: 0;
 }
 
-.export-button, .import-button {
+.export-button,
+.import-button {
   padding: 10px 16px;
   border: 1px solid rgba(138, 109, 255, 0.4);
   border-radius: 8px;
@@ -867,13 +879,15 @@
   letter-spacing: 0.5px;
 }
 
-.export-button:hover, .import-button:hover {
+.export-button:hover,
+.import-button:hover {
   background: rgba(138, 109, 255, 0.2);
   border-color: rgba(138, 109, 255, 0.6);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(138, 109, 255, 0.3);
 }
 
-.export-button:active, .import-button:active {
+.export-button:active,
+.import-button:active {
   transform: translateY(0);
 }
