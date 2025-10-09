@@ -16,7 +16,7 @@ const ResultsBlock = ({
       <h3>Результаты броска</h3>
       
       {rollResults.length === 0 ? (
-        <p className="no-results-message">Здесь будут отображаться результаты бросков</p>
+        <p className="empty-pool-message">Здесь будут отображаться результаты бросков</p>
       ) : (
         <div className="current-results">
           {/* Строки с результатом и кубом эффекта */}
@@ -27,7 +27,7 @@ const ResultsBlock = ({
             maxSelected={maxSelectedDice}
           />
           
-          {/* Выпавшие кубы */}
+          {/* Выпавшие кубы - ТЕПЕРЬ ТАК ЖЕ КАК В ПУЛЕ */}
           <ResultsSection 
             rollResults={rollResults}
             selectedDice={selectedDice}
@@ -87,29 +87,31 @@ const ResultsSection = ({
 }) => (
   <div className="results-section">
     <h4>Выпавшие значения:</h4>
-    <div className="results-dice">
-      {rollResults.map(dice => (
-        <ResultDiceItem
-          key={dice.id}
-          dice={dice}
-          isSelected={selectedDice.includes(dice.id)}
-          canSelect={canSelectDice ? canSelectDice(dice.id) : true}
-          isLimitReached={selectedDice.length >= maxSelectedDice}
-          onClick={() => onResultDiceClick(dice.id)}
-        />
-      ))}
+    <div className="dice-pool">
+      <div className="dice-pool-list">
+        {rollResults.map(dice => (
+          <ResultDiceItem
+            key={dice.id}
+            dice={dice}
+            isSelected={selectedDice.includes(dice.id)}
+            canSelect={canSelectDice ? canSelectDice(dice.id) : true}
+            isLimitReached={selectedDice.length >= maxSelectedDice}
+            onClick={() => onResultDiceClick(dice.id)}
+          />
+        ))}
+      </div>
     </div>
   </div>
 );
 
-// Подкомпонент для отдельного куба результата
+// Подкомпонент для отдельного куба результата - УБРАНО ДУБЛИРОВАНИЕ
 const ResultDiceItem = ({ dice, isSelected, canSelect, isLimitReached, onClick }) => {
   const isInactive = dice.isOne || dice.rolledValue === 0;
   const isDisabled = !isInactive && !canSelect;
   
   return (
     <div 
-      className={`result-dice-item ${isSelected ? 'selected' : ''} ${isInactive ? 'inactive' : ''} ${isDisabled ? 'disabled' : ''}`}
+      className={`pool-dice-item ${isSelected ? 'selected' : ''} ${isInactive ? 'inactive' : ''} ${isDisabled ? 'disabled' : ''}`}
       onClick={onClick}
       title={getDiceTitle(isInactive, isSelected, isDisabled, isLimitReached)}
     >
@@ -118,16 +120,17 @@ const ResultDiceItem = ({ dice, isSelected, canSelect, isLimitReached, onClick }
         value={dice.rolledValue}
         clickable={!isInactive && !isDisabled}
       />
-      <div className="dice-info">
-        <div className="dice-category-small">
+      <div className="dice-info-small">
+        <span className="dice-category">
           {getCategoryLabel(dice.category)}
-        </div>
-        <div className="dice-name">{dice.name}</div>
-        <div className="dice-roll">{dice.rolledValue}</div>
-        {isSelected && <div className="selected-indicator">✓ В результате</div>}
-        {isInactive && <div className="inactive-indicator">✗ Неактивен</div>}
-        {isDisabled && !isSelected && <div className="disabled-indicator">🔒 Лимит</div>}
+        </span>
+        <span className="dice-name">{dice.name}</span>
+        {/* УБРАНА строка с дублирующим значением: <div className="dice-roll">{dice.rolledValue}</div> */}
       </div>
+      {/* Индикаторы статусов */}
+      {isSelected && <div className="selected-indicator">✓</div>}
+      {isInactive && <div className="inactive-indicator">✗</div>}
+      {isDisabled && !isSelected && <div className="disabled-indicator">🔒</div>}
     </div>
   );
 };
