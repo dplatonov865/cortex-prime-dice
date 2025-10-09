@@ -998,3 +998,13 @@
   color: #e67e22;
   text-align: center;
 }
+category-unlocked {
+  border: 2px solid #4CAF50;
+  animation: pulse-unlock 1s ease-in-out;
+}
+
+@keyframes pulse-unlock {
+  0% { border-color: #4CAF50; }
+  50% { border-color: #8BC34A; }
+  100% { border-color: #4CAF50; }
+}

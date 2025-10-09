@@ -3,6 +3,7 @@ import { useState } from 'react';
 export const useDicePool = () => {
   const [dicePool, setDicePool] = useState([]);
   const [usedCategories, setUsedCategories] = useState(new Set());
+  const [plotTokenActive, setPlotTokenActive] = useState(false); // Новое состояние
 
   // Добавление куба в пул
   const addToDicePool = (name, diceType, category) => {
@@ -10,7 +11,7 @@ export const useDicePool = () => {
     const mainCategory = getMainCategory(category);
     
     // Проверяем, не использована ли уже эта категория
-    if (usedCategories.has(mainCategory)) {
+    if (usedCategories.has(mainCategory) && !plotTokenActive) {
       return;
     }
 
@@ -32,7 +33,16 @@ export const useDicePool = () => {
     };
     
     setDicePool(prev => [...prev, newDice]);
-    setUsedCategories(prev => new Set([...prev, mainCategory]));
+    
+    // ЕСЛИ АКТИВЕН ЖЕТОН СЮЖЕТА - БЛОКИРУЕМ ВСЕ КАТЕГОРИИ
+    if (plotTokenActive) {
+      const allCategories = ['attribute', 'role', 'complication', 'distinction', 'specialty'];
+      setUsedCategories(new Set(allCategories));
+      setPlotTokenActive(false); // Сбрасываем режим жетона
+    } else {
+      // Обычная логика - блокируем только одну категорию
+      setUsedCategories(prev => new Set([...prev, mainCategory]));
+    }
   };
 
   // Удаление куба из пула
@@ -52,11 +62,19 @@ export const useDicePool = () => {
   const clearDicePool = () => {
     setDicePool([]);
     setUsedCategories(new Set());
+    setPlotTokenActive(false); // Сбрасываем режим жетона при очистке
   };
 
   // Сброс использованных категорий (после броска)
   const clearUsedCategories = () => {
     setUsedCategories(new Set());
+    setPlotTokenActive(false);
+  };
+
+  // АКТИВАЦИЯ РЕЖИМА ЖЕТОНА СЮЖЕТА
+  const activatePlotTokenMode = () => {
+    setPlotTokenActive(true);
+    setUsedCategories(new Set()); // Разблокируем все категории
   };
 
   // Получение основной категории
@@ -69,6 +87,9 @@ export const useDicePool = () => {
 
   // Проверка, доступна ли категория для добавления
   const isCategoryAvailable = (category) => {
+    // В режиме жетона сюжета все категории доступны
+    if (plotTokenActive) return true;
+    
     const mainCategory = getMainCategory(category);
     return !usedCategories.has(mainCategory);
   };
@@ -76,10 +97,12 @@ export const useDicePool = () => {
   return {
     dicePool,
     usedCategories,
+    plotTokenActive, // Экспортируем для отладки/индикации
     addToDicePool,
     removeFromDicePool,
     clearDicePool,
     clearUsedCategories,
+    activatePlotTokenMode, // Заменяем unlockAllCategories
     isCategoryAvailable,
     setDicePool
   };

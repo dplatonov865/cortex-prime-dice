@@ -40,10 +40,12 @@ const CharacterSheet = () => {
   const {
     dicePool,
     usedCategories,
+    plotTokenActive,
     addToDicePool,
     removeFromDicePool,
     clearDicePool,
     clearUsedCategories,
+    activatePlotTokenMode,
     isCategoryAvailable,
     setDicePool
   } = useDicePool();
@@ -112,8 +114,41 @@ const CharacterSheet = () => {
   };
 
   const handleSpendToken = (action) => {
+    if (plotTokens === 0) return;
+
     setPlotTokens(prev => Math.max(0, prev - 1));
-    // Здесь будет логика для разных действий
+
+    // Обработка разных действий жетонов
+    switch (action) {
+      case 'Добавить куб в пул':
+        // Активируем режим жетона сюжета
+        activatePlotTokenMode();
+        alert('Режим дополнительного куба активирован! Выберите ОДИН куб из любого блока - после этого все блоки снова заблокируются.');
+        break;
+
+      case 'Добавить куб в результат':
+        // TODO: реализовать позже
+        alert(`Жетон потрачен! ${action} (функция в разработке)`);
+        break;
+
+      case 'Добавить куб эффекта':
+        // TODO: реализовать позже
+        alert(`Жетон потрачен! ${action} (функция в разработке)`);
+        break;
+
+      case 'Активировать возможность':
+        // TODO: реализовать позже
+        alert(`Жетон потрачен! ${action} (функция в разработке)`);
+        break;
+
+      case 'Другое действие':
+        // TODO: реализовать позже
+        alert(`Жетон потрачен! ${action} (функция в разработке)`);
+        break;
+
+      default:
+        alert(`Жетон потрачен! ${action}`);
+    }
   };
 
   // Обработчик изменения информации о персонаже
@@ -245,18 +280,20 @@ const CharacterSheet = () => {
         />
       </div>
 
-      {/* Блок 6: Текущий пул кубов */}
+      {/* Жетоны сюжета */}
+      <PlotTokens
+        tokens={plotTokens}
+        onAddToken={handleAddToken}
+        onSpendToken={handleSpendToken}
+        plotTokenActive={plotTokenActive}
+        />
+
+        {/* Блок 6: Текущий пул кубов */}
       <DicePoolBlock
         dicePool={dicePool}
         onRemoveFromPool={removeFromDicePool}
         onRollDice={handleRollDice}
         onClearPool={clearDicePool}
-      />
-
-      <PlotTokens
-        tokens={plotTokens}
-        onAddToken={handleAddToken}
-        onSpendToken={handleSpendToken}
       />
       {/* Блок 7: Результаты броска */}
       <ResultsBlock
