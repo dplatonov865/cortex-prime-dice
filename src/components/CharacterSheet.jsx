@@ -284,7 +284,7 @@ const CharacterSheet = () => {
         tokens={plotTokens}
         onAddToken={handleAddToken}
         onSpendToken={handleSpendToken}
-        onAddToPool={handleActivateAdditionalDie}
+        onActivateAdditionalDie={handleActivateAdditionalDie} // ← ИСПРАВИТЬ ЭТУ СТРОКУ
         additionalDieEffect={additionalDieEffect}
       />
 
