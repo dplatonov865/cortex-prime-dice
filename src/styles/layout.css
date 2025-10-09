@@ -62,11 +62,11 @@
 }
 
 /* Переопределение для блока результатов */
-.results-block {
+/* .results-block {
   background: rgba(20, 20, 25, 0.95) !important;
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 20px;
   padding: 25px !important;
   margin-bottom: 0;
-}
+} */
