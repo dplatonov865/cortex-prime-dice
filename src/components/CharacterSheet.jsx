@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import CharacterHeader from '../components/CharacterHeader';
-import AttributeBlock from '../components/AttributeBlock';
-import RoleBlock from '../components/RoleBlock';
-import ComplicationBlock from '../components/ComplicationBlock';
-import DistinctionBlock from '../components/DistinctionBlock';
-import SpecialtiesBlock from '../components/SpecialtiesBlock';
-import DicePoolBlock from '../components/DicePoolBlock';
-import ResultsBlock from '../components/ResultsBlock';
+import CharacterHeader from './CharacterHeader';
+import AttributeBlock from './AttributeBlock';
+import RoleBlock from './RoleBlock';
+import ComplicationBlock from './ComplicationBlock';
+import DistinctionBlock from './DistinctionBlock';
+import SpecialtiesBlock from './SpecialtiesBlock';
+import DicePoolBlock from './DicePoolBlock';
+import ResultsBlock from './ResultsBlock';
+import PlotTokens from './PlotTokens';
 import { useDicePool } from '../hooks/useDicePool';
 import { useDiceRoll } from '../hooks/useDiceRoll';
 import { exportCharacter, importCharacter, validateCharacterData } from '../utils/fileHandler';
@@ -31,6 +32,8 @@ const CharacterSheet = () => {
   const [complications, setComplications] = useState(DEFAULT_COMPLICATIONS);
   const [distinctions, setDistinctions] = useState(DEFAULT_DISTINCTIONS);
   const [specialties, setSpecialties] = useState(DEFAULT_SPECIALTIES);
+  const [plotTokens, setPlotTokens] = useState(1);
+
 
 
   // Хуки для управления логикой
@@ -100,6 +103,15 @@ const CharacterSheet = () => {
     } catch (error) {
       alert(`Ошибка при импорте: ${error.message}`);
     }
+  };
+
+  const handleAddToken = () => {
+    setPlotTokens(prev => prev + 1);
+  };
+
+  const handleSpendToken = (action) => {
+    setPlotTokens(prev => Math.max(0, prev - 1));
+    // Здесь будет логика для разных действий
   };
 
   // Обработчик изменения информации о персонаже
@@ -228,6 +240,11 @@ const CharacterSheet = () => {
           onSpecialtyClick={handleSpecialtyClick}
           onSpecialtiesChange={handleSpecialtiesChange}
           isCategoryAvailable={isCategoryAvailable}
+        />
+        <PlotTokens
+          tokens={plotTokens}
+          onAddToken={handleAddToken}
+          onSpendToken={handleSpendToken}
         />
       </div>
 

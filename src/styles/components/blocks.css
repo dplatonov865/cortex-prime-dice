@@ -899,3 +899,97 @@
 .import-button:active {
   transform: translateY(0);
 }
+/* Блок жетонов сюжета */
+.plot-tokens-block {
+  grid-column: 5;
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.plot-tokens-block h3 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+  border-bottom: 2px solid #e67e22;
+  padding-bottom: 5px;
+}
+
+.tokens-display {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.tokens-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  background: #fff9e6;
+  border-radius: 20px;
+  border: 2px solid #f39c12;
+}
+
+.tokens-label {
+  font-weight: 600;
+  color: #e67e22;
+}
+
+.tokens-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #e67e22;
+  min-width: 30px;
+}
+
+.tokens-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.token-action-btn, .add-token-btn {
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  /* font-family: 'Source Code Pro', monospace; */
+  font-family: inherit;
+}
+
+.token-action-btn {
+  background: #3498db;
+  color: white;
+}
+
+.token-action-btn:hover:not(:disabled) {
+  background: #2980b9;
+}
+
+.add-token-btn {
+  background: #27ae60;
+  color: white;
+  margin-top: 5px;
+}
+
+.add-token-btn:hover {
+  background: #219653;
+}
+
+.token-action-btn:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.tokens-hint {
+  padding: 10px;
+  background: #fff9e6;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: #e67e22;
+  text-align: center;
+}
