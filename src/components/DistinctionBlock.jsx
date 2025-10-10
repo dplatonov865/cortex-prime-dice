@@ -13,12 +13,6 @@ const DistinctionBlock = ({ distinctions, onDistinctionClick, onDistinctionChang
     onDistinctionChange(category, newName);
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      e.target.blur();
-    }
-  };
-
   const isBlockAvailable = isCategoryAvailable ? isCategoryAvailable('distinction') : true;
   const finalAvailability = isBlockAvailable || additionalDieEffect;
 
@@ -30,57 +24,60 @@ const DistinctionBlock = ({ distinctions, onDistinctionClick, onDistinctionChang
           <div key={category} className="distinction-category">
             <h4 className="distinction-title">{getCategoryTitle(category)}</h4>
             <div className={`distinction-row ${!finalAvailability ? 'row-disabled' : ''}`}>
-              <input
-                type="text"
-                className="distinction-input"
+              <select
+                className="distinction-select"
                 value={distinction.name}
                 onChange={(e) => handleNameChange(category, e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Введите отличительную черту..."
-                maxLength={30}
                 disabled={!finalAvailability}
-              />
-              
+              >
+                <option value="">Выберите {getCategoryTitle(category).toLowerCase()}...</option>
+                {getCategoryOptions(category).map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+
               <div className="distinction-dice">
-                <div 
+                <div
                   className={`distinction-dice-item ${!finalAvailability ? 'dice-disabled' : ''}`}
                   onClick={() => handleDistinctionClick(
-                    distinction.name, 
-                    'd8', 
+                    distinction.name,
+                    'd8',
                     `${getCategoryTitle(category)} (d8)`
                   )}
                   title={
-                    !finalAvailability 
+                    !finalAvailability
                       ? 'Уже используется отличие из этого набора'
                       : additionalDieEffect
-                      ? 'Эффект дополнительного куба: можно добавить в пул'
-                      : 'Клик чтобы добавить d8 в пул'
+                        ? 'Эффект дополнительного куба: можно добавить в пул'
+                        : 'Клик чтобы добавить d8 в пул'
                   }
                 >
-                  <DiceIcon 
-                    type="d8" 
+                  <DiceIcon
+                    type="d8"
                     value="8"
                     clickable={finalAvailability}
                   />
                 </div>
-                
-                <div 
+
+                <div
                   className={`distinction-dice-item ${!finalAvailability ? 'dice-disabled' : ''}`}
                   onClick={() => handleDistinctionClick(
-                    distinction.name, 
-                    'd4', 
+                    distinction.name,
+                    'd4',
                     `${getCategoryTitle(category)} (d4)`
                   )}
                   title={
-                    !finalAvailability 
+                    !finalAvailability
                       ? 'Уже используется отличие из этого набора'
                       : additionalDieEffect
-                      ? 'Эффект дополнительного куба: можно добавить в пул'
-                      : 'Клик чтобы добавить d4 в пул'
+                        ? 'Эффект дополнительного куба: можно добавить в пул'
+                        : 'Клик чтобы добавить d4 в пул'
                   }
                 >
-                  <DiceIcon 
-                    type="d4" 
+                  <DiceIcon
+                    type="d4"
                     value="4"
                     clickable={finalAvailability}
                   />
@@ -91,11 +88,11 @@ const DistinctionBlock = ({ distinctions, onDistinctionClick, onDistinctionChang
         ))}
       </div>
       <div className="distinction-hint">
-        {additionalDieEffect 
-          ? '🎯 Эффект дополнительного куба: можно добавить любое отличие' 
-          : !isBlockAvailable 
-            ? '⚡ Отличие уже используется в пуле' 
-            : '💡 Кликайте по кубам чтобы добавить их в пул. Текст можно редактировать.'
+        {additionalDieEffect
+          ? '🎯 Эффект дополнительного куба: можно добавить любое отличие'
+          : !isBlockAvailable
+            ? '⚡ Отличие уже используется в пуле'
+            : '💡 Выберите отличительные черты из списка и добавляйте кубы в пул'
         }
       </div>
     </div>
@@ -110,6 +107,44 @@ const getCategoryTitle = (category) => {
     'value': 'Ценность'
   };
   return titles[category] || category;
+};
+
+// Функция для получения вариантов выбора для каждой категории
+const getCategoryOptions = (category) => {
+  const options = {
+    'past': [
+      { value: 'Вспыльчивый', label: 'Вспыльчивый' },
+      { value: 'Спокойный', label: 'Спокойный' },
+      { value: 'Импульсивный', label: 'Импульсивный' },
+      { value: 'Осторожный', label: 'Осторожный' },
+      { value: 'Энергичный', label: 'Энергичный' },
+      { value: 'Флегматичный', label: 'Флегматичный' },
+      { value: 'Оптимистичный', label: 'Оптимистичный' },
+      { value: 'Пессимистичный', label: 'Пессимистичный' }
+    ],
+    'trait': [
+      { value: 'Власть', label: 'Власть' },
+      { value: 'Знания', label: 'Знания' },
+      { value: 'Слава', label: 'Слава' },
+      { value: 'Богатство', label: 'Богатство' },
+      { value: 'Справедливость', label: 'Справедливость' },
+      { value: 'Свобода', label: 'Свобода' },
+      { value: 'Защита слабых', label: 'Защита слабых' },
+      { value: 'Самосовершенствование', label: 'Самосовершенствование' }
+    ],
+    'value': [
+      { value: 'Семья', label: 'Семья' },
+      { value: 'Дружба', label: 'Дружба' },
+      { value: 'Честь', label: 'Честь' },
+      { value: 'Верность', label: 'Верность' },
+      { value: 'Истина', label: 'Истина' },
+      { value: 'Милосердие', label: 'Милосердие' },
+      { value: 'Равенство', label: 'Равенство' },
+      { value: 'Традиции', label: 'Традиции' }
+    ]
+  };
+
+  return options[category] || [];
 };
 
 export default DistinctionBlock;

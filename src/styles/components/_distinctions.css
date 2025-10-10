@@ -40,28 +40,77 @@
   min-height: 40px;
 }
 
-.distinction-input {
+/* Стили для выпадающего списка */
+.distinction-select {
   flex: 1;
   border: 1px solid rgba(255, 217, 61, 0.3);
   border-radius: var(--radius-md);
   padding: var(--space-sm) var(--space-md);
+  padding-right: 2.5rem;
+  /* Место для стрелки */
   font-size: var(--text-base);
   font-family: inherit;
   background: rgba(30, 35, 50, 0.8);
   color: var(--text-primary);
   transition: all var(--transition-fast);
   min-width: 0;
+  cursor: pointer;
+
+  /* Кастомная стрелка */
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23ffd93d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  background-size: 1rem;
 }
 
-.distinction-input:focus {
+.distinction-select:focus {
   outline: none;
   border-color: #ffd93d;
   box-shadow: 0 0 0 2px rgba(255, 217, 61, 0.2);
-  background: rgba(35, 40, 55, 0.9);
+  background-color: rgba(35, 40, 55, 0.9);
 }
 
-.distinction-input:hover {
+.distinction-select:hover {
   border-color: rgba(255, 217, 61, 0.5);
+  background-color: rgba(35, 40, 55, 0.9);
+}
+
+.distinction-select:disabled {
+  background-color: rgba(40, 45, 60, 0.6);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+  opacity: 0.7;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+/* Стили для опций в выпадающем списке */
+.distinction-select option {
+  background: rgba(30, 35, 50, 0.95);
+  color: var(--text-primary);
+  padding: var(--space-sm);
+  border: none;
+}
+
+.distinction-select option:checked {
+  background: linear-gradient(135deg, #ffd93d 0%, #ffb347 100%);
+  color: #1e2332;
+  font-weight: 600;
+}
+
+.distinction-select option:hover {
+  background: rgba(255, 217, 61, 0.2) !important;
+  color: var(--text-primary);
+}
+
+/* Стили для выбранного значения */
+.distinction-select:valid {
+  color: #ffeaa7;
+  font-weight: 500;
+}
+
+.distinction-select:invalid {
+  color: var(--text-secondary);
 }
 
 .distinction-dice {
@@ -132,8 +181,8 @@
   animation: pulse-unlock 1s ease-in-out;
 }
 
-/* Отключаем инпуты в использованных отличиях */
-.distinction-category.category-used input:disabled {
+/* Отключаем селекты в использованных отличиях */
+.distinction-category.category-used .distinction-select:disabled {
   background: rgba(40, 45, 60, 0.6);
   color: var(--text-disabled);
   cursor: not-allowed;
@@ -164,6 +213,25 @@
   background: transparent !important;
 }
 
+/* Анимация при выборе значения */
+@keyframes select-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 217, 61, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 6px rgba(255, 217, 61, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 217, 61, 0);
+  }
+}
+
+.distinction-select:focus:valid {
+  animation: select-glow 0.6s ease-out;
+}
+
 /* Адаптивность для отличий */
 @media (max-width: 768px) {
   .distinction-row {
@@ -172,7 +240,7 @@
     gap: var(--space-sm);
   }
 
-  .distinction-input {
+  .distinction-select {
     width: 100%;
   }
 
@@ -191,9 +259,11 @@
     min-height: auto;
   }
 
-  .distinction-input {
+  .distinction-select {
     font-size: var(--text-sm);
     padding: var(--space-xs) var(--space-sm);
+    padding-right: 2.2rem;
+    background-position: right 0.5rem center;
   }
 
   .distinction-dice {
