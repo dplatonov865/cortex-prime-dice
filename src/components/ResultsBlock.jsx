@@ -80,11 +80,11 @@ const ResultStats = ({ result, effectDice, selectedCount, maxSelected, isBoostRe
     <div className="result-stat">
       <strong>Кубы эффекта:</strong>
       <div className="effect-dice-container">
-        {effectDice && effectDice.map((effectDie, index) => ( // ← ДОБАВИТЬ ПРОВЕРКУ effectDice
+        {effectDice && effectDice.map((effectDie, index) => (
           <DiceIcon
-            key={index}
-            type={effectDie}
-            value={effectDie.replace('d', '')}
+            key={effectDie.id} // используем ID вместо index
+            type={effectDie.type}
+            value={effectDie.type.replace('d', '')}
             clickable={false}
           />
         ))}
@@ -138,14 +138,11 @@ const ResultDiceItem = ({ dice, isSelected, canSelect, isLimitReached, activeEff
   const isInactive = dice.isOne || dice.rolledValue === 0;
   const isBoostResultActive = activeEffect === 'boost_result';
 
-  // В режиме boost_result ВСЕ активные кубы доступны (игнорируем лимит)
   const isBoostResultSelectable = isBoostResultActive && !isInactive && !isSelected;
-
-  // В обычном режиме используем стандартную логику
   const isDisabled = !isBoostResultActive && !isInactive && !canSelect;
 
-  // Проверяем, является ли куб уже эффектом
-  const isCurrentEffect = effectDice && effectDice.includes(dice.type);
+  // Проверяем, является ли этот куб ЛЮБЫМ из кубов эффекта
+  const isCurrentEffect = effectDice && effectDice.some(effect => effect.id === dice.id);
 
   return (
     <div
@@ -171,6 +168,19 @@ const ResultDiceItem = ({ dice, isSelected, canSelect, isLimitReached, activeEff
       {isBoostResultSelectable && <div className="boost-indicator">📊</div>}
     </div>
   );
+};
+
+// ДОБАВИТЕ эту вспомогательную функцию для точного определения куба эффекта
+const isDiceCurrentEffect = (dice, rollResults, effectDice) => {
+  if (!effectDice || effectDice.length === 0) return false;
+
+  // Находим все кубы с типом эффекта
+  const effectDiceType = effectDice[0];
+  const allEffectDice = rollResults.filter(d => d.type === effectDiceType && !d.isOne && d.rolledValue !== 0);
+
+  // Если есть несколько кубов с этим типом, берем первый (или можно добавить дополнительную логику)
+  // В простейшем случае считаем, что куб эффекта - это первый куб максимального типа
+  return dice.type === effectDiceType && allEffectDice.length > 0 && dice.id === allEffectDice[0].id;
 };
 
 
@@ -221,7 +231,7 @@ const getDiceTitle = (isInactive, isSelected, isDisabled, isLimitReached, active
     if (isSelected) return 'Уже выбран в результате';
     return 'Клик чтобы увеличить результат на это значение';
   }
-  
+
   if (isInactive) return 'Выпала 1 или ранг 0 - нельзя выбрать';
   if (isSelected) return 'Клик чтобы убрать из результата';
   if (isCurrentEffect) return 'Уже используется как куб эффекта';

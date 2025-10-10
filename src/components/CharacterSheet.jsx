@@ -245,7 +245,7 @@ const CharacterSheet = () => {
         !dice.isOne &&
         dice.rolledValue !== 0 &&
         !selectedDice.includes(dice.id) &&
-        !effectDice.includes(dice.type) // ← проверяем на дублирование
+        !effectDice.some(effect => effect.id === dice.id) // ← проверяем по ID
       );
 
       if (availableForEffect.length > 0) {
@@ -256,14 +256,20 @@ const CharacterSheet = () => {
           return diceValue > maxValue ? dice : max;
         }, availableForEffect[0]);
 
-        // ДОБАВЛЯЕМ новый куб эффекта к существующим
-        const newEffectDice = [...effectDice, bestEffectDie.type];
+        // ДОБАВЛЯЕМ новый куб эффекта к существующим как объект с ID
+        const newEffectDie = {
+          id: bestEffectDie.id,
+          type: bestEffectDie.type,
+          name: bestEffectDie.name
+        };
+
+        const newEffectDice = [...effectDice, newEffectDie];
         setEffectDice(newEffectDice);
 
         // Тратим жетон
         // setPlotTokens(prev => prev - 1);
 
-        console.log(`Добавлен куб эффекта ${bestEffectDie.type}! Теперь эффекты: ${newEffectDice.join(', ')}`);
+        console.log(`Добавлен куб эффекта ${bestEffectDie.type}! Теперь эффекты: ${newEffectDice.map(e => e.type).join(', ')}`);
       } else {
         alert('Нет доступных кубов для повышения эффекта!');
       }

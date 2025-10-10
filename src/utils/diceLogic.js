@@ -30,22 +30,47 @@ export const getPreviousComplicationRank = (currentRank) => {
 
 // Вычисление куба эффекта
 export const calculateEffectDie = (results, selectedIds, setEffectDice) => {
-  // Доступные кубы: не выбранные и не единицы и не нули
+  // Доступные кубы: не выбранные для результата, не единицы и не нули
   const availableDice = results.filter(dice =>
-    !selectedIds.includes(dice.id) && !dice.isOne && dice.rolledValue !== 0
+    !selectedIds.includes(dice.id) &&
+    !dice.isOne &&
+    dice.rolledValue !== 0
   );
 
   if (availableDice.length === 0) {
-    setEffectDice(['d4']); // ← МАССИВ
+    // Не сбрасываем существующие эффекты, просто не добавляем новых
     return;
   }
 
-  // Находим куб с наибольшим номиналом
-  const maxDie = availableDice.reduce((max, dice) => {
+  // Находим максимальный номинал среди доступных кубов
+  const maxDieValue = availableDice.reduce((max, dice) => {
     const diceValue = parseInt(dice.type.replace('d', ''));
-    const maxValue = parseInt(max.type.replace('d', ''));
-    return diceValue > maxValue ? dice : max;
-  }, availableDice[0]);
+    return diceValue > max ? diceValue : max;
+  }, 0);
 
-  setEffectDice([maxDie.type]); // ← МАССИВ
+  // Находим ПЕРВЫЙ куб с максимальным номиналом
+  const effectDie = availableDice.find(dice => {
+    const diceValue = parseInt(dice.type.replace('d', ''));
+    return diceValue === maxDieValue;
+  });
+
+  // Устанавливаем только ОСНОВНОЙ куб эффекта (первый)
+  // Если уже есть кубы эффекта, заменяем только основной (первый в массиве)
+  setEffectDice(prev => {
+    if (prev.length === 0) {
+      return [{
+        id: effectDie.id,
+        type: effectDie.type,
+        name: effectDie.name
+      }];
+    } else {
+      // Заменяем только основной куб эффекта, сохраняя дополнительные
+      const additionalEffects = prev.slice(1);
+      return [{
+        id: effectDie.id,
+        type: effectDie.type,
+        name: effectDie.name
+      }, ...additionalEffects];
+    }
+  });
 };

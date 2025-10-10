@@ -56,7 +56,6 @@ export const useDiceRoll = () => {
     const dice = rollResults.find(d => d.id === diceId);
     if (!dice || dice.isOne || dice.rolledValue === 0) return;
 
-    // Проверяем, достигнут ли лимит выбранных кубов
     const isAtLimit = selectedDice.length >= MAX_SELECTED_DICE;
     const isAlreadySelected = selectedDice.includes(diceId);
 
@@ -66,12 +65,11 @@ export const useDiceRoll = () => {
       setSelectedDice(newSelected);
       updateResultAndEffect(newSelected);
     } else if (!isAtLimit) {
-      // Добавляем в выбранные, если не достигнут лимит
+      // Добавляем в выбранные
       const newSelected = [...selectedDice, diceId];
       setSelectedDice(newSelected);
       updateResultAndEffect(newSelected);
     }
-    // Если достигнут лимит и куб не выбран - ничего не делаем
   };
 
   // Проверка, можно ли выбрать куб
@@ -94,6 +92,7 @@ export const useDiceRoll = () => {
 
     setResult(sum);
 
+    // Пересчитываем куб эффекта с учетом выбранных кубов
     calculateEffectDie(rollResults, selectedIds, setEffectDice);
   };
 
