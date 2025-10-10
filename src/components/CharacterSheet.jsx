@@ -10,6 +10,7 @@ import ResultsBlock from './ResultsBlock';
 import PlotTokens from './PlotTokens';
 import { useDicePool } from '../hooks/useDicePool';
 import { useDiceRoll } from '../hooks/useDiceRoll';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 import { calculateEffectDie } from '../utils/diceLogic';
 import { exportCharacter, importCharacter, validateCharacterData } from '../utils/fileHandler';
 import {
@@ -24,15 +25,15 @@ import {
 
 const CharacterSheet = () => {
   // Информация о персонаже
-  const [characterInfo, setCharacterInfo] = useState(DEFAULT_CHARACTER_INFO);
+  const [characterInfo, setCharacterInfo] = useLocalStorage('characterInfo', DEFAULT_CHARACTER_INFO);
 
   // Состояния характеристик
-  const [attributes, setAttributes] = useState(DEFAULT_ATTRIBUTES);
-  const [roles, setRoles] = useState(DEFAULT_ROLES);
-  const [complications, setComplications] = useState(DEFAULT_COMPLICATIONS);
-  const [distinctions, setDistinctions] = useState(DEFAULT_DISTINCTIONS);
-  const [specialties, setSpecialties] = useState(DEFAULT_SPECIALTIES);
-  const [plotTokens, setPlotTokens] = useState(1);
+  const [attributes, setAttributes] = useLocalStorage('attributes', DEFAULT_ATTRIBUTES);
+  const [roles, setRoles] = useLocalStorage('roles', DEFAULT_ROLES);
+  const [complications, setComplications] = useLocalStorage('complications', DEFAULT_COMPLICATIONS);
+  const [distinctions, setDistinctions] = useLocalStorage('distinctions', DEFAULT_DISTINCTIONS);
+  const [specialties, setSpecialties] = useLocalStorage('specialties', DEFAULT_SPECIALTIES);
+  const [plotTokens, setPlotTokens] = useLocalStorage('plotTokens', 1);
 
   // Состояние активного эффекта
   const [activeEffect, setActiveEffect] = useState(null);
@@ -106,6 +107,27 @@ const CharacterSheet = () => {
     } catch (error) {
       alert(`Ошибка при импорте: ${error.message}`);
     }
+  };
+
+  const handleResetCharacter = () => {
+    setCharacterInfo(DEFAULT_CHARACTER_INFO);
+    setAttributes(DEFAULT_ATTRIBUTES);
+    setRoles(DEFAULT_ROLES);
+    setComplications(DEFAULT_COMPLICATIONS);
+    setDistinctions(DEFAULT_DISTINCTIONS);
+    setSpecialties(DEFAULT_SPECIALTIES);
+    setPlotTokens(1);
+    clearDicePool();
+    setActiveEffect(null);
+
+    // Очищаем localStorage для этих ключей
+    localStorage.removeItem('characterInfo');
+    localStorage.removeItem('attributes');
+    localStorage.removeItem('roles');
+    localStorage.removeItem('complications');
+    localStorage.removeItem('distinctions');
+    localStorage.removeItem('specialties');
+    localStorage.removeItem('plotTokens');
   };
 
   const handleAddToken = () => {
@@ -329,6 +351,7 @@ const CharacterSheet = () => {
         onCharacterInfoChange={handleCharacterInfoChange}
         onExportCharacter={handleExportCharacter}
         onImportCharacter={handleImportCharacter}
+        onResetCharacter={handleResetCharacter}
       />
 
       <div className="main-columns">

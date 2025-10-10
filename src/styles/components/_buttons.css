@@ -64,7 +64,8 @@
 
 /* Кнопки экспорта/импорта */
 .export-button,
-.import-button {
+.import-button,
+.reset-button {
   padding: var(--space-sm) var(--space-lg);
   border: 1px solid rgba(138, 109, 255, 0.4);
   border-radius: var(--radius-md);
