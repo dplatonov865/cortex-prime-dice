@@ -14,23 +14,53 @@
   padding: 0 var(--space-xl);
 }
 
-/* Основные колонки с блоками */
-.main-columns {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--space-2xl);
+/* Строка отличий */
+.distinctions-row {
   margin-bottom: var(--space-2xl);
-  justify-content: center;
 }
 
-/* Базовые стили блоков */
-.block {
+.distinctions-row .distinctions-block {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--space-xl);
+  border-radius: var(--radius-2xl);
+  box-shadow:
+    var(--shadow-lg),
+    0 2px 8px rgba(200, 182, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.distinctions-row .distinctions-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+/* Три колонки */
+.three-columns-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-2xl);
+  margin-bottom: var(--space-2xl);
+  align-items: start;
+}
+
+/* Общие стили колонок */
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+}
+
+/* Стили для блоков в колонках */
+.column .block {
   background: var(--bg-card);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: var(--space-2xl);
   border-radius: var(--radius-2xl);
-  box-shadow: 
+  box-shadow:
     var(--shadow-lg),
     0 2px 8px rgba(200, 182, 255, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
@@ -41,7 +71,7 @@
 }
 
 /* Декоративная верхняя линия */
-.block::before {
+.column .block::before {
   content: '';
   position: absolute;
   top: 0;
@@ -55,40 +85,32 @@
 }
 
 /* Ховер эффект для блоков */
-.block:hover {
+.column .block:hover {
   transform: translateY(-5px);
-  box-shadow: 
+  box-shadow:
     var(--shadow-xl),
     0 4px 12px rgba(200, 182, 255, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
   border-color: rgba(255, 255, 255, 0.15);
 }
 
-/* Специфичные позиции блоков для десктопной версии */
-@media (min-width: 1200px) {
-  .attributes-block {
-    grid-column: 1;
-  }
+/* Специфичные высоты для блоков в правой колонке */
+.right-column .dice-pool-block,
+.right-column .results-block,
+.right-column .plot-tokens-block {
+  min-height: auto;
+}
 
-  .roles-block {
-    grid-column: 2;
-  }
+.right-column .dice-pool-block {
+  min-height: 200px;
+}
 
-  .complications-block {
-    grid-column: 3;
-  }
+.right-column .results-block {
+  min-height: 300px;
+}
 
-  .distinctions-block {
-    grid-column: 1;
-  }
-
-  .specialties-block {
-    grid-column: 2;
-  }
-
-  .plot-tokens-block {
-    grid-column: 5;
-  }
+.right-column .plot-tokens-block {
+  min-height: 180px;
 }
 
 /* Сетка для деталей персонажа */

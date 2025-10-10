@@ -24,7 +24,7 @@ const DistinctionBlock = ({ distinctions, onDistinctionClick, onDistinctionChang
 
   return (
     <div className={`block distinctions-block ${!finalAvailability ? 'category-used' : ''} ${additionalDieEffect ? 'bonus-mode' : ''}`}>
-      <h3>Отличия</h3>
+      <h3>Природа</h3>
       <div className="distinctions-list">
         {Object.entries(distinctions).map(([category, distinction]) => (
           <div key={category} className="distinction-category">
@@ -105,8 +105,8 @@ const DistinctionBlock = ({ distinctions, onDistinctionClick, onDistinctionChang
 // Функция для получения заголовка категории
 const getCategoryTitle = (category) => {
   const titles = {
-    'past': 'Прошлое',
-    'trait': 'Характеристика',
+    'past': 'Темперамент',
+    'trait': 'Амбиция',
     'value': 'Ценность'
   };
   return titles[category] || category;

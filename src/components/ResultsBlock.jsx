@@ -214,12 +214,12 @@ const RollHistory = ({ rollHistory }) => {
 const getCategoryLabel = (category) => {
   switch (category) {
     case 'attribute': return 'Атрибут';
-    case 'role': return 'Роль';
+    case 'role': return 'Набор навыков';
     case 'complication': return 'Осложнение';
-    case 'specialty': return 'Специальность';
+    case 'specialty': return 'Ресурс';
     default:
       if (category.startsWith('distinction:')) {
-        return 'Отличие';
+        return 'Природа';
       }
       return category;
   }

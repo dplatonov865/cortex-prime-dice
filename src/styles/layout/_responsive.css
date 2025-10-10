@@ -2,53 +2,62 @@
 
 /* Большие экраны (1440px и меньше) */
 @media (max-width: 1440px) {
-    .main-columns {
-        grid-template-columns: repeat(5, minmax(250px, 1fr));
-    }
-
     .character-sheet {
-        max-width: var(--max-width-3xl);
-    }
-
-    .attributes-block {
-        grid-column: 1;
-    }
-
-    .roles-block {
-        grid-column: 2;
-    }
-
-    .complications-block {
-        grid-column: 3;
-    }
-
-    .distinctions-block {
-        grid-column: 1;
-    }
-
-    .specialties-block {
-        grid-column: 2;
+        max-width: var(--max-width-2xl);
     }
 }
 
 /* Десктопы среднего размера (1200px - 1439px) */
 @media (min-width: 1200px) and (max-width: 1439px) {
-    .main-columns {
-        grid-template-columns: repeat(4, minmax(250px, 1fr));
+    .three-columns-layout {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: var(--space-xl);
     }
 }
 
 /* Планшеты в ландшафтной ориентации (992px - 1199px) */
 @media (min-width: 992px) and (max-width: 1199px) {
-    .main-columns {
-        grid-template-columns: repeat(3, minmax(250px, 1fr));
+    .three-columns-layout {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-xl);
+    }
+
+    .right-column {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-xl);
+    }
+
+    .right-column .plot-tokens-block {
+        grid-column: 1 / -1;
     }
 }
 
 /* Планшеты в портретной ориентации (768px - 991px) */
 @media (min-width: 768px) and (max-width: 991px) {
-    .main-columns {
-        grid-template-columns: repeat(2, minmax(250px, 1fr));
+    .three-columns-layout {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+    }
+
+    .distinctions-row .distinctions-list {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+    }
+
+    .column {
+        gap: var(--space-xl);
+    }
+
+    .right-column {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-xl);
+    }
+
+    .right-column .plot-tokens-block {
+        grid-column: 1 / -1;
     }
 
     .results-block {
@@ -114,8 +123,14 @@
 
 /* Планшеты и мобильные (768px и меньше) */
 @media (max-width: 768px) {
-    .main-columns {
+    .three-columns-layout {
         grid-template-columns: 1fr;
+        gap: var(--space-lg);
+    }
+
+    .distinctions-row .distinctions-list {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
     }
 
     .app-header h1 {
@@ -126,12 +141,15 @@
         padding: 0 var(--space-lg);
     }
 
-    .attributes-block,
-    .roles-block,
-    .complications-block,
-    .distinctions-block,
-    .specialties-block {
-        grid-column: 1;
+    .column .block {
+        min-height: auto;
+        padding: var(--space-xl);
+    }
+
+    .right-column {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-lg);
     }
 
     .block-header {
@@ -237,9 +255,13 @@
         padding: 0 var(--space-sm);
     }
 
-    .block {
+    .column .block {
         padding: var(--space-lg);
         min-height: auto;
+    }
+
+    .distinctions-row .distinctions-block {
+        padding: var(--space-lg);
     }
 
     .pool-controls {
@@ -349,6 +371,11 @@
     .add-token-btn {
         grid-column: 1 / -1;
     }
+
+    .right-column .dice-pool-block,
+    .right-column .results-block {
+        min-height: auto;
+    }
 }
 
 /* Очень маленькие экраны (360px и меньше) */
@@ -357,7 +384,7 @@
         font-size: var(--text-4xl);
     }
 
-    .block {
+    .column .block {
         padding: var(--space-md);
     }
 
@@ -374,6 +401,10 @@
         font-size: var(--text-xs);
         max-width: 100px;
     }
+
+    .distinctions-row .distinctions-block {
+        padding: var(--space-md);
+    }
 }
 
 /* Высокие экраны */
@@ -382,8 +413,16 @@
         min-height: calc(100vh - 100px);
     }
 
-    .block {
+    .column .block {
         min-height: 350px;
+    }
+
+    .right-column .dice-pool-block {
+        min-height: 220px;
+    }
+
+    .right-column .results-block {
+        min-height: 320px;
     }
 }
 
@@ -394,7 +433,7 @@
         padding: 0;
     }
 
-    .block {
+    .column .block {
         box-shadow: none;
         border: 1px solid #ccc;
         break-inside: avoid;
@@ -408,5 +447,13 @@
     .dice-pool,
     .results-section .dice-pool {
         border: 1px dashed #ccc;
+    }
+
+    .three-columns-layout {
+        display: block;
+    }
+
+    .column {
+        margin-bottom: var(--space-xl);
     }
 }

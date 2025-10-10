@@ -4,7 +4,6 @@
 .dice-pool-block,
 .results-block,
 .plot-tokens-block {
-  margin-bottom: var(--space-2xl);
   background: var(--bg-card-dark);
   backdrop-filter: blur(12px);
   border: 1px solid var(--border-primary);
@@ -110,13 +109,14 @@
   background: rgba(26, 188, 156, 0.1);
 }
 
-/* Контейнер для различий */
-.distinction-category {
+/* Контейнер для различий в новой строке */
+.distinctions-row .distinction-category {
   padding: var(--space-lg);
   background: var(--bg-card-light);
   border-radius: var(--radius-lg);
   border-left: 3px solid #ffd93d;
   border: 1px solid rgba(255, 217, 61, 0.2);
+  height: 100%;
 }
 
 /* Контейнер для жетонов сюжета */
@@ -196,7 +196,7 @@
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: var(--radius-2xl);
-  box-shadow: 
+  box-shadow:
     var(--shadow-lg),
     0 2px 8px rgba(200, 182, 255, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -320,4 +320,59 @@
 .category-unlocked {
   border: 2px solid var(--accent-success);
   animation: pulse-unlock 1s ease-in-out;
+}
+
+/* Специфичные контейнеры для новой структуры колонок */
+.three-columns-layout .column {
+  display: flex;
+  flex-direction: column;
+}
+
+.left-column .block,
+.center-column .block {
+  flex: 1;
+}
+
+.right-column .block {
+  flex-shrink: 0;
+}
+
+/* Контейнеры для блоков в правой колонке */
+.right-column .dice-pool-block {
+  order: 1;
+}
+
+.right-column .results-block {
+  order: 2;
+}
+
+.right-column .plot-tokens-block {
+  order: 3;
+}
+
+/* Контейнеры для сетки отличий */
+.distinctions-row .distinctions-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+.distinctions-row .distinction-category {
+  margin-bottom: 0;
+}
+
+/* Контейнеры для адаптивности */
+@media (max-width: 768px) {
+  .distinctions-row .distinctions-list {
+    grid-template-columns: 1fr;
+  }
+
+  .three-columns-layout .column {
+    gap: var(--space-lg);
+  }
+
+  .right-column {
+    display: flex;
+    flex-direction: column;
+  }
 }

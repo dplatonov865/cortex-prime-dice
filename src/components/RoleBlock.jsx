@@ -29,7 +29,7 @@ const RoleBlock = ({ roles, onRoleClick, onRoleChange, isCategoryAvailable, addi
 
   return (
     <div className={`block roles-block ${!finalAvailability ? 'category-used' : ''} ${additionalDieEffect ? 'bonus-mode' : ''}`}>
-      <h3>Роли</h3>
+      <h3>Наборы навыков</h3>
       <div className="roles-list">
         {Object.entries(roles).map(([name, diceType]) => (
           <div 
@@ -38,7 +38,7 @@ const RoleBlock = ({ roles, onRoleClick, onRoleChange, isCategoryAvailable, addi
             onClick={() => handleRoleClick(name, diceType)}
             title={
               !finalAvailability 
-                ? 'Уже используется роль из этого набора' 
+                ? 'Уже используется набор навыков' 
                 : additionalDieEffect
                 ? 'Эффект дополнительного куба: можно добавить в пул'
                 : 'Клик чтобы добавить куб в пул'
@@ -84,10 +84,10 @@ const RoleBlock = ({ roles, onRoleClick, onRoleChange, isCategoryAvailable, addi
       </div>
       <div className="role-hint">
         {additionalDieEffect 
-          ? '🎯 Эффект дополнительного куба: можно добавить любую роль' 
+          ? '🎯 Эффект дополнительного куба: можно добавить любой набор навыков' 
           : !isBlockAvailable 
-            ? '⚡ Роль уже используется в пуле' 
-            : '💡 Кликайте по ролям чтобы добавить кубы в пул'
+            ? '⚡ Набор навыков уже используется в пуле' 
+            : '💡 Кликайте по наборам навыков чтобы добавить кубы в пул'
         }
       </div>
     </div>

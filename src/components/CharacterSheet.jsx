@@ -354,31 +354,8 @@ const CharacterSheet = () => {
         onResetCharacter={handleResetCharacter}
       />
 
-      <div className="main-columns">
-        <AttributeBlock
-          attributes={attributes}
-          onAttributeClick={handleAttributeClick}
-          onAttributeChange={handleAttributeChange}
-          isCategoryAvailable={isCategoryAvailable}
-          additionalDieEffect={activeEffect === 'additional_die'}
-        />
-
-        <RoleBlock
-          roles={roles}
-          onRoleClick={handleRoleClick}
-          onRoleChange={handleRoleChange}
-          isCategoryAvailable={isCategoryAvailable}
-          additionalDieEffect={activeEffect === 'additional_die'}
-        />
-
-        <ComplicationBlock
-          complications={complications}
-          onComplicationClick={handleComplicationClick}
-          onComplicationChange={handleComplicationChange}
-          isCategoryAvailable={isCategoryAvailable}
-          additionalDieEffect={activeEffect === 'additional_die'}
-        />
-
+      {/* Строка отличий */}
+      <div className="distinctions-row">
         <DistinctionBlock
           distinctions={distinctions}
           onDistinctionClick={handleDistinctionClick}
@@ -386,48 +363,83 @@ const CharacterSheet = () => {
           isCategoryAvailable={isCategoryAvailable}
           additionalDieEffect={activeEffect === 'additional_die'}
         />
-
-        <SpecialtiesBlock
-          specialties={specialties}
-          onSpecialtyClick={handleSpecialtyClick}
-          onSpecialtiesChange={handleSpecialtiesChange}
-          isCategoryAvailable={isCategoryAvailable}
-          additionalDieEffect={activeEffect === 'additional_die'}
-        />
       </div>
 
-      <PlotTokens
-        tokens={plotTokens}
-        onAddToken={handleAddToken}
-        onSpendToken={handleSpendToken}
-        onActivateAdditionalDie={handleActivateAdditionalDie}
-        onActivateBoostResult={handleActivateBoostResult}
-        onActivateBoostEffect={handleActivateBoostEffect}
-        onCancelEffect={handleCancelEffect}
-        activeEffect={activeEffect}
-        hasRollResults={rollResults.length > 0} // ← ДОБАВЬТЕ ЭТОТ ПРОПС
-      />
+      {/* Три колонки */}
+      <div className="three-columns-layout">
+        {/* Левая колонка */}
+        <div className="column left-column">
+          <AttributeBlock
+            attributes={attributes}
+            onAttributeClick={handleAttributeClick}
+            onAttributeChange={handleAttributeChange}
+            isCategoryAvailable={isCategoryAvailable}
+            additionalDieEffect={activeEffect === 'additional_die'}
+          />
 
-      <DicePoolBlock
-        dicePool={dicePool}
-        onRemoveFromPool={removeFromDicePool}
-        onRollDice={handleRollDice}
-        onClearPool={clearDicePool}
-      />
+          <ComplicationBlock
+            complications={complications}
+            onComplicationClick={handleComplicationClick}
+            onComplicationChange={handleComplicationChange}
+            isCategoryAvailable={isCategoryAvailable}
+            additionalDieEffect={activeEffect === 'additional_die'}
+          />
+        </div>
 
-      <ResultsBlock
-        rollResults={rollResults}
-        selectedDice={selectedDice}
-        result={result}
-        effectDice={effectDice}
-        rollHistory={rollHistory}
-        onResultDiceClick={handleResultDiceClick}
-        onBoostResultSelection={handleBoostResultSelection}
-        // onBoostEffectSelection УБРАТЬ - больше не нужно
-        canSelectDice={canSelectDice}
-        maxSelectedDice={maxSelectedDice}
-        activeEffect={activeEffect}
-      />
+        {/* Центральная колонка */}
+        <div className="column center-column">
+          <RoleBlock
+            roles={roles}
+            onRoleClick={handleRoleClick}
+            onRoleChange={handleRoleChange}
+            isCategoryAvailable={isCategoryAvailable}
+            additionalDieEffect={activeEffect === 'additional_die'}
+          />
+
+          <SpecialtiesBlock
+            specialties={specialties}
+            onSpecialtyClick={handleSpecialtyClick}
+            onSpecialtiesChange={handleSpecialtiesChange}
+            isCategoryAvailable={isCategoryAvailable}
+            additionalDieEffect={activeEffect === 'additional_die'}
+          />
+        </div>
+
+        {/* Правая колонка */}
+        <div className="column right-column">
+          <DicePoolBlock
+            dicePool={dicePool}
+            onRemoveFromPool={removeFromDicePool}
+            onRollDice={handleRollDice}
+            onClearPool={clearDicePool}
+          />
+
+          <ResultsBlock
+            rollResults={rollResults}
+            selectedDice={selectedDice}
+            result={result}
+            effectDice={effectDice}
+            rollHistory={rollHistory}
+            onResultDiceClick={handleResultDiceClick}
+            onBoostResultSelection={handleBoostResultSelection}
+            canSelectDice={canSelectDice}
+            maxSelectedDice={maxSelectedDice}
+            activeEffect={activeEffect}
+          />
+
+          <PlotTokens
+            tokens={plotTokens}
+            onAddToken={handleAddToken}
+            onSpendToken={handleSpendToken}
+            onActivateAdditionalDie={handleActivateAdditionalDie}
+            onActivateBoostResult={handleActivateBoostResult}
+            onActivateBoostEffect={handleActivateBoostEffect}
+            onCancelEffect={handleCancelEffect}
+            activeEffect={activeEffect}
+            hasRollResults={rollResults.length > 0}
+          />
+        </div>
+      </div>
     </div>
   );
 };
