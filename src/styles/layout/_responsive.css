@@ -1,0 +1,412 @@
+/* Адаптивные стили для разных размеров экранов */
+
+/* Большие экраны (1440px и меньше) */
+@media (max-width: 1440px) {
+    .main-columns {
+        grid-template-columns: repeat(5, minmax(250px, 1fr));
+    }
+
+    .character-sheet {
+        max-width: var(--max-width-3xl);
+    }
+
+    .attributes-block {
+        grid-column: 1;
+    }
+
+    .roles-block {
+        grid-column: 2;
+    }
+
+    .complications-block {
+        grid-column: 3;
+    }
+
+    .distinctions-block {
+        grid-column: 1;
+    }
+
+    .specialties-block {
+        grid-column: 2;
+    }
+}
+
+/* Десктопы среднего размера (1200px - 1439px) */
+@media (min-width: 1200px) and (max-width: 1439px) {
+    .main-columns {
+        grid-template-columns: repeat(4, minmax(250px, 1fr));
+    }
+}
+
+/* Планшеты в ландшафтной ориентации (992px - 1199px) */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .main-columns {
+        grid-template-columns: repeat(3, minmax(250px, 1fr));
+    }
+}
+
+/* Планшеты в портретной ориентации (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .main-columns {
+        grid-template-columns: repeat(2, minmax(250px, 1fr));
+    }
+
+    .results-block {
+        padding: var(--space-xl) !important;
+    }
+
+    .results-block h3 {
+        font-size: var(--text-2xl);
+        text-align: center;
+    }
+
+    .result-stats {
+        flex-direction: column;
+        gap: var(--space-lg);
+    }
+
+    .result-stat {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--space-sm);
+        padding: var(--space-md);
+        min-height: auto;
+    }
+
+    .result-value {
+        text-align: center;
+        font-size: var(--text-3xl);
+    }
+
+    .pool-dice-item {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--space-sm);
+        padding: var(--space-md);
+        min-height: auto;
+    }
+
+    .dice-info-small {
+        align-items: center;
+        gap: var(--space-xs);
+    }
+
+    .dice-name {
+        text-align: center;
+    }
+
+    .history-item {
+        flex-direction: column;
+        gap: var(--space-sm);
+        text-align: center;
+        padding: var(--space-md);
+    }
+
+    .history-time {
+        min-width: auto;
+    }
+
+    .results-hint {
+        padding: var(--space-md);
+        font-size: var(--text-sm);
+    }
+}
+
+/* Планшеты и мобильные (768px и меньше) */
+@media (max-width: 768px) {
+    .main-columns {
+        grid-template-columns: 1fr;
+    }
+
+    .app-header h1 {
+        font-size: var(--text-5xl);
+    }
+
+    .character-sheet {
+        padding: 0 var(--space-lg);
+    }
+
+    .attributes-block,
+    .roles-block,
+    .complications-block,
+    .distinctions-block,
+    .specialties-block {
+        grid-column: 1;
+    }
+
+    .block-header {
+        flex-direction: column;
+        gap: var(--space-lg);
+        align-items: stretch;
+    }
+
+    .pool-controls {
+        justify-content: center;
+    }
+
+    .dice-pool-list {
+        justify-content: center;
+    }
+
+    .attribute-controls,
+    .role-controls,
+    .complication-controls {
+        gap: var(--space-xs);
+    }
+
+    .rank-buttons-vertical .rank-button {
+        width: 18px;
+        height: 14px;
+        font-size: 7px;
+    }
+
+    .distinction-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+    }
+
+    .distinction-input {
+        width: 100%;
+    }
+
+    .distinction-dice {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .specialty-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+    }
+
+    .specialty-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .character-header-block {
+        padding: var(--space-xl);
+    }
+
+    .character-name-input {
+        font-size: var(--text-4xl);
+        padding: var(--space-md) 0;
+    }
+
+    .character-details-grid {
+        grid-template-columns: 1fr;
+        padding: var(--space-lg);
+    }
+
+    .character-description {
+        min-height: 80px;
+        font-size: var(--text-base);
+    }
+
+    .character-header-top {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-lg);
+    }
+
+    .character-actions {
+        justify-content: center;
+    }
+
+    .tokens-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .token-action-btn,
+    .add-token-btn {
+        flex: 1;
+        min-width: 120px;
+    }
+}
+
+/* Мобильные устройства (480px и меньше) */
+@media (max-width: 480px) {
+    .App {
+        padding: var(--space-sm);
+    }
+
+    .character-sheet {
+        padding: 0 var(--space-sm);
+    }
+
+    .block {
+        padding: var(--space-lg);
+        min-height: auto;
+    }
+
+    .pool-controls {
+        flex-direction: column;
+    }
+
+    .roll-button,
+    .clear-button {
+        width: 100%;
+    }
+
+    .dice-pool-list {
+        justify-content: center;
+    }
+
+    .history-item {
+        flex-direction: column;
+        gap: var(--space-sm);
+        align-items: flex-start;
+    }
+
+    .attribute-row,
+    .role-row,
+    .complication-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+    }
+
+    .attribute-controls,
+    .role-controls,
+    .complication-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .distinction-category {
+        padding: var(--space-md);
+    }
+
+    .distinction-dice {
+        gap: var(--space-xs);
+    }
+
+    .distinction-input {
+        font-size: var(--text-sm);
+        padding: var(--space-xs) var(--space-sm);
+    }
+
+    .specialties-input-container {
+        flex-direction: column;
+    }
+
+    .add-specialty-button {
+        width: 100%;
+        height: 35px;
+    }
+
+    .specialty-controls {
+        gap: var(--space-sm);
+    }
+
+    .character-header-block {
+        padding: var(--space-lg);
+    }
+
+    .character-name-input {
+        font-size: var(--text-3xl);
+    }
+
+    .character-details-grid {
+        padding: var(--space-md);
+        gap: var(--space-sm);
+    }
+
+    .detail-input {
+        padding: var(--space-sm) var(--space-sm);
+    }
+
+    .character-description {
+        padding: var(--space-md);
+        min-height: 70px;
+    }
+
+    .character-actions {
+        flex-direction: column;
+    }
+
+    .export-button,
+    .import-button {
+        width: 100%;
+        text-align: center;
+    }
+
+    .plot-tokens-block {
+        position: static !important;
+        transform: none !important;
+        margin: var(--space-sm) 0;
+    }
+
+    .tokens-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-sm);
+    }
+
+    .add-token-btn {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Очень маленькие экраны (360px и меньше) */
+@media (max-width: 360px) {
+    .app-header h1 {
+        font-size: var(--text-4xl);
+    }
+
+    .block {
+        padding: var(--space-md);
+    }
+
+    .character-name-input {
+        font-size: var(--text-2xl);
+    }
+
+    .pool-dice-item {
+        min-width: 120px;
+        padding: var(--space-sm);
+    }
+
+    .dice-name {
+        font-size: var(--text-xs);
+        max-width: 100px;
+    }
+}
+
+/* Высокие экраны */
+@media (min-height: 900px) {
+    .character-sheet {
+        min-height: calc(100vh - 100px);
+    }
+
+    .block {
+        min-height: 350px;
+    }
+}
+
+/* Печать */
+@media print {
+    .character-sheet {
+        max-width: none;
+        padding: 0;
+    }
+
+    .block {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        break-inside: avoid;
+    }
+
+    .pool-controls,
+    .character-actions {
+        display: none;
+    }
+
+    .dice-pool,
+    .results-section .dice-pool {
+        border: 1px dashed #ccc;
+    }
+}

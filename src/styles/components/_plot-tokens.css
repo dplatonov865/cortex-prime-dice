@@ -1,0 +1,161 @@
+/* Стили для блока жетонов сюжета */
+
+.plot-tokens-block {
+  background: var(--bg-card-dark);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-2xl);
+}
+
+.plot-tokens-block h3 {
+  color: var(--text-secondary);
+  border-bottom: 2px solid var(--accent-primary);
+  padding-bottom: var(--space-sm);
+  margin-bottom: 0;
+}
+
+.tokens-display {
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.tokens-count {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  background: #fff9e6;
+  border-radius: 20px;
+  border: 2px solid var(--accent-warning);
+}
+
+.tokens-label {
+  font-weight: 600;
+  color: #e67e22;
+}
+
+.tokens-value {
+  font-size: var(--text-3xl);
+  font-weight: bold;
+  color: #e67e22;
+  min-width: 30px;
+}
+
+.tokens-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.token-action-btn,
+.add-token-btn {
+  padding: var(--space-sm) var(--space-sm);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: var(--text-xs);
+  min-height: 44px;
+}
+
+.token-action-btn {
+  background: var(--accent-info);
+  color: white;
+}
+
+.token-action-btn:hover:not(:disabled) {
+  background: #2980b9;
+}
+
+.add-token-btn {
+  background: var(--accent-success);
+  color: white;
+  grid-column: 1 / -1;
+  margin-top: var(--space-xs);
+}
+
+.add-token-btn:hover {
+  background: #219653;
+}
+
+.token-action-btn:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.tokens-hint {
+  padding: var(--space-sm);
+  background: #fff9e6;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  color: #e67e22;
+  text-align: center;
+}
+
+/* В src/styles/components/_plot-tokens.css */
+.token-action-btn:disabled,
+.add-token-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #cccccc;
+}
+
+.token-action-btn:disabled:hover,
+.add-token-btn:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Адаптивность для жетонов сюжета */
+@media (max-width: 768px) {
+  .plot-tokens-block {
+    position: static !important;
+    transform: none !important;
+    margin: var(--space-sm) 0;
+  }
+
+  .tokens-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .token-action-btn,
+  .add-token-btn {
+    flex: 1;
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .plot-tokens-block {
+    padding: var(--space-lg);
+  }
+
+  .tokens-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+  }
+
+  .add-token-btn {
+    grid-column: 1 / -1;
+  }
+
+  .tokens-count {
+    padding: var(--space-xs) var(--space-lg);
+  }
+
+  .tokens-value {
+    font-size: var(--text-2xl);
+  }
+}
+
+/* Специфичные позиции для десктопной версии */
+@media (min-width: 1200px) {
+  .plot-tokens-block {
+    grid-column: 5;
+  }
+}

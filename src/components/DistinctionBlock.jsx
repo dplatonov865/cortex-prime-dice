@@ -1,9 +1,9 @@
 import React from 'react';
 import DiceIcon from './DiceIcon';
 
-const DistinctionBlock = ({ distinctions, onDistinctionClick, onDistinctionChange, isCategoryAvailable }) => {
+const DistinctionBlock = ({ distinctions, onDistinctionClick, onDistinctionChange, isCategoryAvailable, additionalDieEffect = false }) => {
   const handleDistinctionClick = (distinctionName, diceType, category) => {
-    if (isCategoryAvailable && !isCategoryAvailable('distinction')) {
+    if (isCategoryAvailable && !isCategoryAvailable('distinction') && !additionalDieEffect) {
       return;
     }
     onDistinctionClick(distinctionName, diceType, category);
@@ -20,15 +20,16 @@ const DistinctionBlock = ({ distinctions, onDistinctionClick, onDistinctionChang
   };
 
   const isBlockAvailable = isCategoryAvailable ? isCategoryAvailable('distinction') : true;
+  const finalAvailability = isBlockAvailable || additionalDieEffect;
 
   return (
-    <div className={`block distinctions-block ${!isBlockAvailable ? 'category-used' : ''}`}>
+    <div className={`block distinctions-block ${!finalAvailability ? 'category-used' : ''} ${additionalDieEffect ? 'bonus-mode' : ''}`}>
       <h3>Отличия</h3>
       <div className="distinctions-list">
         {Object.entries(distinctions).map(([category, distinction]) => (
           <div key={category} className="distinction-category">
             <h4 className="distinction-title">{getCategoryTitle(category)}</h4>
-            <div className={`distinction-row ${!isBlockAvailable ? 'row-disabled' : ''}`}>
+            <div className={`distinction-row ${!finalAvailability ? 'row-disabled' : ''}`}>
               <input
                 type="text"
                 className="distinction-input"
@@ -37,47 +38,51 @@ const DistinctionBlock = ({ distinctions, onDistinctionClick, onDistinctionChang
                 onKeyPress={handleKeyPress}
                 placeholder="Введите отличительную черту..."
                 maxLength={30}
-                disabled={!isBlockAvailable}
+                disabled={!finalAvailability}
               />
               
               <div className="distinction-dice">
                 <div 
-                  className={`distinction-dice-item ${!isBlockAvailable ? 'dice-disabled' : ''}`}
+                  className={`distinction-dice-item ${!finalAvailability ? 'dice-disabled' : ''}`}
                   onClick={() => handleDistinctionClick(
                     distinction.name, 
                     'd8', 
                     `${getCategoryTitle(category)} (d8)`
                   )}
                   title={
-                    !isBlockAvailable 
+                    !finalAvailability 
                       ? 'Уже используется отличие из этого набора'
+                      : additionalDieEffect
+                      ? 'Эффект дополнительного куба: можно добавить в пул'
                       : 'Клик чтобы добавить d8 в пул'
                   }
                 >
                   <DiceIcon 
                     type="d8" 
                     value="8"
-                    clickable={isBlockAvailable}
+                    clickable={finalAvailability}
                   />
                 </div>
                 
                 <div 
-                  className={`distinction-dice-item ${!isBlockAvailable ? 'dice-disabled' : ''}`}
+                  className={`distinction-dice-item ${!finalAvailability ? 'dice-disabled' : ''}`}
                   onClick={() => handleDistinctionClick(
                     distinction.name, 
                     'd4', 
                     `${getCategoryTitle(category)} (d4)`
                   )}
                   title={
-                    !isBlockAvailable 
+                    !finalAvailability 
                       ? 'Уже используется отличие из этого набора'
+                      : additionalDieEffect
+                      ? 'Эффект дополнительного куба: можно добавить в пул'
                       : 'Клик чтобы добавить d4 в пул'
                   }
                 >
                   <DiceIcon 
                     type="d4" 
                     value="4"
-                    clickable={isBlockAvailable}
+                    clickable={finalAvailability}
                   />
                 </div>
               </div>
@@ -86,9 +91,11 @@ const DistinctionBlock = ({ distinctions, onDistinctionClick, onDistinctionChang
         ))}
       </div>
       <div className="distinction-hint">
-        {!isBlockAvailable 
-          ? '⚡ Отличие уже используется в пуле' 
-          : '💡 Кликайте по кубам чтобы добавить их в пул. Текст можно редактировать.'
+        {additionalDieEffect 
+          ? '🎯 Эффект дополнительного куба: можно добавить любое отличие' 
+          : !isBlockAvailable 
+            ? '⚡ Отличие уже используется в пуле' 
+            : '💡 Кликайте по кубам чтобы добавить их в пул. Текст можно редактировать.'
         }
       </div>
     </div>

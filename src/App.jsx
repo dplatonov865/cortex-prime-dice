@@ -6,8 +6,7 @@ function App() {
   return (
     <div className="App">
       <header className="app-header">
-        <h1>Cortex Character Sheet</h1>
-        <p>Лист персонажа для настольной ролевой игры</p>
+        <h1>Лист персонажа для моей настольной игры. Эксклюзивно для Ильи и Матвея</h1>
       </header>
       <main>
         <CharacterSheet />

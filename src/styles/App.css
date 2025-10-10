@@ -1,1 +1,59 @@
-@import '../styles/index.css'; 
+/* Стили для корневого компонента App */
+
+@import './index.css';
+
+/* Дополнительные глобальные стили для App */
+.App {
+  min-height: 100vh;
+  padding: var(--space-xl);
+  width: 100%;
+}
+
+/* Убедимся, что фоновое изображение работает */
+body {
+  background: 
+    linear-gradient(rgba(5, 8, 15, 0.4), rgba(10, 12, 20, 0.3)),
+    url('../assets/1000006215.jpg') center/cover fixed;
+  min-height: 100vh;
+}
+
+/* Дополнительные утилиты для App */
+.app-container {
+  width: 100%;
+  max-width: var(--max-width-3xl);
+  margin: 0 auto;
+}
+
+/* Состояния загрузки */
+.app-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+/* Обработка ошибок */
+.app-error {
+  text-align: center;
+  padding: var(--space-3xl);
+  color: var(--accent-danger);
+  background: var(--bg-card);
+  border-radius: var(--radius-2xl);
+  margin: var(--space-xl);
+}
+
+/* Темы (для будущего расширения) */
+.App[data-theme="dark"] {
+  /* Темная тема (по умолчанию) */
+}
+
+.App[data-theme="light"] {
+  /* Светлая тема */
+  --bg-primary: rgba(240, 240, 240, 0.9);
+  --bg-secondary: rgba(250, 250, 250, 0.8);
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --text-primary: #2c3e50;
+  --text-secondary: #34495e;
+  --text-muted: #7f8c8d;
+}

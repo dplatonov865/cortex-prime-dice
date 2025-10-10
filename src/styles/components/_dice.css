@@ -1,0 +1,180 @@
+/* Стили для кубов и их состояний */
+
+.dice-clickable {
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.dice-clickable:hover {
+  transform: scale(1.2);
+  filter: brightness(1.1);
+}
+
+.dice-clickable:active {
+  transform: scale(1.1);
+}
+
+/* Кубы в различиях */
+.distinction-dice-item {
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs);
+}
+
+.distinction-dice-item:hover {
+  transform: scale(1.1);
+  background: rgba(255, 217, 61, 0.1);
+}
+
+/* Кубы в специальностях */
+.specialty-dice {
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs);
+}
+
+.specialty-dice:hover {
+  transform: scale(1.1);
+  background: rgba(26, 188, 156, 0.1);
+}
+
+/* Отключенные кубы */
+.dice-disabled {
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}
+
+.dice-disabled:hover {
+  transform: none !important;
+  filter: none !important;
+  background: transparent !important;
+}
+
+/* Кубы в пуле */
+.pool-dice-item .dice-clickable {
+  flex-shrink: 0;
+}
+
+/* Кубы в результатах */
+.results-section .dice-clickable {
+  flex-shrink: 0;
+}
+
+/* Анимации для кубов */
+@keyframes dice-roll {
+  0% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(90deg) scale(1.1); }
+  50% { transform: rotate(180deg) scale(1.2); }
+  75% { transform: rotate(270deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+.dice-rolling {
+  animation: dice-roll 0.5s ease-in-out;
+}
+
+/* Состояния кубов при выборе */
+.dice-selected {
+  border: 2px solid var(--accent-success) !important;
+  background: rgba(39, 174, 96, 0.1) !important;
+}
+
+.dice-inactive {
+  border: 2px solid var(--accent-danger) !important;
+  background: rgba(231, 76, 60, 0.1) !important;
+  cursor: not-allowed !important;
+}
+
+/* Размеры кубов */
+.dice-size-sm {
+  width: 24px;
+  height: 24px;
+}
+
+.dice-size-md {
+  width: 32px;
+  height: 32px;
+}
+
+.dice-size-lg {
+  width: 40px;
+  height: 40px;
+}
+
+.dice-size-xl {
+  width: 48px;
+  height: 48px;
+}
+
+/* Цвета кубов для разных типов */
+.dice-type-attribute {
+  color: var(--accent-primary);
+}
+
+.dice-type-role {
+  color: var(--accent-secondary);
+}
+
+.dice-type-complication {
+  color: var(--accent-danger);
+}
+
+.dice-type-distinction {
+  color: #ffd93d;
+}
+
+.dice-type-specialty {
+  color: #1abc9c;
+}
+
+/* Эффекты при наведении на кубы в разных блоках */
+.attributes-block .dice-clickable:hover {
+  filter: drop-shadow(0 0 8px rgba(138, 109, 255, 0.4));
+}
+
+.roles-block .dice-clickable:hover {
+  filter: drop-shadow(0 0 8px rgba(109, 193, 255, 0.4));
+}
+
+.complications-block .dice-clickable:hover {
+  filter: drop-shadow(0 0 8px rgba(231, 76, 60, 0.4));
+}
+
+.distinctions-block .dice-clickable:hover {
+  filter: drop-shadow(0 0 8px rgba(255, 217, 61, 0.4));
+}
+
+.specialties-block .dice-clickable:hover {
+  filter: drop-shadow(0 0 8px rgba(26, 188, 156, 0.4));
+}
+
+/* Адаптивность для кубов */
+@media (max-width: 768px) {
+  .dice-clickable:hover {
+    transform: scale(1.1);
+  }
+  
+  .distinction-dice-item:hover,
+  .specialty-dice:hover {
+    transform: scale(1.05);
+  }
+}
+
+@media (max-width: 480px) {
+  .dice-size-md {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .dice-size-lg {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .dice-size-xl {
+    width: 42px;
+    height: 42px;
+  }
+}

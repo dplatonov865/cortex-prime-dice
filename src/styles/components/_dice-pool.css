@@ -1,0 +1,209 @@
+/* Стили для блока пула кубов */
+
+.dice-pool-block {
+    margin-bottom: var(--space-2xl);
+    background: var(--bg-card-dark);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-2xl);
+}
+
+.dice-pool-block h3 {
+    color: var(--text-secondary);
+    border-bottom: 2px solid var(--accent-primary);
+    padding-bottom: var(--space-sm);
+    margin-bottom: 0;
+}
+
+.dice-pool {
+    min-height: 120px;
+    padding: var(--space-xl);
+    background: var(--bg-card-light);
+    border-radius: var(--radius-xl);
+    border: 2px dashed rgba(138, 109, 255, 0.3);
+}
+
+.empty-pool-message {
+    text-align: center;
+    color: var(--text-disabled);
+    font-style: italic;
+    padding: var(--space-3xl) var(--space-xl);
+    font-size: var(--text-lg);
+}
+
+.dice-pool-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-lg);
+}
+
+.pool-dice-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: rgba(50, 55, 80, 0.8);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-accent);
+    transition: all var(--transition-normal);
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    min-width: 150px;
+    position: relative;
+}
+
+.pool-dice-item:hover {
+    border-color: rgba(138, 109, 255, 0.6);
+    background: rgba(138, 109, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(138, 109, 255, 0.2);
+}
+
+.dice-info-small {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 0;
+    flex: 1;
+}
+
+.dice-category {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.dice-name {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    text-align: left;
+    max-width: 120px;
+    word-break: break-word;
+    font-weight: 500;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Шапка блока с элементами управления */
+.block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-xl);
+}
+
+.pool-controls {
+    display: flex;
+    gap: var(--space-md);
+}
+
+/* Состояния кубов в пуле */
+.pool-dice-item.selected {
+    border-color: var(--accent-success) !important;
+    background: rgba(39, 174, 96, 0.15) !important;
+}
+
+.pool-dice-item.inactive {
+    border-color: var(--accent-danger) !important;
+    background: rgba(231, 76, 60, 0.15) !important;
+    cursor: not-allowed !important;
+}
+
+.pool-dice-item.disabled {
+    border-color: var(--accent-warning) !important;
+    background: rgba(243, 156, 18, 0.15) !important;
+    cursor: not-allowed !important;
+}
+
+/* Индикаторы статусов для кубов в пуле */
+.selected-indicator,
+.inactive-indicator,
+.disabled-indicator {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-xs);
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.selected-indicator {
+    background: var(--accent-success);
+    color: white;
+}
+
+.inactive-indicator {
+    background: var(--accent-danger);
+    color: white;
+}
+
+.disabled-indicator {
+    background: var(--accent-warning);
+    color: white;
+}
+
+/* Адаптивность для пула кубов */
+@media (max-width: 768px) {
+    .dice-pool-list {
+        justify-content: center;
+    }
+
+    .block-header {
+        flex-direction: column;
+        gap: var(--space-lg);
+        align-items: stretch;
+    }
+
+    .pool-controls {
+        justify-content: center;
+    }
+
+    .pool-dice-item {
+        min-width: 140px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dice-pool-block {
+        padding: var(--space-lg);
+    }
+
+    .dice-pool {
+        padding: var(--space-lg);
+    }
+
+    .pool-controls {
+        flex-direction: column;
+    }
+
+    .roll-button,
+    .clear-button {
+        width: 100%;
+    }
+
+    .pool-dice-item {
+        min-width: 130px;
+        flex-direction: column;
+        text-align: center;
+        gap: var(--space-sm);
+    }
+
+    .dice-info-small {
+        align-items: center;
+    }
+
+    .dice-name {
+        text-align: center;
+    }
+}

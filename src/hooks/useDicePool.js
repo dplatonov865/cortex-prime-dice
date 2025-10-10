@@ -3,25 +3,24 @@ import { useState } from 'react';
 export const useDicePool = () => {
   const [dicePool, setDicePool] = useState([]);
   const [usedCategories, setUsedCategories] = useState(new Set());
-  const [plotTokenActive, setPlotTokenActive] = useState(false); // Новое состояние
+  const [additionalDieEffect, setAdditionalDieEffect] = useState(false);
 
   // Добавление куба в пул
   const addToDicePool = (name, diceType, category) => {
-    // Определяем основную категорию (для блоков)
-    const mainCategory = getMainCategory(category);
-    
-    // Проверяем, не использована ли уже эта категория
-    if (usedCategories.has(mainCategory) && !plotTokenActive) {
-      return;
-    }
+    // В режиме дополнительного куба игнорируем проверки использованных категорий
+    if (!additionalDieEffect) {
+      const mainCategory = getMainCategory(category);
+      
+      if (usedCategories.has(mainCategory)) {
+        return;
+      }
 
-    // Не добавляем осложнения с рангом "0" или не d4
-    if (category === 'complication' && diceType !== 'd4') {
-      return;
+      if (category === 'complication' && diceType !== 'd4') {
+        return;
+      }
+      
+      if (diceType === '0') return;
     }
-    
-    // Для остальных категорий проверяем только 0
-    if (diceType === '0') return;
     
     const newDice = {
       id: Date.now() + Math.random(),
@@ -29,19 +28,14 @@ export const useDicePool = () => {
       type: diceType,
       value: diceType === '0' ? '0' : parseInt(diceType.replace('d', '')),
       category: category,
-      mainCategory: mainCategory
+      mainCategory: getMainCategory(category),
+      isBonus: additionalDieEffect
     };
     
     setDicePool(prev => [...prev, newDice]);
     
-    // ЕСЛИ АКТИВЕН ЖЕТОН СЮЖЕТА - БЛОКИРУЕМ ВСЕ КАТЕГОРИИ
-    if (plotTokenActive) {
-      const allCategories = ['attribute', 'role', 'complication', 'distinction', 'specialty'];
-      setUsedCategories(new Set(allCategories));
-      setPlotTokenActive(false); // Сбрасываем режим жетона
-    } else {
-      // Обычная логика - блокируем только одну категорию
-      setUsedCategories(prev => new Set([...prev, mainCategory]));
+    if (!additionalDieEffect) {
+      setUsedCategories(prev => new Set([...prev, getMainCategory(category)]));
     }
   };
 
@@ -50,11 +44,13 @@ export const useDicePool = () => {
     const diceToRemove = dicePool.find(dice => dice.id === diceId);
     if (diceToRemove) {
       setDicePool(prev => prev.filter(dice => dice.id !== diceId));
-      setUsedCategories(prev => {
-        const newUsed = new Set(prev);
-        newUsed.delete(diceToRemove.mainCategory);
-        return newUsed;
-      });
+      if (!diceToRemove.isBonus) {
+        setUsedCategories(prev => {
+          const newUsed = new Set(prev);
+          newUsed.delete(diceToRemove.mainCategory);
+          return newUsed;
+        });
+      }
     }
   };
 
@@ -62,19 +58,13 @@ export const useDicePool = () => {
   const clearDicePool = () => {
     setDicePool([]);
     setUsedCategories(new Set());
-    setPlotTokenActive(false); // Сбрасываем режим жетона при очистке
+    setAdditionalDieEffect(false);
   };
 
-  // Сброс использованных категорий (после броска)
+  // Сброс использованных категорий
   const clearUsedCategories = () => {
     setUsedCategories(new Set());
-    setPlotTokenActive(false);
-  };
-
-  // АКТИВАЦИЯ РЕЖИМА ЖЕТОНА СЮЖЕТА
-  const activatePlotTokenMode = () => {
-    setPlotTokenActive(true);
-    setUsedCategories(new Set()); // Разблокируем все категории
+    setAdditionalDieEffect(false);
   };
 
   // Получение основной категории
@@ -85,25 +75,36 @@ export const useDicePool = () => {
     return category;
   };
 
-  // Проверка, доступна ли категория для добавления
+  // Проверка доступности категории
   const isCategoryAvailable = (category) => {
-    // В режиме жетона сюжета все категории доступны
-    if (plotTokenActive) return true;
+    if (additionalDieEffect) return true;
     
     const mainCategory = getMainCategory(category);
     return !usedCategories.has(mainCategory);
   };
 
+  // Активация режима дополнительного куба
+  const activateAdditionalDie = () => {
+    setAdditionalDieEffect(true);
+  };
+
+  // Деактивация режима дополнительного куба
+  const deactivateAdditionalDie = () => {
+    setAdditionalDieEffect(false);
+  };
+
   return {
     dicePool,
     usedCategories,
-    plotTokenActive, // Экспортируем для отладки/индикации
+    additionalDieEffect,
     addToDicePool,
     removeFromDicePool,
     clearDicePool,
     clearUsedCategories,
     activatePlotTokenMode, // Заменяем unlockAllCategories
     isCategoryAvailable,
+    activateAdditionalDie,
+    deactivateAdditionalDie,
     setDicePool
   };
 };

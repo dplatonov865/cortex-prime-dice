@@ -2,7 +2,7 @@ import React from 'react';
 import DiceIcon from './DiceIcon';
 import { getNextRank, getPreviousRank } from '../utils/diceLogic';
 
-const AttributeBlock = ({ attributes, onAttributeClick, onAttributeChange, isCategoryAvailable }) => {
+const AttributeBlock = ({ attributes, onAttributeClick, onAttributeChange, isCategoryAvailable, additionalDieEffect = false }) => {
   const handleIncrease = (attributeName, currentRank) => {
     const newRank = getNextRank(currentRank);
     if (newRank !== currentRank && onAttributeChange) {
@@ -18,26 +18,29 @@ const AttributeBlock = ({ attributes, onAttributeClick, onAttributeChange, isCat
   };
 
   const handleAttributeClick = (attributeName, diceType) => {
-    if (isCategoryAvailable && !isCategoryAvailable('attribute')) {
+    if (isCategoryAvailable && !isCategoryAvailable('attribute') && !additionalDieEffect) {
       return;
     }
     onAttributeClick(attributeName, diceType);
   };
 
   const isBlockAvailable = isCategoryAvailable ? isCategoryAvailable('attribute') : true;
+  const finalAvailability = isBlockAvailable || additionalDieEffect;
 
   return (
-    <div className={`block attributes-block ${!isBlockAvailable ? 'category-used' : ''}`}>
+    <div className={`block attributes-block ${!finalAvailability ? 'category-used' : ''} ${additionalDieEffect ? 'bonus-mode' : ''}`}>
       <h3>Атрибуты</h3>
       <div className="attributes-list">
         {Object.entries(attributes).map(([name, diceType]) => (
           <div 
             key={name} 
-            className={`attribute-row ${!isBlockAvailable ? 'row-disabled' : ''}`}
+            className={`attribute-row ${!finalAvailability ? 'row-disabled' : ''}`}
             onClick={() => handleAttributeClick(name, diceType)}
             title={
-              !isBlockAvailable 
+              !finalAvailability 
                 ? 'Уже используется атрибут из этого набора' 
+                : additionalDieEffect
+                ? 'Эффект дополнительного куба: можно добавить в пул'
                 : 'Клик чтобы добавить куб в пул'
             }
           >
@@ -47,7 +50,7 @@ const AttributeBlock = ({ attributes, onAttributeClick, onAttributeChange, isCat
               <DiceIcon 
                 type={diceType} 
                 value={diceType.replace('d', '')}
-                clickable={isBlockAvailable}
+                clickable={finalAvailability}
               />
               
               <div className="rank-buttons-vertical">
@@ -57,7 +60,7 @@ const AttributeBlock = ({ attributes, onAttributeClick, onAttributeChange, isCat
                     e.stopPropagation();
                     handleIncrease(name, diceType);
                   }}
-                  disabled={diceType === 'd12' || !isBlockAvailable}
+                  disabled={diceType === 'd12' || !finalAvailability}
                   title="Повысить ранг"
                 >
                   ▲
@@ -69,7 +72,7 @@ const AttributeBlock = ({ attributes, onAttributeClick, onAttributeChange, isCat
                     e.stopPropagation();
                     handleDecrease(name, diceType);
                   }}
-                  disabled={diceType === 'd4' || !isBlockAvailable}
+                  disabled={diceType === 'd4' || !finalAvailability}
                   title="Понизить ранг"
                 >
                   ▼
@@ -80,9 +83,11 @@ const AttributeBlock = ({ attributes, onAttributeClick, onAttributeChange, isCat
         ))}
       </div>
       <div className="attribute-hint">
-        {!isBlockAvailable 
-          ? '⚡ Атрибут уже используется в пуле' 
-          : '💡 Кликайте по атрибутам чтобы добавить кубы в пул'
+        {additionalDieEffect 
+          ? '🎯 Эффект дополнительного куба: можно добавить любой атрибут' 
+          : !isBlockAvailable 
+            ? '⚡ Атрибут уже используется в пуле' 
+            : '💡 Кликайте по атрибутам чтобы добавить кубы в пул'
         }
       </div>
     </div>
