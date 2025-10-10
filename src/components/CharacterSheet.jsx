@@ -380,8 +380,9 @@ const CharacterSheet = () => {
         onActivateAdditionalDie={handleActivateAdditionalDie}
         onActivateBoostResult={handleActivateBoostResult}
         onActivateBoostEffect={handleActivateBoostEffect}
-        onCancelEffect={handleCancelEffect} // ← ДОБАВИТЬ ЭТОТ ПРОПС
+        onCancelEffect={handleCancelEffect}
         activeEffect={activeEffect}
+        hasRollResults={rollResults.length > 0} // ← ДОБАВЬТЕ ЭТОТ ПРОПС
       />
 
       <DicePoolBlock

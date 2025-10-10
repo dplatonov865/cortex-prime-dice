@@ -7,8 +7,9 @@ const PlotTokens = ({
   onActivateAdditionalDie,
   onActivateBoostResult,
   onActivateBoostEffect,
-  onCancelEffect, // ← НОВЫЙ ПРОПС
-  activeEffect
+  onCancelEffect,
+  activeEffect,
+  hasRollResults // ← ДОБАВИТЬ ЭТОТ ПРОПС
 }) => {
   const isEffectActive = activeEffect !== null;
 
@@ -20,14 +21,14 @@ const PlotTokens = ({
   };
 
   const handleBoostResult = () => {
-    if (tokens > 0 && !isEffectActive) {
+    if (tokens > 0 && !isEffectActive && hasRollResults) {
       onSpendToken('boost_result');
       onActivateBoostResult();
     }
   };
 
   const handleBoostEffect = () => {
-    if (tokens > 0 && !isEffectActive) {
+    if (tokens > 0 && !isEffectActive && hasRollResults) {
       onSpendToken('boost_effect');
       onActivateBoostEffect(); // Этот вызов теперь мгновенно применяет эффект
     }
@@ -44,6 +45,9 @@ const PlotTokens = ({
       onCancelEffect();
     }
   };
+
+  const canUseBoostResult = tokens > 0 && !isEffectActive && hasRollResults;
+  const canUseBoostEffect = tokens > 0 && !isEffectActive && hasRollResults;
 
   const getEffectDescription = () => {
     switch (activeEffect) {
@@ -93,11 +97,15 @@ const PlotTokens = ({
         <button
           className="token-action-btn"
           onClick={handleBoostResult}
-          disabled={tokens === 0 || isEffectActive}
+          disabled={!canUseBoostResult}
           title={
-            isEffectActive
-              ? "Дождитесь завершения активного эффекта"
-              : "Повысить результат броска"
+            !hasRollResults
+              ? "Сначала выполните бросок кубов"
+              : isEffectActive
+                ? "Дождитесь завершения активного эффекта"
+                : tokens === 0
+                  ? "Недостаточно жетонов"
+                  : "Повысить результат броска"
           }
         >
           + 📊 Результат
@@ -106,11 +114,15 @@ const PlotTokens = ({
         <button
           className="token-action-btn"
           onClick={handleBoostEffect}
-          disabled={tokens === 0 || isEffectActive}
+          disabled={!canUseBoostEffect}
           title={
-            isEffectActive
-              ? "Дождитесь завершения активного эффекта"
-              : "Автоматически повысить куб эффекта до максимального доступного"
+            !hasRollResults
+              ? "Сначала выполните бросок кубов"
+              : isEffectActive
+                ? "Дождитесь завершения активного эффекта"
+                : tokens === 0
+                  ? "Недостаточно жетонов"
+                  : "Автоматически повысить куб эффекта до максимального доступного"
           }
         >
           + ⚡ Эффект
