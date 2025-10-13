@@ -39,7 +39,7 @@ const SpecialtiesBlock = ({ specialties, onSpecialtyClick, onSpecialtiesChange, 
 
   return (
     <div className={`block specialties-block ${!finalAvailability ? 'category-used' : ''} ${additionalDieEffect ? 'bonus-mode' : ''}`}>
-      <h3>Ресурсы</h3>
+      <h3>Специальности и ресурсы</h3>
       
       <div className="specialties-input-container">
         <input
@@ -48,7 +48,7 @@ const SpecialtiesBlock = ({ specialties, onSpecialtyClick, onSpecialtiesChange, 
           value={newSpecialty}
           onChange={(e) => setNewSpecialty(e.target.value)}
           onKeyPress={handleKeyPress}
-          placeholder="Добавить ресурс..."
+          placeholder="Добавить специальность или ресурс..."
           disabled={!canAddNew}
           maxLength={30}
         />
@@ -56,7 +56,7 @@ const SpecialtiesBlock = ({ specialties, onSpecialtyClick, onSpecialtiesChange, 
           className="add-specialty-button"
           onClick={handleAddSpecialty}
           disabled={!newSpecialty.trim() || !canAddNew}
-          title={!canAddNew ? 'Нельзя добавить - набор уже используется или достигнут лимит' : 'Добавить ресурс'}
+          title={!canAddNew ? 'Нельзя добавить - набор уже используется или достигнут лимит' : 'Добавить специальность или ресурс'}
         >
           +
         </button>
@@ -73,7 +73,7 @@ const SpecialtiesBlock = ({ specialties, onSpecialtyClick, onSpecialtiesChange, 
               onKeyPress={(e) => {
                 if (e.key === 'Enter') e.target.blur();
               }}
-              placeholder="Название ресурса..."
+              placeholder="Название специальности или ресурса..."
               maxLength={30}
               disabled={!finalAvailability}
             />
@@ -84,7 +84,7 @@ const SpecialtiesBlock = ({ specialties, onSpecialtyClick, onSpecialtiesChange, 
                 onClick={() => handleSpecialtyClick(specialty.name, 'd6')}
                 title={
                   !finalAvailability 
-                    ? 'Уже используется ресурс из этого набора'
+                    ? 'Уже используется специальность или ресурс из этого набора'
                     : additionalDieEffect
                     ? 'Эффект дополнительного куба: можно добавить в пул'
                     : 'Клик чтобы добавить d6 в пул'
@@ -100,7 +100,7 @@ const SpecialtiesBlock = ({ specialties, onSpecialtyClick, onSpecialtiesChange, 
               <button
                 className="remove-specialty-button"
                 onClick={() => handleRemoveSpecialty(id)}
-                title="Удалить ресурс"
+                title="Удалить специальность или ресурс"
                 disabled={!finalAvailability}
               >
                 ×

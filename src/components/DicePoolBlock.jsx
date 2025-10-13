@@ -32,7 +32,7 @@ const DicePoolBlock = ({
       <div className="dice-pool">
         {dicePool.length === 0 ? (
           <p className="empty-pool-message">
-            Кликайте по атрибутам, наборам навыков или осложнениям чтобы добавить кубы в пул
+            Кликайте по атрибутам, наборам навыков, специальностям или ресурсам, чтобы добавить кубы в пул
           </p>
         ) : (
           <div className="dice-pool-list">
@@ -69,7 +69,7 @@ const getCategoryLabel = (category) => {
     case 'attribute': return 'Атрибут';
     case 'role': return 'Набор навыков';
     case 'complication': return 'Осложнение';
-    case 'specialty': return 'Ресурс';
+    case 'specialty': return 'Специальности и ресурсы';
     default: 
       if (category.startsWith('distinction:')) {
         return 'Природа';

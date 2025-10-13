@@ -103,7 +103,7 @@ const CharacterHeader = ({
         </div>
       </div>
 
-      <div className="character-description-section">
+      {/* <div className="character-description-section">
         <label className="description-label">Описание персонажа</label>
         <textarea
           className="character-description"
@@ -116,7 +116,7 @@ const CharacterHeader = ({
         <div className="description-counter">
           {characterInfo.description.length}/500 символов
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -24,6 +24,7 @@
 @import './components/_plot-tokens.css';
 @import './components/_results.css';
 @import './components/_dice.css';
+@import './components/_modals.css';
 
 /* Убедимся, что все переменные загружены */
 :root {

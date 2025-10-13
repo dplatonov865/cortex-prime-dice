@@ -216,7 +216,7 @@ const getCategoryLabel = (category) => {
     case 'attribute': return 'Атрибут';
     case 'role': return 'Набор навыков';
     case 'complication': return 'Осложнение';
-    case 'specialty': return 'Ресурс';
+    case 'specialty': return 'Специальность или ресурс';
     default:
       if (category.startsWith('distinction:')) {
         return 'Природа';
