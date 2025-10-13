@@ -33,7 +33,7 @@ const ComplicationBlock = ({ complications, onComplicationClick, onComplicationC
 
   return (
     <div className={`block complications-block ${!isBlockAvailable ? 'category-used' : ''}`}>
-      <h3>Осложнения</h3>
+      <h3>Стресс</h3>
       <div className="complications-list">
         {Object.entries(complications).map(([name, diceType]) => {
           const isClickable = diceType === 'd4' && isBlockAvailable;
