@@ -9,12 +9,14 @@ export const DEFAULT_CHARACTER_INFO = {
 };
 
 export const DEFAULT_ATTRIBUTES = {
-  'Ловкость': 'd6',
   'Мощь': 'd8',
-  'Убеждённость': 'd10',
-  'Хитрость': 'd6',
+  'Ловкость': 'd6',
   'Чутьё': 'd8',
-  'Эрудиция': 'd10'
+  'Разум': 'd6',
+  'Обаяние': 'd10',
+  'Манипуляция': 'd10',
+  'Вера': 'd8',
+  'Стойкость': 'd6'
 };
 
 export const DEFAULT_ROLES = {
