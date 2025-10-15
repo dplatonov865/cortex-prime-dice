@@ -44,14 +44,14 @@ const CharacterSheet = () => {
   // Хуки для управления логикой
   const {
     dicePool,
-    usedCategories,
+    usageCounters,
     additionalDieEffect,
     addToDicePool,
     removeFromDicePool,
     clearDicePool,
-    clearUsedCategories,
-    isCategoryAvailable,
-    setDicePool,
+    clearUsageCounters,
+    getUsageCount,
+    isUsageLimitReached,
     activateAdditionalDie,
     deactivateAdditionalDie
   } = useDicePool();
@@ -272,7 +272,7 @@ const CharacterSheet = () => {
 
   // Обработчик броска
   const handleRollDice = () => {
-    rollDicePool(dicePool, setDicePool, clearUsedCategories);
+    rollDicePool(dicePool, clearDicePool, clearUsageCounters);
   };
 
   // Функции управления эффектами
@@ -286,30 +286,25 @@ const CharacterSheet = () => {
   const handleActivateBoostResult = () => {
     if (plotTokens > 0) {
       setActiveEffect('boost_result');
-      // setPlotTokens(prev => prev - 1);
     }
   };
 
-  // CharacterSheet.jsx - полностью новая логика для handleActivateBoostEffect
   const handleActivateBoostEffect = () => {
     if (plotTokens > 0 && rollResults.length > 0) {
-      // Находим доступные кубы для эффекта (не "1", не в результате, не уже используемые как эффект)
       const availableForEffect = rollResults.filter(dice =>
         !dice.isOne &&
         dice.rolledValue !== 0 &&
         !selectedDice.includes(dice.id) &&
-        !effectDice.some(effect => effect.id === dice.id) // ← проверяем по ID
+        !effectDice.some(effect => effect.id === dice.id)
       );
 
       if (availableForEffect.length > 0) {
-        // Находим куб с максимальным номиналом среди доступных
         const bestEffectDie = availableForEffect.reduce((max, dice) => {
           const diceValue = parseInt(dice.type.replace('d', ''));
           const maxValue = parseInt(max.type.replace('d', ''));
           return diceValue > maxValue ? dice : max;
         }, availableForEffect[0]);
 
-        // ДОБАВЛЯЕМ новый куб эффекта к существующим как объект с ID
         const newEffectDie = {
           id: bestEffectDie.id,
           type: bestEffectDie.type,
@@ -319,9 +314,6 @@ const CharacterSheet = () => {
         const newEffectDice = [...effectDice, newEffectDie];
         setEffectDice(newEffectDice);
 
-        // Тратим жетон
-        // setPlotTokens(prev => prev - 1);
-
         console.log(`Добавлен куб эффекта ${bestEffectDie.type}! Теперь эффекты: ${newEffectDice.map(e => e.type).join(', ')}`);
       } else {
         alert('Нет доступных кубов для повышения эффекта!');
@@ -329,9 +321,8 @@ const CharacterSheet = () => {
     }
   };
 
-
   const deactivateEffect = () => {
-    if (activeEffect !== 'boost_effect') { // boost_effect теперь мгновенный, не требует деактивации
+    if (activeEffect !== 'boost_effect') {
       setActiveEffect(null);
       deactivateAdditionalDie();
     }
@@ -342,34 +333,26 @@ const CharacterSheet = () => {
     if (activeEffect === 'boost_result') {
       const dice = rollResults.find(d => d.id === diceId);
       if (dice && !dice.isOne && dice.rolledValue !== 0 && !selectedDice.includes(diceId)) {
-
-        // Создаем новый массив выбранных кубов с добавленным кубом
         const newSelectedDice = [...selectedDice, diceId];
         setSelectedDice(newSelectedDice);
 
-        // Пересчитываем сумму ВСЕХ выбранных кубов
         const newResult = newSelectedDice.reduce((total, id) => {
           const selectedDice = rollResults.find(d => d.id === id);
           return total + (selectedDice ? selectedDice.rolledValue : 0);
         }, 0);
 
         setResult(newResult);
-
-        // Пересчитываем куб эффекта
         calculateEffectDie(rollResults, newSelectedDice, setEffectDice);
-
-        // Деактивируем эффект
         deactivateEffect();
 
         console.log(`Куб "${dice.name}" добавлен в результат! Новый результат: ${newResult}`);
       }
     }
   };
+
   const handleCancelEffect = () => {
     if (activeEffect) {
-      // Возвращаем жетон
       setPlotTokens(prev => prev + 1);
-      // Деактивируем эффект
       deactivateEffect();
       console.log(`Эффект ${activeEffect} отменен, жетон возвращен`);
     }
@@ -391,7 +374,8 @@ const CharacterSheet = () => {
           distinctions={distinctions}
           onDistinctionClick={handleDistinctionClick}
           onDistinctionChange={handleDistinctionChange}
-          isCategoryAvailable={isCategoryAvailable}
+          getUsageCount={getUsageCount}
+          isUsageLimitReached={isUsageLimitReached}
           additionalDieEffect={activeEffect === 'additional_die'}
         />
       </div>
@@ -404,7 +388,8 @@ const CharacterSheet = () => {
             attributes={attributes}
             onAttributeClick={handleAttributeClick}
             onAttributeChange={handleAttributeChange}
-            isCategoryAvailable={isCategoryAvailable}
+            getUsageCount={getUsageCount}
+            isUsageLimitReached={isUsageLimitReached}
             additionalDieEffect={activeEffect === 'additional_die'}
           />
 
@@ -412,8 +397,8 @@ const CharacterSheet = () => {
             complications={complications}
             onComplicationClick={handleComplicationClick}
             onComplicationChange={handleComplicationChange}
-            isCategoryAvailable={isCategoryAvailable}
-            additionalDieEffect={activeEffect === 'additional_die'}
+            getUsageCount={getUsageCount}
+            isUsageLimitReached={isUsageLimitReached}
           />
         </div>
 
@@ -423,7 +408,8 @@ const CharacterSheet = () => {
             roles={roles}
             onRoleClick={handleRoleClick}
             onRoleChange={handleRoleChange}
-            isCategoryAvailable={isCategoryAvailable}
+            getUsageCount={getUsageCount}
+            isUsageLimitReached={isUsageLimitReached}
             additionalDieEffect={activeEffect === 'additional_die'}
           />
 
@@ -431,7 +417,8 @@ const CharacterSheet = () => {
             specialties={specialties}
             onSpecialtyClick={handleSpecialtyClick}
             onSpecialtiesChange={handleSpecialtiesChange}
-            isCategoryAvailable={isCategoryAvailable}
+            getUsageCount={getUsageCount}
+            isUsageLimitReached={isUsageLimitReached}
             additionalDieEffect={activeEffect === 'additional_die'}
           />
 
@@ -439,7 +426,8 @@ const CharacterSheet = () => {
             resources={resources}
             onResourceClick={handleResourceClick}
             onResourcesChange={handleResourcesChange}
-            isCategoryAvailable={isCategoryAvailable}
+            getUsageCount={getUsageCount}
+            isUsageLimitReached={isUsageLimitReached}
             additionalDieEffect={activeEffect === 'additional_die'}
           />
         </div>

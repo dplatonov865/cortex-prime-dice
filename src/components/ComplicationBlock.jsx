@@ -2,7 +2,7 @@ import React from 'react';
 import DiceIcon from './DiceIcon';
 import { getNextComplicationRank, getPreviousComplicationRank } from '../utils/diceLogic';
 
-const ComplicationBlock = ({ complications, onComplicationClick, onComplicationChange, isCategoryAvailable }) => {
+const ComplicationBlock = ({ complications, onComplicationClick, onComplicationChange, getUsageCount, isUsageLimitReached }) => {
   const handleIncrease = (complicationName, currentRank) => {
     const newRank = getNextComplicationRank(currentRank);
     if (newRank !== currentRank) {
@@ -18,50 +18,53 @@ const ComplicationBlock = ({ complications, onComplicationClick, onComplicationC
   };
 
   const handleComplicationClick = (complicationName, diceType) => {
-    // Проверяем доступность категории
-    if (isCategoryAvailable && !isCategoryAvailable('complication')) {
-      return;
-    }
-    
     // Разрешаем добавление в пул только если ранг d4
     if (diceType === 'd4') {
+      if (isUsageLimitReached && isUsageLimitReached('complication', complicationName)) {
+        return;
+      }
       onComplicationClick(complicationName, diceType);
     }
   };
 
-  const isBlockAvailable = isCategoryAvailable ? isCategoryAvailable('complication') : true;
-
   return (
-    <div className={`block complications-block ${!isBlockAvailable ? 'category-used' : ''}`}>
+    <div className="block complications-block">
       <h3>Стресс</h3>
       <div className="complications-list">
         {Object.entries(complications).map(([name, diceType]) => {
-          const isClickable = diceType === 'd4' && isBlockAvailable;
-          
+          const usageCount = getUsageCount ? getUsageCount('complication', name) : 0;
+          const isLimitReached = isUsageLimitReached && isUsageLimitReached('complication', name);
+          const isClickable = diceType === 'd4' && !isLimitReached;
+
           return (
-            <div 
-              key={name} 
-              className={`complication-row ${!isClickable ? 'complication-disabled' : ''} ${!isBlockAvailable ? 'row-disabled' : ''}`}
+            <div
+              key={name}
+              className={`complication-row ${!isClickable ? 'complication-disabled' : ''}`}
               onClick={() => handleComplicationClick(name, diceType)}
               title={
-                !isBlockAvailable 
-                  ? 'Уже используется осложнение из этого набора'
-                  : diceType === '0' 
-                  ? 'Осложнение отсутствует' 
-                  : diceType === 'd4'
-                  ? 'Клик чтобы добавить куб в пул'
-                  : 'Осложнение слишком сильное - нельзя добавить в пул'
+                diceType === '0'
+                  ? 'Осложнение отсутствует'
+                  : diceType !== 'd4'
+                    ? 'Осложнение слишком сильное - нельзя добавить в пул'
+                    : !isClickable
+                      ? 'Достигнут лимит в 3 использования'
+                      : `Клик чтобы добавить куб в пул (использовано: ${usageCount}/3)`
               }
             >
-              <span className="complication-name">{name}</span>
-              
+              <div className="complication-name-container">
+                <span className="complication-name">{name}</span>
+                {usageCount > 0 && (
+                  <span className="usage-counter"> X{usageCount}</span>
+                )}
+              </div>
+
               <div className="complication-controls">
-                <DiceIcon 
-                  type={diceType} 
+                <DiceIcon
+                  type={diceType}
                   value={diceType === '0' ? '0' : diceType.replace('d', '')}
                   clickable={isClickable}
                 />
-                
+
                 <div className="rank-buttons-vertical">
                   <button
                     className="rank-button increase-button"
@@ -69,19 +72,19 @@ const ComplicationBlock = ({ complications, onComplicationClick, onComplicationC
                       e.stopPropagation();
                       handleIncrease(name, diceType);
                     }}
-                    disabled={diceType === 'd12' || !isBlockAvailable}
+                    disabled={diceType === 'd12'}
                     title="Повысить ранг"
                   >
                     ▲
                   </button>
-                  
+
                   <button
                     className="rank-button decrease-button"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleDecrease(name, diceType);
                     }}
-                    disabled={diceType === '0' || !isBlockAvailable}
+                    disabled={diceType === '0'}
                     title="Понизить ранг"
                   >
                     ▼
@@ -93,10 +96,7 @@ const ComplicationBlock = ({ complications, onComplicationClick, onComplicationC
         })}
       </div>
       <div className="complication-hint">
-        {!isBlockAvailable 
-          ? '⚡ Осложнение уже используется в пуле' 
-          : '💡 В пул можно добавлять только осложнения с рангом d4'
-        }
+        '💡 В пул можно добавлять только осложнения с рангом d4 (макс. 3 раза)'
       </div>
     </div>
   );

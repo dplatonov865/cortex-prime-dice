@@ -2,24 +2,19 @@ import { useState } from 'react';
 
 export const useDicePool = () => {
   const [dicePool, setDicePool] = useState([]);
-  const [usedCategories, setUsedCategories] = useState(new Set());
+  const [usageCounters, setUsageCounters] = useState({});
   const [additionalDieEffect, setAdditionalDieEffect] = useState(false);
 
   // Добавление куба в пул
   const addToDicePool = (name, diceType, category) => {
-    // В режиме дополнительного куба игнорируем проверки использованных категорий
-    if (!additionalDieEffect) {
-      const mainCategory = getMainCategory(category);
+    if (diceType === '0') return;
 
-      if (usedCategories.has(mainCategory)) {
-        return;
-      }
+    const counterKey = `${category}:${name}`;
+    const currentCount = usageCounters[counterKey] || 0;
 
-      if (category === 'complication' && diceType !== 'd4') {
-        return;
-      }
-
-      if (diceType === '0') return;
+    // Проверяем лимит в 3 использования
+    if (currentCount >= 3 && !additionalDieEffect) {
+      return;
     }
 
     const newDice = {
@@ -28,59 +23,64 @@ export const useDicePool = () => {
       type: diceType,
       value: diceType === '0' ? '0' : parseInt(diceType.replace('d', '')),
       category: category,
-      mainCategory: getMainCategory(category),
       isBonus: additionalDieEffect
     };
 
     setDicePool(prev => [...prev, newDice]);
 
+    // Обновляем счетчик использования
     if (!additionalDieEffect) {
-      setUsedCategories(prev => new Set([...prev, getMainCategory(category)]));
+      setUsageCounters(prev => ({
+        ...prev,
+        [counterKey]: currentCount + 1
+      }));
     }
   };
 
   // Удаление куба из пула
   const removeFromDicePool = (diceId) => {
     const diceToRemove = dicePool.find(dice => dice.id === diceId);
-    if (diceToRemove) {
-      setDicePool(prev => prev.filter(dice => dice.id !== diceId));
-      if (!diceToRemove.isBonus) {
-        setUsedCategories(prev => {
-          const newUsed = new Set(prev);
-          newUsed.delete(diceToRemove.mainCategory);
-          return newUsed;
-        });
-      }
+    if (diceToRemove && !diceToRemove.isBonus) {
+      const counterKey = `${diceToRemove.category}:${diceToRemove.name}`;
+
+      setUsageCounters(prev => {
+        const currentCount = prev[counterKey] || 0;
+        if (currentCount > 0) {
+          return {
+            ...prev,
+            [counterKey]: currentCount - 1
+          };
+        }
+        return prev;
+      });
     }
+
+    setDicePool(prev => prev.filter(dice => dice.id !== diceId));
   };
 
   // Очистка пула
   const clearDicePool = () => {
     setDicePool([]);
-    setUsedCategories(new Set());
+    setUsageCounters({});
     setAdditionalDieEffect(false);
   };
 
-  // Сброс использованных категорий
-  const clearUsedCategories = () => {
-    setUsedCategories(new Set());
+  // Сброс счетчиков использования
+  const clearUsageCounters = () => {
+    setUsageCounters({});
     setAdditionalDieEffect(false);
   };
 
-  // Получение основной категории
-  const getMainCategory = (category) => {
-    if (category.startsWith('distinction:')) {
-      return 'distinction';
-    }
-    return category;
+  // Получение счетчика использования для конкретной характеристики
+  const getUsageCount = (category, name) => {
+    const counterKey = `${category}:${name}`;
+    return usageCounters[counterKey] || 0;
   };
 
-  // Проверка доступности категории
-  const isCategoryAvailable = (category) => {
-    if (additionalDieEffect) return true;
-
-    const mainCategory = getMainCategory(category);
-    return !usedCategories.has(mainCategory);
+  // Проверка достигнут ли лимит для характеристики
+  const isUsageLimitReached = (category, name) => {
+    const counterKey = `${category}:${name}`;
+    return (usageCounters[counterKey] || 0) >= 3;
   };
 
   // Активация режима дополнительного куба
@@ -95,13 +95,14 @@ export const useDicePool = () => {
 
   return {
     dicePool,
-    usedCategories,
+    usageCounters,
     additionalDieEffect,
     addToDicePool,
     removeFromDicePool,
     clearDicePool,
-    clearUsedCategories,
-    isCategoryAvailable,
+    clearUsageCounters,
+    getUsageCount,
+    isUsageLimitReached,
     activateAdditionalDie,
     deactivateAdditionalDie,
     setDicePool
