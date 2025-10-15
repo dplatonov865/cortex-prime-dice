@@ -73,7 +73,7 @@ const getCategoryLabel = (category) => {
     case 'resource': return 'Ресурс';
     default:
       if (category.startsWith('distinction:')) {
-        return 'Природа';
+        return 'Отличие';
       }
       return category;
   }

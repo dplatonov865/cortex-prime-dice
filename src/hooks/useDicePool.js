@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { getDistinctionGroup } from '../constants/distinctions';
 
 export const useDicePool = () => {
   const [dicePool, setDicePool] = useState([]);
   const [usageCounters, setUsageCounters] = useState({});
+  const [usedDistinctionGroups, setUsedDistinctionGroups] = useState(new Set());
   const [additionalDieEffect, setAdditionalDieEffect] = useState(false);
 
   // Добавление куба в пул
@@ -34,6 +36,14 @@ export const useDicePool = () => {
         ...prev,
         [counterKey]: currentCount + 1
       }));
+
+      // Если это отличие, добавляем группу в использованные
+      if (category.startsWith('distinction:')) {
+        const distinctionGroup = getDistinctionGroup(name);
+        if (distinctionGroup) {
+          setUsedDistinctionGroups(prev => new Set([...prev, distinctionGroup]));
+        }
+      }
     }
   };
 
@@ -53,6 +63,25 @@ export const useDicePool = () => {
         }
         return prev;
       });
+
+      // Если это отличие, проверяем нужно ли удалить группу из использованных
+      if (diceToRemove.category.startsWith('distinction:')) {
+        setUsedDistinctionGroups(prev => {
+          const newUsed = new Set(prev);
+          // Удаляем группу только если больше нет кубов с этой группой в пуле
+          const hasOtherDiceFromSameGroup = dicePool.some(dice =>
+            dice.id !== diceId &&
+            !dice.isBonus &&
+            dice.category.startsWith('distinction:') &&
+            getDistinctionGroup(dice.name) === getDistinctionGroup(diceToRemove.name)
+          );
+
+          if (!hasOtherDiceFromSameGroup) {
+            newUsed.delete(getDistinctionGroup(diceToRemove.name));
+          }
+          return newUsed;
+        });
+      }
     }
 
     setDicePool(prev => prev.filter(dice => dice.id !== diceId));
@@ -62,12 +91,14 @@ export const useDicePool = () => {
   const clearDicePool = () => {
     setDicePool([]);
     setUsageCounters({});
+    setUsedDistinctionGroups(new Set());
     setAdditionalDieEffect(false);
   };
 
   // Сброс счетчиков использования
   const clearUsageCounters = () => {
     setUsageCounters({});
+    setUsedDistinctionGroups(new Set());
     setAdditionalDieEffect(false);
   };
 
@@ -96,6 +127,7 @@ export const useDicePool = () => {
   return {
     dicePool,
     usageCounters,
+    usedDistinctionGroups,
     additionalDieEffect,
     addToDicePool,
     removeFromDicePool,

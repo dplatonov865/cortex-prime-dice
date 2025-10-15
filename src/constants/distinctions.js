@@ -1,27 +1,71 @@
-export const DISTINCTION_OPTIONS = [
-    { 'value': 'Здоровяк', 'label': 'Здоровяк' },
-    { 'value': 'Многоборец', 'label': 'Многоборец' },
-    { 'value': 'Проныра', 'label': 'Проныра' },
-    { 'value': 'Сорвиголова', 'label': 'Сорвиголова' },
-    { 'value': 'Золотые руки', 'label': 'Золотые руки' },
-    { 'value': 'Наивный идеалист', 'label': 'Наивный идеалист' },
-    { 'value': 'Прожжённый циник', 'label': 'Прожжённый циник' },
-    { 'value': 'Крестоносец', 'label': 'Крестоносец' },
-    { 'value': 'Истинно верующий', 'label': 'Истинно верующий' },
-    { 'value': 'Искатель приключений', 'label': 'Искатель приключений' },
-    { 'value': 'Убеждённый скептик', 'label': 'Убеждённый скептик' },
-    { 'value': 'Сыщик-любитель', 'label': 'Сыщик-любитель' },
-    { 'value': 'Дилетант', 'label': 'Дилетант' },
-    { 'value': 'Рассеянный профессор', 'label': 'Рассеянный профессор' },
-    { 'value': 'Планировщик', 'label': 'Планировщик' },
-    { 'value': 'Душа компании', 'label': 'Душа компании' },
-    { 'value': 'Прирождённый артист', 'label': 'Прирождённый артист' },
-    { 'value': 'Кукловод', 'label': 'Кукловод' },
-    { 'value': 'Наставник', 'label': 'Наставник' },
-    { 'value': 'Брутальный', 'label': 'Брутальный' },
-    { 'value': 'Видящий духов', 'label': 'Видящий духов' },
-    { 'value': 'Дьявольски везучий', 'label': 'Дьявольски везучий' },
-    { 'value': 'Провидец', 'label': 'Провидец' },
-    { 'value': 'Сновидец', 'label': 'Сновидец' },
-    { 'value': 'Отмеченный судьбой', 'label': 'Отмеченный судьбой' }
-];
+export const DISTINCTION_GROUPS = {
+    physical: {
+        name: 'Физические',
+        options: [
+            { value: 'Здоровяк', label: 'Здоровяк' },
+            { value: 'Проныра', label: 'Проныра' },
+            { value: 'Спортсмен', label: 'Спортсмен' },
+            { value: 'Красавчик', label: 'Красавчик' },
+            { value: 'Золотые руки', label: 'Золотые руки' }
+        ]
+    },
+    spiritual: {
+        name: 'Духовные',
+        options: [
+            { value: 'Прожжённый циник', label: 'Прожжённый циник' },
+            { value: 'Наивный идеалист', label: 'Наивный идеалист' },
+            { value: 'Праведный', label: 'Праведный' },
+            { value: 'Авантюрист', label: 'Авантюрист' },
+            { value: 'Преданный', label: 'Преданный' }
+        ]
+    },
+    mental: {
+        name: 'Ментальные',
+        options: [
+            { value: 'Рассеянный эрудит', label: 'Рассеянный эрудит' },
+            { value: 'Бдительный', label: 'Бдительный' },
+            { value: 'Дилетант', label: 'Дилетант' },
+            { value: 'Планировщик', label: 'Планировщик' },
+            { value: 'Мечтатель', label: 'Мечтатель' }
+        ]
+    },
+    social: {
+        name: 'Социальные',
+        options: [
+            { value: 'Душа компании', label: 'Душа компании' },
+            { value: 'Кукловод', label: 'Кукловод' },
+            { value: 'Наставник', label: 'Наставник' },
+            { value: 'Артист', label: 'Артист' },
+            { value: 'Внушительный', label: 'Внушительный' }
+        ]
+    },
+    mystical: {
+        name: 'Мистические',
+        options: [
+            { value: 'Дьявольски везучий', label: 'Дьявольски везучий' },
+            { value: 'Отмеченный судьбой', label: 'Отмеченный судьбой' },
+            { value: 'Видящий духов', label: 'Видящий духов' },
+            { value: 'Менталист', label: 'Менталист' },
+            { value: 'Провидец', label: 'Провидец' }
+        ]
+    }
+};
+
+// Вспомогательная функция для получения всех опций в плоском виде (для обратной совместимости)
+export const DISTINCTION_OPTIONS = Object.values(DISTINCTION_GROUPS).flatMap(group => group.options);
+
+// Функция для получения группы по значению отличия
+export const getDistinctionGroup = (distinctionValue) => {
+    for (const [groupKey, group] of Object.entries(DISTINCTION_GROUPS)) {
+        if (group.options.some(option => option.value === distinctionValue)) {
+            return groupKey;
+        }
+    }
+    return null;
+};
+
+// Функция для получения названия группы по значению отличия
+export const getDistinctionGroupName = (distinctionValue) => {
+    const groupKey = getDistinctionGroup(distinctionValue);
+    return groupKey ? DISTINCTION_GROUPS[groupKey].name : null;
+};

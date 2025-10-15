@@ -45,6 +45,7 @@ const CharacterSheet = () => {
   const {
     dicePool,
     usageCounters,
+    usedDistinctionGroups,
     additionalDieEffect,
     addToDicePool,
     removeFromDicePool,
@@ -376,6 +377,7 @@ const CharacterSheet = () => {
           onDistinctionChange={handleDistinctionChange}
           getUsageCount={getUsageCount}
           isUsageLimitReached={isUsageLimitReached}
+          usedDistinctionGroups={usedDistinctionGroups}
           additionalDieEffect={activeEffect === 'additional_die'}
         />
       </div>

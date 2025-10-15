@@ -1,8 +1,16 @@
 import React from 'react';
 import DiceIcon from './DiceIcon';
-import { DISTINCTION_OPTIONS } from '../constants/distinctions';
+import { DISTINCTION_GROUPS, getDistinctionGroup } from '../constants/distinctions';
 
-const DistinctionBlock = ({ distinctions, onDistinctionClick, onDistinctionChange, getUsageCount, isUsageLimitReached, additionalDieEffect = false }) => {
+const DistinctionBlock = ({
+  distinctions,
+  onDistinctionClick,
+  onDistinctionChange,
+  getUsageCount,
+  isUsageLimitReached,
+  usedDistinctionGroups,
+  additionalDieEffect = false
+}) => {
   const handleDistinctionClick = (distinctionName, diceType, category) => {
     if (isUsageLimitReached && isUsageLimitReached('distinction', `${category}:${distinctionName}`) && !additionalDieEffect) {
       return;
@@ -12,6 +20,48 @@ const DistinctionBlock = ({ distinctions, onDistinctionClick, onDistinctionChang
 
   const handleNameChange = (category, newName) => {
     onDistinctionChange(category, newName);
+  };
+
+  // Функция для получения доступных опций для категории
+  const getAvailableOptions = (currentCategory, currentValue) => {
+    const allOptions = Object.values(DISTINCTION_GROUPS).flatMap(group => group.options);
+
+    // Если это режим дополнительного куба, показываем все опции
+    if (additionalDieEffect) {
+      return allOptions;
+    }
+
+    // Собираем все выбранные отличия из других категорий
+    const otherCategories = Object.entries(distinctions)
+      .filter(([categoryKey]) => categoryKey !== currentCategory)
+      .map(([_, distinction]) => distinction.name)
+      .filter(name => name && name !== '');
+
+    // Определяем какие группы уже используются другими отличиями
+    const usedGroups = new Set();
+    otherCategories.forEach(distinctionName => {
+      const group = getDistinctionGroup(distinctionName);
+      if (group) {
+        usedGroups.add(group);
+      }
+    });
+
+    // Добавляем группы из usedDistinctionGroups
+    if (usedDistinctionGroups) {
+      usedDistinctionGroups.forEach(group => usedGroups.add(group));
+    }
+
+    // Фильтруем опции: показываем только из неиспользованных групп + текущее значение
+    const availableOptions = allOptions.filter(option => {
+      const optionGroup = getDistinctionGroup(option.value);
+      // Показываем опцию если:
+      // 1. Это текущее выбранное значение
+      // 2. Группа опции не используется другими отличиями
+      // 3. Группа опции не заблокирована через usedDistinctionGroups
+      return option.value === currentValue || !usedGroups.has(optionGroup);
+    });
+
+    return availableOptions;
   };
 
   return (
@@ -28,6 +78,8 @@ const DistinctionBlock = ({ distinctions, onDistinctionClick, onDistinctionChang
           const isClickableD8 = !isLimitReachedD8 || additionalDieEffect;
           const isClickableD4 = !isLimitReachedD4 || additionalDieEffect;
 
+          const availableOptions = getAvailableOptions(category, distinction.name);
+
           return (
             <div key={category} className="distinction-category">
               <h4 className="distinction-title">{getCategoryTitle(category)}</h4>
@@ -38,7 +90,7 @@ const DistinctionBlock = ({ distinctions, onDistinctionClick, onDistinctionChang
                   onChange={(e) => handleNameChange(category, e.target.value)}
                 >
                   <option value="">Выберите {getCategoryTitle(category).toLowerCase()}...</option>
-                  {DISTINCTION_OPTIONS.map(option => (
+                  {availableOptions.map(option => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
@@ -97,6 +149,11 @@ const DistinctionBlock = ({ distinctions, onDistinctionClick, onDistinctionChang
                   </div>
                 </div>
               </div>
+              {availableOptions.length === 1 && distinction.name && (
+                <div className="distinction-warning">
+                  ⚠️ Все группы отличий уже используются
+                </div>
+              )}
             </div>
           );
         })}
@@ -104,7 +161,7 @@ const DistinctionBlock = ({ distinctions, onDistinctionClick, onDistinctionChang
       <div className="distinction-hint">
         {additionalDieEffect
           ? '🎯 Эффект дополнительного куба: можно добавить любое отличие'
-          : '💡 Выберите отличительные черты из списка и добавляйте кубы в пул (макс. 3 раза на каждый куб)'
+          : '💡 Выберите отличительные черты из разных групп. При выборе отличия из группы, другие отличия из этой группы становятся недоступны.'
         }
       </div>
     </div>
