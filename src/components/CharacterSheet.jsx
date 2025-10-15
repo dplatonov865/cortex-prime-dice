@@ -5,6 +5,7 @@ import RoleBlock from './RoleBlock';
 import ComplicationBlock from './ComplicationBlock';
 import DistinctionBlock from './DistinctionBlock';
 import SpecialtiesBlock from './SpecialtiesBlock';
+import ResourcesBlock from './ResourcesBlock';
 import DicePoolBlock from './DicePoolBlock';
 import ResultsBlock from './ResultsBlock';
 import PlotTokens from './PlotTokens';
@@ -20,6 +21,7 @@ import {
   DEFAULT_COMPLICATIONS,
   DEFAULT_DISTINCTIONS,
   DEFAULT_SPECIALTIES,
+  DEFAULT_RESOURCES,
   LIMITS
 } from '../constants/characterData';
 
@@ -33,6 +35,7 @@ const CharacterSheet = () => {
   const [complications, setComplications] = useLocalStorage('complications', DEFAULT_COMPLICATIONS);
   const [distinctions, setDistinctions] = useLocalStorage('distinctions', DEFAULT_DISTINCTIONS);
   const [specialties, setSpecialties] = useLocalStorage('specialties', DEFAULT_SPECIALTIES);
+  const [resources, setResources] = useLocalStorage('resources', DEFAULT_RESOURCES);
   const [plotTokens, setPlotTokens] = useLocalStorage('plotTokens', 1);
 
   // Состояние активного эффекта
@@ -77,6 +80,7 @@ const CharacterSheet = () => {
       complications,
       distinctions,
       specialties,
+      resources,
       exportDate: new Date().toISOString(),
       version: '1.0'
     };
@@ -101,6 +105,7 @@ const CharacterSheet = () => {
         setComplications(data.complications || DEFAULT_COMPLICATIONS);
         setDistinctions(data.distinctions || DEFAULT_DISTINCTIONS);
         setSpecialties(data.specialties || DEFAULT_SPECIALTIES);
+        setResources(data.resources || DEFAULT_RESOURCES);
         clearDicePool();
         alert('Персонаж успешно загружен!');
       }
@@ -116,6 +121,7 @@ const CharacterSheet = () => {
     setComplications(DEFAULT_COMPLICATIONS);
     setDistinctions(DEFAULT_DISTINCTIONS);
     setSpecialties(DEFAULT_SPECIALTIES);
+    setResources(DEFAULT_RESOURCES);
     setPlotTokens(1);
     clearDicePool();
     setActiveEffect(null);
@@ -127,6 +133,7 @@ const CharacterSheet = () => {
     localStorage.removeItem('complications');
     localStorage.removeItem('distinctions');
     localStorage.removeItem('specialties');
+    localStorage.removeItem('resources');
     localStorage.removeItem('plotTokens');
   };
 
@@ -192,6 +199,15 @@ const CharacterSheet = () => {
     }
   };
 
+  const handleResourceClick = (resourceName, diceType) => {
+    if (activeEffect === 'additional_die') {
+      addToDicePool(resourceName, diceType, 'resource');
+      deactivateEffect();
+    } else {
+      addToDicePool(resourceName, diceType, 'resource');
+    }
+  };
+
   // Обработчики изменения данных
   const handleAttributeChange = (attributeName, newRank) => {
     setAttributes(prev => ({
@@ -236,6 +252,21 @@ const CharacterSheet = () => {
       });
     } else if (action === 'edit') {
       setSpecialties(prev => ({ ...prev, [id]: { name } }));
+    }
+  };
+
+  const handleResourcesChange = (action, id, name) => {
+    if (action === 'add' && Object.keys(resources).length < LIMITS.MAX_SPECIALTIES) {
+      const newId = Date.now().toString();
+      setResources(prev => ({ ...prev, [newId]: { name } }));
+    } else if (action === 'remove') {
+      setResources(prev => {
+        const newResources = { ...prev };
+        delete newResources[id];
+        return newResources;
+      });
+    } else if (action === 'edit') {
+      setResources(prev => ({ ...prev, [id]: { name } }));
     }
   };
 
@@ -400,6 +431,14 @@ const CharacterSheet = () => {
             specialties={specialties}
             onSpecialtyClick={handleSpecialtyClick}
             onSpecialtiesChange={handleSpecialtiesChange}
+            isCategoryAvailable={isCategoryAvailable}
+            additionalDieEffect={activeEffect === 'additional_die'}
+          />
+
+          <ResourcesBlock
+            resources={resources}
+            onResourceClick={handleResourceClick}
+            onResourcesChange={handleResourcesChange}
             isCategoryAvailable={isCategoryAvailable}
             additionalDieEffect={activeEffect === 'additional_die'}
           />

@@ -38,7 +38,12 @@ export const calculateEffectDie = (results, selectedIds, setEffectDice) => {
   );
 
   if (availableDice.length === 0) {
-    // Не сбрасываем существующие эффекты, просто не добавляем новых
+    // Если нет доступных кубов, устанавливаем d4 как куб эффекта
+    setEffectDice([{
+      id: 'default-d4',
+      type: 'd4',
+      name: 'Куб эффекта по умолчанию'
+    }]);
     return;
   }
 
@@ -55,22 +60,9 @@ export const calculateEffectDie = (results, selectedIds, setEffectDice) => {
   });
 
   // Устанавливаем только ОСНОВНОЙ куб эффекта (первый)
-  // Если уже есть кубы эффекта, заменяем только основной (первый в массиве)
-  setEffectDice(prev => {
-    if (prev.length === 0) {
-      return [{
-        id: effectDie.id,
-        type: effectDie.type,
-        name: effectDie.name
-      }];
-    } else {
-      // Заменяем только основной куб эффекта, сохраняя дополнительные
-      const additionalEffects = prev.slice(1);
-      return [{
-        id: effectDie.id,
-        type: effectDie.type,
-        name: effectDie.name
-      }, ...additionalEffects];
-    }
-  });
+  setEffectDice([{
+    id: effectDie.id,
+    type: effectDie.type,
+    name: effectDie.name
+  }]);
 };

@@ -1,26 +1,26 @@
 import React from 'react';
 import DiceIcon from './DiceIcon';
 
-const DicePoolBlock = ({ 
-  dicePool, 
-  onRemoveFromPool, 
-  onRollDice, 
-  onClearPool 
+const DicePoolBlock = ({
+  dicePool,
+  onRemoveFromPool,
+  onRollDice,
+  onClearPool
 }) => {
   return (
     <div className="horizontal-block dice-pool-block">
       <div className="block-header">
         <h3>Текущий пул кубов</h3>
         <div className="pool-controls">
-          <button 
-            onClick={onRollDice} 
+          <button
+            onClick={onRollDice}
             className="roll-button"
             disabled={dicePool.length === 0}
           >
             Бросок ({dicePool.length})
           </button>
-          <button 
-            onClick={onClearPool} 
+          <button
+            onClick={onClearPool}
             className="clear-button"
             disabled={dicePool.length === 0}
           >
@@ -28,7 +28,7 @@ const DicePoolBlock = ({
           </button>
         </div>
       </div>
-      
+
       <div className="dice-pool">
         {dicePool.length === 0 ? (
           <p className="empty-pool-message">
@@ -37,14 +37,14 @@ const DicePoolBlock = ({
         ) : (
           <div className="dice-pool-list">
             {dicePool.map(dice => (
-              <div 
-                key={dice.id} 
+              <div
+                key={dice.id}
                 className="pool-dice-item"
                 onClick={() => onRemoveFromPool(dice.id)}
                 title={`Клик чтобы удалить\n${getCategoryLabel(dice.category)}: ${dice.name} (${dice.type})`}
               >
-                <DiceIcon 
-                  type={dice.type} 
+                <DiceIcon
+                  type={dice.type}
                   value={dice.value}
                   clickable={false}
                 />
@@ -69,8 +69,9 @@ const getCategoryLabel = (category) => {
     case 'attribute': return 'Атрибут';
     case 'role': return 'Набор навыков';
     case 'complication': return 'Осложнение';
-    case 'specialty': return 'Специальности и ресурсы';
-    default: 
+    case 'specialty': return 'Специальность';
+    case 'resource': return 'Ресурс';
+    default:
       if (category.startsWith('distinction:')) {
         return 'Природа';
       }

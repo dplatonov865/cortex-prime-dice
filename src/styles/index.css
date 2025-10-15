@@ -20,6 +20,7 @@
 @import './components/_complications.css';
 @import './components/_distinctions.css';
 @import './components/_specialties.css';
+@import './components/_resources.css';
 @import './components/_dice-pool.css';
 @import './components/_plot-tokens.css';
 @import './components/_results.css';

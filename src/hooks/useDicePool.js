@@ -10,7 +10,7 @@ export const useDicePool = () => {
     // В режиме дополнительного куба игнорируем проверки использованных категорий
     if (!additionalDieEffect) {
       const mainCategory = getMainCategory(category);
-      
+
       if (usedCategories.has(mainCategory)) {
         return;
       }
@@ -18,10 +18,10 @@ export const useDicePool = () => {
       if (category === 'complication' && diceType !== 'd4') {
         return;
       }
-      
+
       if (diceType === '0') return;
     }
-    
+
     const newDice = {
       id: Date.now() + Math.random(),
       name: name,
@@ -31,9 +31,9 @@ export const useDicePool = () => {
       mainCategory: getMainCategory(category),
       isBonus: additionalDieEffect
     };
-    
+
     setDicePool(prev => [...prev, newDice]);
-    
+
     if (!additionalDieEffect) {
       setUsedCategories(prev => new Set([...prev, getMainCategory(category)]));
     }
@@ -78,7 +78,7 @@ export const useDicePool = () => {
   // Проверка доступности категории
   const isCategoryAvailable = (category) => {
     if (additionalDieEffect) return true;
-    
+
     const mainCategory = getMainCategory(category);
     return !usedCategories.has(mainCategory);
   };

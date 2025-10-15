@@ -183,7 +183,6 @@ const isDiceCurrentEffect = (dice, rollResults, effectDice) => {
   return dice.type === effectDiceType && allEffectDice.length > 0 && dice.id === allEffectDice[0].id;
 };
 
-
 const RollHistory = ({ rollHistory }) => {
   if (rollHistory.length === 0) return null;
 
@@ -216,7 +215,8 @@ const getCategoryLabel = (category) => {
     case 'attribute': return 'Атрибут';
     case 'role': return 'Набор навыков';
     case 'complication': return 'Осложнение';
-    case 'specialty': return 'Специальность или ресурс';
+    case 'specialty': return 'Специальность';
+    case 'resource': return 'Ресурс';
     default:
       if (category.startsWith('distinction:')) {
         return 'Природа';

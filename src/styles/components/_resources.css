@@ -1,0 +1,277 @@
+/* Стили для блока специальностей */
+
+.resources-block h3 {
+  border-color: #1abc9c;
+  background: linear-gradient(135deg, #1abc9c 0%, transparent 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.resources-input-container {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.resource-input {
+  flex: 1;
+  border: 1px solid rgba(26, 188, 156, 0.3);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-base);
+  font-family: inherit;
+  background: rgba(30, 35, 50, 0.8);
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+}
+
+.resource-input:focus {
+  outline: none;
+  border-color: #1abc9c;
+  box-shadow: 0 0 0 2px rgba(26, 188, 156, 0.2);
+  background: rgba(35, 40, 55, 0.9);
+}
+
+.resource-input:disabled {
+  background: rgba(40, 45, 60, 0.6);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.add-resource-button {
+  width: 45px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #1abc9c, #16a085);
+  color: white;
+  font-size: var(--text-2xl);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-resource-button:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(26, 188, 156, 0.3);
+}
+
+.add-resource-button:disabled {
+  background: rgba(189, 195, 199, 0.3);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.resources-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: var(--space-sm);
+  padding-right: var(--space-xs);
+}
+
+.resource-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  background: var(--bg-card-light);
+  border-radius: var(--radius-md);
+  border-left: 3px solid #1abc9c;
+  border: 1px solid rgba(26, 188, 156, 0.2);
+  transition: all var(--transition-fast);
+}
+
+.resource-row:hover {
+  background: rgba(26, 188, 156, 0.1);
+}
+
+.resource-name-input {
+  flex: 1;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--text-xs);
+  font-family: inherit;
+  background: transparent;
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+  min-width: 0;
+}
+
+.resource-name-input:focus {
+  outline: none;
+  border-color: rgba(26, 188, 156, 0.4);
+  background: rgba(30, 35, 50, 0.8);
+  box-shadow: 0 0 0 1px rgba(26, 188, 156, 0.2);
+}
+
+.resource-name-input:hover {
+  border-color: rgba(26, 188, 156, 0.3);
+}
+
+.resource-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.resource-dice {
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs);
+}
+
+.resource-dice:hover {
+  transform: scale(1.1);
+  background: rgba(26, 188, 156, 0.1);
+}
+
+.remove-resource-button {
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+  font-size: var(--text-base);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.remove-resource-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+}
+
+/* Сообщение когда нет специальностей */
+.no-resources-message {
+  text-align: center;
+  color: var(--text-disabled);
+  font-style: italic;
+  padding: var(--space-xl);
+  font-size: var(--text-base);
+}
+
+.resources-counter {
+  text-align: center;
+  font-size: var(--text-xs);
+  color: var(--text-disabled);
+  margin-bottom: var(--space-sm);
+  font-weight: 500;
+}
+
+/* Подсказка для блока специальностей */
+.resources-hint {
+  padding: var(--space-md);
+  background: rgba(26, 188, 156, 0.15);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  color: #76ecc8;
+  text-align: center;
+  border: 1px solid rgba(26, 188, 156, 0.2);
+}
+
+/* Состояния для специальностей */
+.resource-row.row-disabled {
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}
+
+.resource-row.row-disabled:hover {
+  transform: none !important;
+  background: var(--bg-card-light) !important;
+}
+
+/* Стили для кубиков специальностей */
+.resources-block .dice-clickable {
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.resources-block .dice-clickable:hover {
+  transform: scale(1.2);
+  filter: brightness(1.1);
+}
+
+.resources-block .dice-clickable:active {
+  transform: scale(1.1);
+}
+
+.resources-block .dice-disabled {
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}
+
+.resources-block .dice-disabled:hover {
+  transform: none !important;
+  background: transparent !important;
+}
+
+/* Стили для скроллбара в списке специальностей */
+.resources-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.resources-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 2px;
+}
+
+.resources-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 2px;
+}
+
+.resources-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Адаптивность для специальностей */
+@media (max-width: 768px) {
+  .resource-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  .resource-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .resources-input-container {
+    flex-direction: column;
+  }
+
+  .add-resource-button {
+    width: 100%;
+    height: 35px;
+  }
+}
+
+@media (max-width: 480px) {
+  .resources-block {
+    min-height: auto;
+  }
+
+  .resource-controls {
+    gap: var(--space-sm);
+  }
+
+  .resource-name-input {
+    font-size: var(--text-sm);
+  }
+}
