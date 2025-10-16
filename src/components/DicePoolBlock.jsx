@@ -66,15 +66,19 @@ const DicePoolBlock = ({
 // Вспомогательная функция для получения метки категории
 const getCategoryLabel = (category) => {
   switch (category) {
-    case 'attribute': return 'Атрибут';
-    case 'role': return 'Набор навыков';
-    case 'complication': return 'Осложнение';
-    case 'specialty': return 'Специальность';
-    case 'resource': return 'Ресурс';
+    case 'attributes':
+      return 'Атрибут';
+    case 'roles':
+      return 'Набор навыков';
+    case 'complications':
+      return 'Осложнение';
+    case 'distinctions':
+      return 'Отличие';
+    case 'specialties':
+      return 'Специальность';
+    case 'resources':
+      return 'Ресурс';
     default:
-      if (category.startsWith('distinction:')) {
-        return 'Отличие';
-      }
       return category;
   }
 };

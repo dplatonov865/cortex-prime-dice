@@ -361,6 +361,16 @@
   margin-bottom: 0;
 }
 
+/* ПЕРЕОПРЕДЕЛЕНИЕ ДЛЯ СТАРЫХ СТИЛЕЙ */
+.fixed-traits-block .fixed-trait-row {
+  border-color: rgba(109, 193, 255, 0.2) !important;
+}
+
+.fixed-traits-block .fixed-trait-row:hover {
+  background: rgba(109, 193, 255, 0.15) !important;
+  border-color: rgba(109, 193, 255, 0.4) !important;
+}
+
 /* Контейнеры для адаптивности */
 @media (max-width: 768px) {
   .distinctions-row .distinctions-list {

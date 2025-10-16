@@ -15,17 +15,19 @@
 @import './components/_buttons.css';
 @import './components/_inputs.css';
 @import './components/_character-header.css';
-@import './components/_attributes.css';
-@import './components/_roles.css';
-@import './components/_complications.css';
+/* @import './components/_attributes.css'; */
+/* @import './components/_roles.css'; */
+/* @import './components/_complications.css'; */
 @import './components/_distinctions.css';
-@import './components/_specialties.css';
-@import './components/_resources.css';
+/* @import './components/_specialties.css'; */
+/* @import './components/_resources.css'; */
 @import './components/_dice-pool.css';
 @import './components/_plot-tokens.css';
 @import './components/_results.css';
 @import './components/_dice.css';
 @import './components/_modals.css';
+@import './components/_fixed-traits-block.css';
+@import './components/_editable-traits-block.css';
 
 /* Убедимся, что все переменные загружены */
 :root {

@@ -8,10 +8,10 @@ export const useDicePool = () => {
   const [additionalDieEffect, setAdditionalDieEffect] = useState(false);
 
   // Добавление куба в пул
-  const addToDicePool = (name, diceType, category) => {
+  const addToDicePool = (traitId, traitName, diceType, category) => {
     if (diceType === '0') return;
 
-    const counterKey = `${category}:${name}`;
+    const counterKey = `${category}:${traitName}`;
     const currentCount = usageCounters[counterKey] || 0;
 
     // Проверяем лимит в 3 использования
@@ -21,10 +21,11 @@ export const useDicePool = () => {
 
     const newDice = {
       id: Date.now() + Math.random(),
-      name: name,
+      name: traitName,
       type: diceType,
       value: diceType === '0' ? '0' : parseInt(diceType.replace('d', '')),
       category: category,
+      traitId: traitId, // Сохраняем ID трейта для возможного использования
       isBonus: additionalDieEffect
     };
 
@@ -38,8 +39,8 @@ export const useDicePool = () => {
       }));
 
       // Если это отличие, добавляем группу в использованные
-      if (category.startsWith('distinction:')) {
-        const distinctionGroup = getDistinctionGroup(name);
+      if (category === 'distinctions') {
+        const distinctionGroup = getDistinctionGroup(traitName);
         if (distinctionGroup) {
           setUsedDistinctionGroups(prev => new Set([...prev, distinctionGroup]));
         }
@@ -65,14 +66,14 @@ export const useDicePool = () => {
       });
 
       // Если это отличие, проверяем нужно ли удалить группу из использованных
-      if (diceToRemove.category.startsWith('distinction:')) {
+      if (diceToRemove.category === 'distinctions') {
         setUsedDistinctionGroups(prev => {
           const newUsed = new Set(prev);
           // Удаляем группу только если больше нет кубов с этой группой в пуле
           const hasOtherDiceFromSameGroup = dicePool.some(dice =>
             dice.id !== diceId &&
             !dice.isBonus &&
-            dice.category.startsWith('distinction:') &&
+            dice.category === 'distinctions' &&
             getDistinctionGroup(dice.name) === getDistinctionGroup(diceToRemove.name)
           );
 

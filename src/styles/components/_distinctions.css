@@ -1,8 +1,8 @@
 /* Стили для блока отличий */
 
 .distinctions-block h3 {
-  border-color: #ffd93d;
-  background: linear-gradient(135deg, #ffd93d 0%, transparent 100%);
+  border-color: var(--accent-warning);
+  background: linear-gradient(135deg, var(--accent-warning) 0%, transparent 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -14,123 +14,103 @@
   gap: var(--space-lg);
 }
 
-.distinction-category {
+.distinction-row {
   padding: var(--space-lg);
   background: var(--bg-card-light);
   border-radius: var(--radius-lg);
-  border-left: 3px solid #ffd93d;
   border: 1px solid rgba(255, 217, 61, 0.2);
+  transition: all var(--transition-normal);
 }
 
 .distinction-title {
-  font-size: var(--text-base);
+  font-size: var(--text-sm);
   font-weight: 600;
-  color: #ffd93d;
-  margin-bottom: var(--space-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-md);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  opacity: 0.8;
 }
 
-.distinction-row {
+.distinction-controls {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: var(--space-sm);
-  min-height: 40px;
+  gap: var(--space-md);
+  justify-content: space-between;
 }
 
-/* Стили для выпадающего списка */
 .distinction-select {
   flex: 1;
   border: 1px solid rgba(255, 217, 61, 0.3);
   border-radius: var(--radius-md);
   padding: var(--space-sm) var(--space-md);
-  padding-right: 2.5rem;
-  /* Место для стрелки */
   font-size: var(--text-base);
   font-family: inherit;
   background: rgba(30, 35, 50, 0.8);
   color: var(--text-primary);
   transition: all var(--transition-fast);
-  min-width: 0;
   cursor: pointer;
-
-  /* Кастомная стрелка */
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23ffd93d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.7rem center;
-  background-size: 1rem;
 }
 
 .distinction-select:focus {
   outline: none;
   border-color: #ffd93d;
   box-shadow: 0 0 0 2px rgba(255, 217, 61, 0.2);
-  background-color: rgba(35, 40, 55, 0.9);
+  background: rgba(35, 40, 55, 0.9);
 }
 
-.distinction-select:hover {
-  border-color: rgba(255, 217, 61, 0.5);
-  background-color: rgba(35, 40, 55, 0.9);
-}
-
-.distinction-select:disabled {
-  background-color: rgba(40, 45, 60, 0.6);
-  color: var(--text-disabled);
-  cursor: not-allowed;
-  opacity: 0.7;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-}
-
-/* Стили для опций в выпадающем списке */
 .distinction-select option {
-  background: rgba(30, 35, 50, 0.95);
+  background: var(--bg-card-dark);
   color: var(--text-primary);
-  padding: var(--space-sm);
-  border: none;
-}
-
-.distinction-select option:checked {
-  background: linear-gradient(135deg, #ffd93d 0%, #ffb347 100%);
-  color: #1e2332;
-  font-weight: 600;
-}
-
-.distinction-select option:hover {
-  background: rgba(255, 217, 61, 0.2) !important;
-  color: var(--text-primary);
-}
-
-/* Стили для выбранного значения */
-.distinction-select:valid {
-  color: #ffeaa7;
-  font-weight: 500;
-}
-
-.distinction-select:invalid {
-  color: var(--text-secondary);
 }
 
 .distinction-dice {
   display: flex;
-  gap: var(--space-sm);
   align-items: center;
-  flex-shrink: 0;
-  min-width: max-content;
-}
-
-.distinction-dice-item {
+  gap: var(--space-sm);
   cursor: pointer;
   transition: all var(--transition-fast);
-  border-radius: var(--radius-sm);
   padding: var(--space-xs);
+  border-radius: var(--radius-md);
 }
 
-.distinction-dice-item:hover {
-  transform: scale(1.1);
+.distinction-dice:hover:not(.dice-disabled) {
   background: rgba(255, 217, 61, 0.1);
+  transform: scale(1.05);
+}
+
+.distinction-dice.dice-disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.distinction-dice.dice-disabled:hover {
+  transform: none;
+  background: transparent;
+}
+
+/* Счетчик использований для отличий */
+.usage-counter-small {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-weight: 600;
+  background: rgba(255, 217, 61, 0.2);
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Предупреждение о занятых группах */
+.distinction-warning {
+  margin-top: var(--space-sm);
+  padding: var(--space-sm);
+  background: rgba(231, 76, 60, 0.1);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  color: #e74c3c;
+  text-align: center;
 }
 
 /* Подсказка для блока отличий */
@@ -145,23 +125,13 @@
   margin-top: var(--space-lg);
 }
 
-/* Состояния для отличий */
-.distinction-row.row-disabled {
-  cursor: not-allowed !important;
-  opacity: 0.6;
-}
-
-.distinction-row.row-disabled:hover {
-  transform: none !important;
-  background: transparent !important;
-}
-
-.distinction-category.category-used {
+/* Состояния строк отличий */
+.distinction-row.category-used {
   opacity: 0.8;
   position: relative;
 }
 
-.distinction-category.category-used::before {
+.distinction-row.category-used::before {
   content: "✓ В ПУЛЕ";
   position: absolute;
   top: 10px;
@@ -176,16 +146,9 @@
 }
 
 /* Анимация разблокировки */
-.distinction-category.category-unlocked {
+.distinction-row.category-unlocked {
   border: 2px solid var(--accent-success);
   animation: pulse-unlock 1s ease-in-out;
-}
-
-/* Отключаем селекты в использованных отличиях */
-.distinction-category.category-used .distinction-select:disabled {
-  background: rgba(40, 45, 60, 0.6);
-  color: var(--text-disabled);
-  cursor: not-allowed;
 }
 
 /* Стили для кубиков отличий */
@@ -203,53 +166,29 @@
   transform: scale(1.1);
 }
 
-.distinctions-block .dice-disabled {
-  cursor: not-allowed !important;
-  opacity: 0.6;
+/* Режим бонуса */
+.distinctions-block.bonus-mode .distinction-row {
+  border-color: rgba(46, 204, 113, 0.4);
+  background: rgba(46, 204, 113, 0.05);
 }
 
-.distinctions-block .dice-disabled:hover {
-  transform: none !important;
-  background: transparent !important;
-}
-
-/* Анимация при выборе значения */
-@keyframes select-glow {
-  0% {
-    box-shadow: 0 0 0 0 rgba(255, 217, 61, 0.4);
-  }
-
-  70% {
-    box-shadow: 0 0 0 6px rgba(255, 217, 61, 0);
-  }
-
-  100% {
-    box-shadow: 0 0 0 0 rgba(255, 217, 61, 0);
-  }
-}
-
-.distinction-select:focus:valid {
-  animation: select-glow 0.6s ease-out;
+.distinctions-block.bonus-mode .distinction-select {
+  border-color: rgba(46, 204, 113, 0.4);
 }
 
 /* Адаптивность для отличий */
 @media (max-width: 768px) {
-  .distinction-row {
+  .distinction-controls {
     flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-sm);
-  }
-
-  .distinction-select {
-    width: 100%;
+    align-items: stretch;
+    gap: var(--space-md);
   }
 
   .distinction-dice {
-    width: 100%;
-    justify-content: flex-start;
+    align-self: center;
   }
 
-  .distinction-category {
+  .distinction-row {
     padding: var(--space-md);
   }
 }
@@ -259,14 +198,15 @@
     min-height: auto;
   }
 
-  .distinction-select {
-    font-size: var(--text-sm);
-    padding: var(--space-xs) var(--space-sm);
-    padding-right: 2.2rem;
-    background-position: right 0.5rem center;
+  .distinction-row {
+    padding: var(--space-sm);
   }
 
-  .distinction-dice {
-    gap: var(--space-xs);
+  .distinction-title {
+    font-size: var(--text-xs);
+  }
+
+  .distinction-select {
+    font-size: var(--text-sm);
   }
 }
