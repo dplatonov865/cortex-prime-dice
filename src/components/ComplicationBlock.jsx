@@ -19,12 +19,12 @@ const ComplicationBlock = ({ complications, onComplicationClick, onComplicationC
 
   const handleComplicationClick = (complicationName, diceType) => {
     // Разрешаем добавление в пул только если ранг d4
-    if (diceType === 'd4') {
+    // if (diceType === 'd4') {
       if (isUsageLimitReached && isUsageLimitReached('complication', complicationName)) {
         return;
       }
       onComplicationClick(complicationName, diceType);
-    }
+    // }
   };
 
   return (
@@ -34,7 +34,8 @@ const ComplicationBlock = ({ complications, onComplicationClick, onComplicationC
         {Object.entries(complications).map(([name, diceType]) => {
           const usageCount = getUsageCount ? getUsageCount('complication', name) : 0;
           const isLimitReached = isUsageLimitReached && isUsageLimitReached('complication', name);
-          const isClickable = diceType === 'd4' && !isLimitReached;
+          // const isClickable = diceType === 'd4' && !isLimitReached;
+          const isClickable = !isLimitReached;
 
           return (
             <div
@@ -96,7 +97,7 @@ const ComplicationBlock = ({ complications, onComplicationClick, onComplicationC
         })}
       </div>
       <div className="complication-hint">
-        '💡 В пул можно добавлять только осложнения с рангом d4 (макс. 3 раза)'
+        '💡 В пул можно добавлять только осложнения с рангом d4'
       </div>
     </div>
   );
