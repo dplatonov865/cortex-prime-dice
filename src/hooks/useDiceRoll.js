@@ -83,6 +83,30 @@ export const useDiceRoll = () => {
     return isAlreadySelected || !isAtLimit;
   };
 
+  const handleBoostResultSelection = (diceId) => {
+    const dice = rollResults.find(d => d.id === diceId);
+    if (dice && !dice.isOne && dice.rolledValue !== 0 && !selectedDice.includes(diceId)) {
+      // В режиме boost_result можно выбрать сверх лимита
+      const newSelectedDice = [...selectedDice, diceId];
+      setSelectedDice(newSelectedDice);
+
+      const newResult = newSelectedDice.reduce((total, id) => {
+        const selectedDice = rollResults.find(d => d.id === id);
+        return total + (selectedDice ? selectedDice.rolledValue : 0);
+      }, 0);
+
+      setResult(newResult);
+      calculateEffectDie(rollResults, newSelectedDice, setEffectDice);
+
+      // Автоматически завершаем эффект после выбора
+      if (setActiveEffect) {
+        setActiveEffect(null);
+      }
+
+      console.log(`Куб "${dice.name}" добавлен в результат! Новый результат: ${newResult}`);
+    }
+  };
+
   // Обновление результата и куба эффекта
   const updateResultAndEffect = (selectedIds) => {
     const sum = selectedIds.reduce((total, diceId) => {
@@ -105,6 +129,7 @@ export const useDiceRoll = () => {
     rollHistory,
     rollDicePool,
     handleResultDiceClick,
+    handleBoostResultSelection,
     canSelectDice,
     maxSelectedDice: MAX_SELECTED_DICE,
     setRollResults,

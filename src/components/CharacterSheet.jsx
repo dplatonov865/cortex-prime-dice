@@ -213,6 +213,33 @@ const CharacterSheet = () => {
     rollDicePool(dicePool, clearDicePool, clearUsageCounters);
   };
 
+  const handleBoostResultSelection = (diceId) => {
+    if (activeEffect === 'boost_result') {
+      // Находим куб
+      const dice = rollResults.find(d => d.id === diceId);
+      if (dice && !dice.isOne && dice.rolledValue !== 0 && !selectedDice.includes(diceId)) {
+        // Добавляем в выбранные (можно сверх лимита)
+        const newSelectedDice = [...selectedDice, diceId];
+        setSelectedDice(newSelectedDice);
+
+        // Пересчитываем результат
+        const newResult = newSelectedDice.reduce((total, id) => {
+          const selectedDice = rollResults.find(d => d.id === id);
+          return total + (selectedDice ? selectedDice.rolledValue : 0);
+        }, 0);
+        setResult(newResult);
+
+        // Пересчитываем куб эффекта
+        calculateEffectDie(rollResults, newSelectedDice, setEffectDice);
+
+        // Завершаем эффект и тратим жетон
+        deactivateEffect();
+        handleSpendToken();
+
+        console.log(`Куб "${dice.name}" добавлен в результат! Новый результат: ${newResult}`);
+      }
+    }
+  };
   // Функции экспорта/импорта
   const handleExportCharacter = () => {
     const characterData = {
@@ -395,7 +422,7 @@ const CharacterSheet = () => {
             effectDice={effectDice}
             rollHistory={rollHistory}
             onResultDiceClick={handleResultDiceClick}
-            onBoostResultSelection={() => { }} // TODO: обновить при необходимости
+            onBoostResultSelection={handleBoostResultSelection}
             canSelectDice={canSelectDice}
             maxSelectedDice={maxSelectedDice}
             activeEffect={activeEffect}
