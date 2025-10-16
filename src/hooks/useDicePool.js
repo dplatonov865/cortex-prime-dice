@@ -48,6 +48,18 @@ export const useDicePool = () => {
     }
   };
 
+  const addQuickDie = (diceType) => {
+    const newDice = {
+      id: Date.now() + Math.random(),
+      name: `Быстрый ${diceType}`,
+      type: diceType,
+      value: parseInt(diceType.replace('d', '')),
+      category: 'quick',
+      isBonus: false
+    };
+
+    setDicePool(prev => [...prev, newDice]);
+  };
   // Удаление куба из пула
   const removeFromDicePool = (diceId) => {
     const diceToRemove = dicePool.find(dice => dice.id === diceId);
@@ -138,6 +150,7 @@ export const useDicePool = () => {
     isUsageLimitReached,
     activateAdditionalDie,
     deactivateAdditionalDie,
-    setDicePool
+    setDicePool,
+    addQuickDie
   };
 };

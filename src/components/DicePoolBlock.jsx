@@ -5,8 +5,18 @@ const DicePoolBlock = ({
   dicePool,
   onRemoveFromPool,
   onRollDice,
-  onClearPool
+  onClearPool,
+  onAddQuickDie // ← новый пропс
 }) => {
+  // Быстрые кубы для добавления
+  const quickDice = [
+    { type: 'd4', value: '4' },
+    { type: 'd6', value: '6' },
+    { type: 'd8', value: '8' },
+    { type: 'd10', value: '10' },
+    { type: 'd12', value: '12' }
+  ];
+
   return (
     <div className="horizontal-block dice-pool-block">
       <div className="block-header">
@@ -26,6 +36,27 @@ const DicePoolBlock = ({
           >
             Очистить
           </button>
+        </div>
+      </div>
+
+      {/* Панель быстрых кубов */}
+      <div className="quick-dice-panel">
+        <h4>Быстрые кубы:</h4>
+        <div className="quick-dice-list">
+          {quickDice.map(dice => (
+            <div
+              key={dice.type}
+              className="quick-dice-item"
+              onClick={() => onAddQuickDie(dice.type)}
+              title={`Добавить ${dice.type} в пул`}
+            >
+              <DiceIcon
+                type={dice.type}
+                value={dice.value}
+                clickable={true}
+              />
+            </div>
+          ))}
         </div>
       </div>
 
@@ -78,6 +109,8 @@ const getCategoryLabel = (category) => {
       return 'Специальность';
     case 'resources':
       return 'Ресурс';
+    case 'quick':
+      return 'Быстрый куб';
     default:
       return category;
   }

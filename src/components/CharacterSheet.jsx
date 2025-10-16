@@ -51,7 +51,8 @@ const CharacterSheet = () => {
     getUsageCount,
     isUsageLimitReached,
     activateAdditionalDie,
-    deactivateAdditionalDie
+    deactivateAdditionalDie,
+    addQuickDie
   } = useDicePool();
 
   const {
@@ -301,6 +302,10 @@ const CharacterSheet = () => {
     keys.forEach(key => localStorage.removeItem(key));
   };
 
+  const handleAddQuickDie = (diceType) => {
+    addQuickDie(diceType);
+  };
+
   return (
     <div className="character-sheet">
       <CharacterHeader
@@ -413,6 +418,7 @@ const CharacterSheet = () => {
             onRemoveFromPool={removeFromDicePool}
             onRollDice={handleRollDice}
             onClearPool={clearDicePool}
+            onAddQuickDie={handleAddQuickDie}
           />
 
           <ResultsBlock
