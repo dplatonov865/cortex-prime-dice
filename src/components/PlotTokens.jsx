@@ -79,7 +79,7 @@ const PlotTokens = ({
       </div>
 
       <div className="tokens-actions">
-        <button
+        {/* <button
           className="token-action-btn"
           onClick={handleAddCubeToPool}
           disabled={tokens === 0 || isEffectActive}
@@ -92,7 +92,7 @@ const PlotTokens = ({
           }
         >
           + 🎲 В пул
-        </button>
+        </button> */}
 
         <button
           className="token-action-btn"

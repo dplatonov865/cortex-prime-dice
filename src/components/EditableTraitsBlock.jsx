@@ -139,7 +139,7 @@ const EditableTraitsBlock = ({
                             <div className="editable-trait-controls">
                                 <div className="trait-usage">
                                     {usageCount > 0 && (
-                                        <span className="usage-counter"> X{usageCount}</span>
+                                        <span className="usage-counter"> x {usageCount}</span>
                                     )}
                                 </div>
 

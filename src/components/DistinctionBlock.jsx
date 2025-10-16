@@ -93,7 +93,8 @@ const DistinctionBlock = ({
                 <select
                   className="distinction-select"
                   value={distinction.name}
-                  onChange={(e) => handleNameChange(distinctionId, e.target.value)}
+                  // onChange={(e) => handleNameChange(distinctionId, e.target.value)}
+                  onChange={(e) => onDistinctionChange(distinctionId, { name: e.target.value })}
                 >
                   <option value="">Выберите отличие...</option>
                   {availableOptions.map(option => (
@@ -122,7 +123,7 @@ const DistinctionBlock = ({
                     clickable={isClickable && !!distinction.name}
                   />
                   {usageCount > 0 && (
-                    <span className="usage-counter-small">X{usageCount}</span>
+                    <span className="usage-counter-small"> x {usageCount}</span>
                   )}
                 </div>
               </div>

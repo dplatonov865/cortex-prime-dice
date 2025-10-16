@@ -321,7 +321,8 @@ const CharacterSheet = () => {
         <DistinctionBlock
           distinctions={distinctions}
           onTraitClick={handleTraitClick}
-          onDistinctionChange={handleTraitChange}
+          onDistinctionChange={(distinctionId, updates) =>
+            handleTraitChange('distinctions', distinctionId, updates)}
           getUsageCount={getUsageCount}
           isUsageLimitReached={isUsageLimitReached}
           usedDistinctionGroups={usedDistinctionGroups}
@@ -357,7 +358,7 @@ const CharacterSheet = () => {
             getUsageCount={getUsageCount}
             isUsageLimitReached={isUsageLimitReached}
             maxItems={10}
-            hint="💡 В пул можно добавлять осложнения любого ранга (макс. 3 раза). Можно добавлять до 10 осложнений."
+            hint="💡 В пул можно добавлять осложнения ранга d4"
           />
         </div>
 
@@ -390,7 +391,7 @@ const CharacterSheet = () => {
             additionalDieEffect={activeEffect === 'additional_die'}
             hint={activeEffect === 'additional_die'
               ? '🎯 Эффект дополнительного куба: можно добавить любую специальность'
-              : '💡 Кликайте по кубам чтобы добавить их в пул. Можно добавлять до 10 специальностей.'
+              : '💡 Кликайте по кубам чтобы добавить их в пул.'
             }
           />
 
@@ -406,7 +407,7 @@ const CharacterSheet = () => {
             additionalDieEffect={activeEffect === 'additional_die'}
             hint={activeEffect === 'additional_die'
               ? '🎯 Эффект дополнительного куба: можно добавить любой ресурс'
-              : '💡 Кликайте по кубам чтобы добавить их в пул. Можно добавлять до 10 ресурсов.'
+              : '💡 Кликайте по кубам чтобы добавить их в пул.'
             }
           />
         </div>

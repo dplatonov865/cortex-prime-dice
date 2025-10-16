@@ -59,7 +59,7 @@ const FixedTraitsBlock = ({
                             <div className="fixed-trait-name-container">
                                 <span className="trait-name">{trait.name}</span>
                                 {usageCount > 0 && (
-                                    <span className="usage-counter"> X{usageCount}</span>
+                                    <span className="usage-counter"> x {usageCount}</span>
                                 )}
                             </div>
 

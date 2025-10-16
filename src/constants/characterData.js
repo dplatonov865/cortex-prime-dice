@@ -38,13 +38,10 @@ export const DEFAULT_ROLES = {
 };
 
 export const DEFAULT_COMPLICATIONS = {
-  '1': { name: 'Опутан', diceType: '0' },
-  '2': { name: 'Оглохший', diceType: '0' },
-  '3': { name: 'Ослеплённый', diceType: '0' },
-  '4': { name: 'Ошеломлён', diceType: '0' },
-  '5': { name: 'Физический стресс', diceType: '0' },
-  '6': { name: 'Ментальный стресс', diceType: '0' },
-  '7': { name: 'Духовный стресс', diceType: '0' }
+  '1': { name: 'Физический стресс', diceType: '0' },
+  '2': { name: 'Ментальный стресс', diceType: '0' },
+  '3': { name: 'Духовный стресс', diceType: '0' },
+  '4': { name: 'Социальный стресс', diceType: '0' }
 };
 
 // Отличия теперь тоже в едином формате
