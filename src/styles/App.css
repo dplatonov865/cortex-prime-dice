@@ -13,7 +13,8 @@
 body {
   background: 
     linear-gradient(rgba(5, 8, 15, 0.4), rgba(10, 12, 20, 0.3)),
-    url('../assets/1000006215.jpg') center/cover fixed;
+    /* url('../assets/1000006215.jpg') center/cover fixed; */
+    url('../assets/background_imgupscaler.png') center/cover fixed;
   min-height: 100vh;
 }
 

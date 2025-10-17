@@ -366,7 +366,7 @@ const CharacterSheet = () => {
         <div className="column center-column">
           <FixedTraitsBlock
             type={TRAIT_TYPES.ROLES}
-            title="Наборы навыков"
+            title="Навыки"
             traits={roles}
             onTraitClick={handleTraitClick}
             onTraitChange={handleTraitChange}
@@ -374,8 +374,8 @@ const CharacterSheet = () => {
             isUsageLimitReached={isUsageLimitReached}
             additionalDieEffect={activeEffect === 'additional_die'}
             hint={activeEffect === 'additional_die'
-              ? '🎯 Эффект дополнительного куба: можно добавить любой набор навыков'
-              : '💡 Кликайте по наборам навыков чтобы добавить кубы в пул'
+              ? '🎯 Эффект дополнительного куба: можно добавить любой навык'
+              : '💡 Кликайте по навыкам чтобы добавить кубы в пул'
             }
           />
 

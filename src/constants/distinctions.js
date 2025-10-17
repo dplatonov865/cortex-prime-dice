@@ -22,11 +22,11 @@ export const DISTINCTION_GROUPS = {
     mental: {
         name: 'Ментальные',
         options: [
-            { value: 'Рассеянный эрудит', label: 'Рассеянный эрудит' },
+            { value: 'Эрудит', label: 'Эрудит' },
             { value: 'Бдительный', label: 'Бдительный' },
             { value: 'Дилетант', label: 'Дилетант' },
             { value: 'Планировщик', label: 'Планировщик' },
-            { value: 'Мечтатель', label: 'Мечтатель' }
+            { value: 'Творческая натура', label: 'Творческая натура' }
         ]
     },
     social: {
@@ -36,7 +36,7 @@ export const DISTINCTION_GROUPS = {
             { value: 'Кукловод', label: 'Кукловод' },
             { value: 'Наставник', label: 'Наставник' },
             { value: 'Артист', label: 'Артист' },
-            { value: 'Внушительный', label: 'Внушительный' }
+            { value: 'Брутальный', label: 'Брутальный' }
         ]
     },
     mystical: {

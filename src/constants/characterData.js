@@ -19,10 +19,10 @@ export const DEFAULT_CHARACTER_INFO = {
 export const DEFAULT_ATTRIBUTES = {
   '1': { name: 'Мощь', diceType: 'd6' },
   '2': { name: 'Ловкость', diceType: 'd8' },
-  '3': { name: 'Нюх', diceType: 'd10' },
-  '4': { name: 'Ум', diceType: 'd6' },
-  '5': { name: 'Сердце', diceType: 'd8' },
-  '6': { name: 'Яйца', diceType: 'd10' }
+  '3': { name: 'Чутьё', diceType: 'd10' },
+  '4': { name: 'Разум', diceType: 'd6' },
+  '5': { name: 'Убеждённость', diceType: 'd8' },
+  '6': { name: 'Воля', diceType: 'd10' }
 };
 
 export const DEFAULT_ROLES = {
@@ -34,22 +34,25 @@ export const DEFAULT_ROLES = {
   '6': { name: 'Общение', diceType: 'd6' },
   '7': { name: 'Расследование', diceType: 'd4' },
   '8': { name: 'Ремесло', diceType: 'd4' },
-  '9': { name: 'Скрытность', diceType: 'd4' }
+  '9': { name: 'Скрытность', diceType: 'd4' },
+  '10': { name: 'Стойкость', diceType: 'd6'}
 };
 
 export const DEFAULT_COMPLICATIONS = {
-  '1': { name: 'Физический стресс', diceType: '0' },
-  '2': { name: 'Ментальный стресс', diceType: '0' },
-  '3': { name: 'Духовный стресс', diceType: '0' },
-  '4': { name: 'Социальный стресс', diceType: '0' }
+  '1': { name: 'Ранение', diceType: '0' },
+  '2': { name: 'Истощение', diceType: '0' },
+  '3': { name: 'Деморализация', diceType: '0' },
+  '4': { name: 'Увлечение', diceType: '0'},
+  '5': { name: 'Напряжение', diceType: '0' },
+  '6': { name: 'Подозрения', diceType: '0'}
 };
 
 // Отличия теперь тоже в едином формате
 // Для отличий можно использовать d8 как основной тип
 export const DEFAULT_DISTINCTIONS = {
-  '1': { name: 'Любопытный', diceType: 'd8' },
-  '2': { name: 'Власть', diceType: 'd8' },
-  '3': { name: 'Свобода', diceType: 'd8' }
+  '1': { name: 'Здоровяк', diceType: 'd8' },
+  '2': { name: 'Авантюрист', diceType: 'd8' },
+  '3': { name: 'Дьявольски везучий', diceType: 'd8' }
 };
 
 // Специальности и ресурсы теперь с diceType

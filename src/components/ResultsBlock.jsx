@@ -202,7 +202,7 @@ const getCategoryLabel = (category) => {
     case 'attributes':
       return 'Атрибут';
     case 'roles':
-      return 'Набор навыков';
+      return 'Навык';
     case 'complications':
       return 'Осложнение';
     case 'distinctions':
@@ -211,6 +211,8 @@ const getCategoryLabel = (category) => {
       return 'Специальность';
     case 'resources':
       return 'Ресурс';
+    case 'quick':
+      return 'Быстрый куб';
     default:
       return category;
   }

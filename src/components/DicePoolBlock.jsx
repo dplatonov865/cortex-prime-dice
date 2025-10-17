@@ -100,7 +100,7 @@ const getCategoryLabel = (category) => {
     case 'attributes':
       return 'Атрибут';
     case 'roles':
-      return 'Набор навыков';
+      return 'Навык';
     case 'complications':
       return 'Осложнение';
     case 'distinctions':
