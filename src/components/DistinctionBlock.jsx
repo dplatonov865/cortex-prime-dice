@@ -67,16 +67,16 @@ const DistinctionBlock = ({
   // Функция для получения заголовка отличия по ID
   const getDistinctionTitle = (distinctionId) => {
     const titles = {
-      '1': 'Первое отличие',
-      '2': 'Второе отличие',
-      '3': 'Третье отличие'
+      '1': 'Первая ценность',
+      '2': 'Вторая ценность',
+      '3': 'Третья ценность'
     };
     return titles[distinctionId] || `Черта ${distinctionId}`;
   };
 
   return (
     <div className={`block distinctions-block ${additionalDieEffect ? 'bonus-mode' : ''}`}>
-      <h3>Отличия</h3>
+      <h3>Ценности</h3>
       <div className="distinctions-list">
         {Object.entries(distinctions).map(([distinctionId, distinction]) => {
           const usageCount = getUsageCount ? getUsageCount('distinctions', distinction.name) : 0;
@@ -96,7 +96,7 @@ const DistinctionBlock = ({
                   // onChange={(e) => handleNameChange(distinctionId, e.target.value)}
                   onChange={(e) => onDistinctionChange(distinctionId, { name: e.target.value })}
                 >
-                  <option value="">Выберите отличие...</option>
+                  <option value="">Выберите ценность...</option>
                   {availableOptions.map(option => (
                     <option key={option.value} value={option.value}>
                       {option.label}
@@ -109,7 +109,7 @@ const DistinctionBlock = ({
                   onClick={() => handleDistinctionClick(distinctionId, distinction.name)}
                   title={
                     !distinction.name
-                      ? 'Сначала выберите отличие'
+                      ? 'Сначала выберите ценность'
                       : !isClickable
                         ? 'Достигнут лимит в 3 использования'
                         : additionalDieEffect
@@ -130,7 +130,7 @@ const DistinctionBlock = ({
 
               {availableOptions.length === 1 && distinction.name && (
                 <div className="distinction-warning">
-                  ⚠️ Все группы отличий уже используются
+                  ⚠️ Все группы ценностей уже используются
                 </div>
               )}
             </div>

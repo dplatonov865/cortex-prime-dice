@@ -104,7 +104,7 @@ const getCategoryLabel = (category) => {
     case 'complications':
       return 'Осложнение';
     case 'distinctions':
-      return 'Отличие';
+      return 'Ценность';
     case 'specialties':
       return 'Специальность';
     case 'resources':

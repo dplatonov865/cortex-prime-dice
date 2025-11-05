@@ -174,7 +174,7 @@ const PlotTokens = ({
                   : "Разблокировать отличия для повторного использования"
           }
         >
-          + Отличие
+          + Ценность
         </button>
         <button
           className="token-action-btn"
