@@ -9,15 +9,25 @@ const DistinctionBlock = ({
   getUsageCount,
   isUsageLimitReached,
   usedDistinctionGroups,
+  usedCategories,
   additionalDieEffect = false
 }) => {
-  const handleDistinctionClick = (distinctionId, distinctionName) => {
+  // const handleDistinctionClick = (distinctionId, distinctionName) => {
+  //   if (isUsageLimitReached && isUsageLimitReached('distinctions', distinctionName) && !additionalDieEffect) {
+  //     return;
+  //   }
+  //   onTraitClick(distinctionId, distinctionName, 'd8', 'distinctions');
+  // };
+
+  const handleDistinctionClick = (distinctionId, distinctionName, diceType = 'd8') => {
     if (isUsageLimitReached && isUsageLimitReached('distinctions', distinctionName) && !additionalDieEffect) {
       return;
     }
-    onTraitClick(distinctionId, distinctionName, 'd8', 'distinctions');
-  };
 
+    // Для d4_fallback передаем 'd4', для остальных - 'd8'
+    const actualDiceType = distinctionId === 'd4_fallback' ? 'd4' : diceType;
+    onTraitClick(distinctionId, distinctionName, actualDiceType, 'distinctions');
+  };
   const handleNameChange = (distinctionId, newName) => {
     onDistinctionChange(distinctionId, { name: newName });
   };
@@ -136,6 +146,32 @@ const DistinctionBlock = ({
             </div>
           );
         })}
+      </div>
+      <div className="distinction-d4-row">
+        <div className="distinction-d4-info">
+          <span className="d4-label">Если ни одна из ценностей не подходит:</span>
+        </div>
+
+        <div className="distinction-d4-controls">
+          <div
+            className={`distinction-d4-dice ${usedCategories.has('distinctions') && !additionalDieEffect ? 'dice-disabled' : ''}`}
+            onClick={() => handleDistinctionClick('d4_fallback', 'Без ценности', 'd4')}
+            title={
+              usedCategories.has('distinctions') && !additionalDieEffect
+                ? 'Отличия уже использованы'
+                : additionalDieEffect
+                  ? 'Эффект дополнительного куба: можно добавить в пул'
+                  : 'Добавить d4 в пул (блокирует отличия)'
+            }
+          >
+            <DiceIcon
+              type="d4"
+              value="4"
+              clickable={!usedCategories.has('distinctions') || additionalDieEffect}
+            />
+            <span className="d4-description">добавить d4</span>
+          </div>
+        </div>
       </div>
       <div className="distinction-hint">
         {additionalDieEffect

@@ -343,6 +343,7 @@ const CharacterSheet = () => {
           getUsageCount={getUsageCount}
           isUsageLimitReached={isUsageLimitReached}
           usedDistinctionGroups={usedDistinctionGroups}
+          usedCategories={usedCategories}
           additionalDieEffect={activeEffect === 'additional_die'}
         />
       </div>

@@ -176,6 +176,65 @@
   border-color: rgba(46, 204, 113, 0.4);
 }
 
+.distinction-d4-row {
+  padding: var(--space-lg);
+  background: var(--bg-card-light);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 217, 61, 0.2);
+  transition: all var(--transition-normal);
+  margin-top: var(--space-md);
+}
+
+.distinction-d4-info {
+  margin-bottom: var(--space-md);
+}
+
+.d4-label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.8;
+}
+
+.distinction-d4-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.distinction-d4-dice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  padding: var(--space-xs);
+  border-radius: var(--radius-md);
+}
+
+.distinction-d4-dice:hover:not(.dice-disabled) {
+  background: rgba(255, 217, 61, 0.1);
+  transform: scale(1.05);
+}
+
+.distinction-d4-dice.dice-disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.distinction-d4-dice.dice-disabled:hover {
+  transform: none;
+  background: transparent;
+}
+
+.d4-description {
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
 /* Адаптивность для отличий */
 @media (max-width: 768px) {
   .distinction-controls {
@@ -193,6 +252,16 @@
   }
 }
 
+.distinction-d4-controls {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-md);
+}
+
+.distinction-d4-dice {
+  align-self: center;
+}
+
 @media (max-width: 480px) {
   .distinctions-block {
     min-height: auto;
@@ -208,5 +277,17 @@
 
   .distinction-select {
     font-size: var(--text-sm);
+  }
+
+  .distinction-d4-row {
+    padding: var(--space-md);
+  }
+
+  .d4-label {
+    font-size: var(--text-xs);
+  }
+
+  .d4-description {
+    font-size: var(--text-xs);
   }
 }
