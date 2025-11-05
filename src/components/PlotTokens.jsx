@@ -45,6 +45,11 @@ const PlotTokens = ({
       onCancelEffect();
     }
   };
+  const handleRemoveToken = () => {
+    if (tokens > 0 && !isEffectActive) {
+      onSpendToken('remove_token');
+    }
+  };
 
   const canUseBoostResult = tokens > 0 && !isEffectActive && hasRollResults;
   const canUseBoostEffect = tokens > 0 && !isEffectActive && hasRollResults;
@@ -111,7 +116,7 @@ const PlotTokens = ({
           + 📊 Результат
         </button>
 
-        <button
+        {/* <button
           className="token-action-btn"
           onClick={handleBoostEffect}
           disabled={!canUseBoostEffect}
@@ -126,7 +131,7 @@ const PlotTokens = ({
           }
         >
           + ⚡ Эффект
-        </button>
+        </button> */}
 
         <button
           className="add-token-btn"
@@ -140,15 +145,28 @@ const PlotTokens = ({
         >
           + Жетон
         </button>
-
-        {/* КНОПКА ОТМЕНЫ ЭФФЕКТА */}
         <button
+          className="remove-token-btn"
+          onClick={handleRemoveToken}
+          disabled={tokens === 0 || isEffectActive}
+          title={
+            isEffectActive
+              ? "Дождитесь завершения активного эффекта"
+              : tokens === 0
+                ? "Нет доступных жетонов"
+                : "Убрать жетон сюжета"
+          }
+        >
+          - Жетон
+        </button>
+        {/* КНОПКА ОТМЕНЫ ЭФФЕКТА */}
+        {/* <button
           className="cancel-effect-btn"
           onClick={handleCancelEffect}
           title="Отменить эффект и вернуть жетон"
         >
           ✕ Отменить эффект
-        </button>
+        </button> */}
       </div>
 
       <div className="tokens-hint">

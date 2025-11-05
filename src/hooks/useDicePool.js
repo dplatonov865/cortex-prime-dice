@@ -3,7 +3,7 @@ import { getDistinctionGroup } from '../constants/distinctions';
 
 export const useDicePool = () => {
   const [dicePool, setDicePool] = useState([]);
-  const [usageCounters, setUsageCounters] = useState({});
+  const [usedCategories, setUsedCategories] = useState(new Set());
   const [usedDistinctionGroups, setUsedDistinctionGroups] = useState(new Set());
   const [additionalDieEffect, setAdditionalDieEffect] = useState(false);
 
@@ -11,11 +11,8 @@ export const useDicePool = () => {
   const addToDicePool = (traitId, traitName, diceType, category) => {
     if (diceType === '0') return;
 
-    const counterKey = `${category}:${traitName}`;
-    const currentCount = usageCounters[counterKey] || 0;
-
-    // Проверяем лимит в 3 использования
-    if (currentCount >= 3 && !additionalDieEffect) {
+    // Проверяем, использовалась ли уже эта категория
+    if (usedCategories.has(category) && !additionalDieEffect) {
       return;
     }
 
@@ -25,18 +22,15 @@ export const useDicePool = () => {
       type: diceType,
       value: diceType === '0' ? '0' : parseInt(diceType.replace('d', '')),
       category: category,
-      traitId: traitId, // Сохраняем ID трейта для возможного использования
+      traitId: traitId,
       isBonus: additionalDieEffect
     };
 
     setDicePool(prev => [...prev, newDice]);
 
-    // Обновляем счетчик использования
+    // Добавляем категорию в использованные (если не в режиме бонуса)
     if (!additionalDieEffect) {
-      setUsageCounters(prev => ({
-        ...prev,
-        [counterKey]: currentCount + 1
-      }));
+      setUsedCategories(prev => new Set([...prev, category]));
 
       // Если это отличие, добавляем группу в использованные
       if (category === 'distinctions') {
@@ -60,21 +54,26 @@ export const useDicePool = () => {
 
     setDicePool(prev => [...prev, newDice]);
   };
+
   // Удаление куба из пула
   const removeFromDicePool = (diceId) => {
     const diceToRemove = dicePool.find(dice => dice.id === diceId);
     if (diceToRemove && !diceToRemove.isBonus) {
-      const counterKey = `${diceToRemove.category}:${diceToRemove.name}`;
+      const category = diceToRemove.category;
 
-      setUsageCounters(prev => {
-        const currentCount = prev[counterKey] || 0;
-        if (currentCount > 0) {
-          return {
-            ...prev,
-            [counterKey]: currentCount - 1
-          };
+      // Удаляем категорию из использованных, если больше нет кубов этой категории
+      setUsedCategories(prev => {
+        const newUsed = new Set(prev);
+        const hasOtherDiceFromSameCategory = dicePool.some(dice =>
+          dice.id !== diceId &&
+          !dice.isBonus &&
+          dice.category === category
+        );
+
+        if (!hasOtherDiceFromSameCategory) {
+          newUsed.delete(category);
         }
-        return prev;
+        return newUsed;
       });
 
       // Если это отличие, проверяем нужно ли удалить группу из использованных
@@ -103,28 +102,26 @@ export const useDicePool = () => {
   // Очистка пула
   const clearDicePool = () => {
     setDicePool([]);
-    setUsageCounters({});
+    setUsedCategories(new Set());
     setUsedDistinctionGroups(new Set());
     setAdditionalDieEffect(false);
   };
 
   // Сброс счетчиков использования
   const clearUsageCounters = () => {
-    setUsageCounters({});
+    setUsedCategories(new Set());
     setUsedDistinctionGroups(new Set());
     setAdditionalDieEffect(false);
   };
 
   // Получение счетчика использования для конкретной характеристики
   const getUsageCount = (category, name) => {
-    const counterKey = `${category}:${name}`;
-    return usageCounters[counterKey] || 0;
+    return usedCategories.has(category) ? 1 : 0;
   };
 
   // Проверка достигнут ли лимит для характеристики
   const isUsageLimitReached = (category, name) => {
-    const counterKey = `${category}:${name}`;
-    return (usageCounters[counterKey] || 0) >= 3;
+    return usedCategories.has(category) && !additionalDieEffect;
   };
 
   // Активация режима дополнительного куба
@@ -139,7 +136,7 @@ export const useDicePool = () => {
 
   return {
     dicePool,
-    usageCounters,
+    usageCounters: usedCategories, // Для обратной совместимости
     usedDistinctionGroups,
     additionalDieEffect,
     addToDicePool,

@@ -204,6 +204,9 @@ const CharacterSheet = () => {
   const handleAddToken = () => {
     setPlotTokens(prev => prev + 1);
   };
+  const handleRemoveToken = () => {
+    setPlotTokens(prev => Math.max(0, prev - 1));
+  };
 
   const handleSpendToken = () => {
     setPlotTokens(prev => Math.max(0, prev - 1));
@@ -438,6 +441,7 @@ const CharacterSheet = () => {
           <PlotTokens
             tokens={plotTokens}
             onAddToken={handleAddToken}
+            onRemoveToken={handleRemoveToken} // ← ДОБАВИТЬ ЭТОТ ПРОПС
             onSpendToken={handleSpendToken}
             onActivateAdditionalDie={handleActivateAdditionalDie}
             onActivateBoostResult={handleActivateBoostResult}
