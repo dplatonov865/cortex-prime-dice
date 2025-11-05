@@ -9,7 +9,11 @@ const PlotTokens = ({
   onActivateBoostEffect,
   onCancelEffect,
   activeEffect,
-  hasRollResults // ← ДОБАВИТЬ ЭТОТ ПРОПС
+  hasRollResults,
+  usedCategories,
+  onActivateAttributes,
+  onActivateRoles,
+  onActivateDistinctions // ← ДОБАВИТЬ ЭТОТ ПРОПС
 }) => {
   const isEffectActive = activeEffect !== null;
 
@@ -51,8 +55,32 @@ const PlotTokens = ({
     }
   };
 
+  const handleActivateAttributes = () => {
+    if (tokens > 0 && !isEffectActive && usedCategories.has('attributes')) {
+      onSpendToken('activate_attributes');
+      onActivateAttributes();
+    }
+  };
+
+  const handleActivateRoles = () => {
+    if (tokens > 0 && !isEffectActive && usedCategories.has('roles')) {
+      onSpendToken('activate_roles');
+      onActivateRoles();
+    }
+  };
+
+  const handleActivateDistinctions = () => {
+    if (tokens > 0 && !isEffectActive && usedCategories.has('distinctions')) {
+      onSpendToken('activate_distinctions');
+      onActivateDistinctions();
+    }
+  };
+
   const canUseBoostResult = tokens > 0 && !isEffectActive && hasRollResults;
   const canUseBoostEffect = tokens > 0 && !isEffectActive && hasRollResults;
+  const canActivateAttributes = tokens > 0 && !isEffectActive && usedCategories.has('attributes');
+  const canActivateRoles = tokens > 0 && !isEffectActive && usedCategories.has('roles');
+  const canActivateDistinctions = tokens > 0 && !isEffectActive && usedCategories.has('distinctions');
 
   const getEffectDescription = () => {
     switch (activeEffect) {
@@ -98,7 +126,56 @@ const PlotTokens = ({
         >
           + 🎲 В пул
         </button> */}
+        <button
+          className="token-action-btn"
+          onClick={handleActivateAttributes}
+          disabled={!canActivateAttributes}
+          title={
+            !usedCategories.has('attributes')
+              ? "Атрибуты ещё не использованы"
+              : isEffectActive
+                ? "Дождитесь завершения активного эффекта"
+                : tokens === 0
+                  ? "Недостаточно жетонов"
+                  : "Разблокировать атрибуты для повторного использования"
+          }
+        >
+          + Атрибут
+        </button>
 
+        <button
+          className="token-action-btn"
+          onClick={handleActivateRoles}
+          disabled={!canActivateRoles}
+          title={
+            !usedCategories.has('roles')
+              ? "Навыки ещё не использованы"
+              : isEffectActive
+                ? "Дождитесь завершения активного эффекта"
+                : tokens === 0
+                  ? "Недостаточно жетонов"
+                  : "Разблокировать навыки для повторного использования"
+          }
+        >
+          + Навык
+        </button>
+
+        <button
+          className="token-action-btn"
+          onClick={handleActivateDistinctions}
+          disabled={!canActivateDistinctions}
+          title={
+            !usedCategories.has('distinctions')
+              ? "Отличия ещё не использованы"
+              : isEffectActive
+                ? "Дождитесь завершения активного эффекта"
+                : tokens === 0
+                  ? "Недостаточно жетонов"
+                  : "Разблокировать отличия для повторного использования"
+          }
+        >
+          + Отличие
+        </button>
         <button
           className="token-action-btn"
           onClick={handleBoostResult}
@@ -113,7 +190,7 @@ const PlotTokens = ({
                   : "Повысить результат броска"
           }
         >
-          + 📊 Результат
+          + Результат
         </button>
 
         {/* <button

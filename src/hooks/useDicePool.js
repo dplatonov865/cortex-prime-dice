@@ -133,12 +133,22 @@ export const useDicePool = () => {
   const deactivateAdditionalDie = () => {
     setAdditionalDieEffect(false);
   };
+  const removeFromUsedCategories = (category) => {
+    setUsedCategories(prev => {
+      const newUsed = new Set(prev);
+      newUsed.delete(category);
+      console.log(`Removed ${category} from usedCategories:`, newUsed); // для отладки
+      return newUsed;
+    });
+  };
 
   return {
     dicePool,
     usageCounters: usedCategories, // Для обратной совместимости
     usedDistinctionGroups,
     additionalDieEffect,
+    usedCategories, // ← ДОБАВИТЬ
+    removeFromUsedCategories, // ← ДОБАВИТЬ
     addToDicePool,
     removeFromDicePool,
     clearDicePool,

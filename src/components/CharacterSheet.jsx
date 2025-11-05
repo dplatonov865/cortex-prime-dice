@@ -44,6 +44,8 @@ const CharacterSheet = () => {
     usageCounters,
     usedDistinctionGroups,
     additionalDieEffect,
+    usedCategories, // ← ДОБАВИТЬ
+    removeFromUsedCategories, // ← ДОБАВИТЬ (нужно будет добавить в useDicePool)
     addToDicePool,
     removeFromDicePool,
     clearDicePool,
@@ -309,6 +311,18 @@ const CharacterSheet = () => {
     addQuickDie(diceType);
   };
 
+  const handleActivateAttributes = () => {
+    removeFromUsedCategories('attributes');
+  };
+
+  const handleActivateRoles = () => {
+    removeFromUsedCategories('roles');
+  };
+
+  const handleActivateDistinctions = () => {
+    removeFromUsedCategories('distinctions');
+  };
+
   return (
     <div className="character-sheet">
       <CharacterHeader
@@ -397,7 +411,7 @@ const CharacterSheet = () => {
               : '💡 Кликайте по кубам чтобы добавить их в пул.'
             }
           />
-
+          usedCategories={usedCategories} // ← ДОБАВИТЬ (из useDicePool)
           <EditableTraitsBlock
             type={TRAIT_TYPES.RESOURCES}
             title="Ресурсы"
@@ -447,8 +461,12 @@ const CharacterSheet = () => {
             onActivateBoostResult={handleActivateBoostResult}
             onActivateBoostEffect={handleActivateBoostEffect}
             onCancelEffect={handleCancelEffect}
+            onActivateAttributes={handleActivateAttributes} // ← ДОБАВИТЬ
+            onActivateRoles={handleActivateRoles} // ← ДОБАВИТЬ
+            onActivateDistinctions={handleActivateDistinctions} // ← ДОБАВИТЬ
             activeEffect={activeEffect}
             hasRollResults={rollResults.length > 0}
+            usedCategories={usedCategories} // ← ДОБАВИТЬ (из useDicePool)
           />
         </div>
       </div>
