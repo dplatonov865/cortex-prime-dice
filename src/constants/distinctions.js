@@ -48,7 +48,67 @@ export const DISTINCTION_GROUPS = {
             { value: 'Менталист', label: 'Менталист' },
             { value: 'Провидец', label: 'Провидец' }
         ]
-    }
+    },
+    truth: {
+        name: "Истина",
+        options: [
+            { value: "Истина", label: "Истина"}
+        ]
+    },
+    justice: {
+        name: "Справедливость",
+        options: [
+            { value: "Справедливость", label: "Справедливость"}
+        ]
+    },
+    love: {
+        name: "Любовь",
+        options: [
+            { value: "Любовь", label: "Любовь"}
+        ]
+    },
+    friendship: {
+        name: "Дружба",
+        options: [
+            { value: "Дружба", label: "Дружба"}
+        ]
+    },
+    faith: {
+        name: "Вера",
+        options: [
+            { value: "Вера", label: "Вера"}
+        ]
+    },
+    mercy: {
+        name: "Милосердие",
+        options: [
+            { value: "Милосердие", label: "Милосердие"}
+        ]
+    },
+    power: {
+        name: "Власть",
+        options: [
+            { value: "Власть", label: "Власть"}
+        ]
+    },
+    prestige: {
+        name: "Престиж",
+        options: [
+            { value: "Престиж", label: "Престиж"}
+        ]
+    },
+    thrill: {
+        name: "Острые ощущения",
+        options: [
+            { value: "Острые ощущения", label: "Острые ощущения"}
+        ]
+    },
+    freedom: {
+        name: "Свобода",
+        options: [
+            { value: "Свобода", label: "Свобода"}
+        ]
+    },
 };
 
 // Вспомогательная функция для получения всех опций в плоском виде (для обратной совместимости)

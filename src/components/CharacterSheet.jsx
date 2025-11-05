@@ -323,6 +323,17 @@ const CharacterSheet = () => {
     removeFromUsedCategories('distinctions');
   };
 
+  const checkMinimumRequirements = () => {
+    const hasAttribute = dicePool.some(dice => dice.category === 'attributes');
+    const hasRole = dicePool.some(dice => dice.category === 'roles');
+    const hasDistinction = dicePool.some(dice => dice.category === 'distinctions');
+
+    return hasAttribute && hasRole && hasDistinction;
+  };
+
+  const canRoll = checkMinimumRequirements();
+
+
   return (
     <div className="character-sheet">
       <CharacterHeader
@@ -438,6 +449,7 @@ const CharacterSheet = () => {
             onRollDice={handleRollDice}
             onClearPool={clearDicePool}
             onAddQuickDie={handleAddQuickDie}
+            canRoll={canRoll}
           />
 
           <ResultsBlock

@@ -6,7 +6,8 @@ const DicePoolBlock = ({
   onRemoveFromPool,
   onRollDice,
   onClearPool,
-  onAddQuickDie // ← новый пропс
+  onAddQuickDie,
+  canRoll // ← новый пропс
 }) => {
   // Быстрые кубы для добавления
   const quickDice = [
@@ -25,7 +26,12 @@ const DicePoolBlock = ({
           <button
             onClick={onRollDice}
             className="roll-button"
-            disabled={dicePool.length === 0}
+            disabled={!canRoll}
+            title={
+              !canRoll
+                ? "Для броска нужен минимум: 1 атрибут, 1 навык и 1 ценность"
+                : `Выполнить бросок (${dicePool.length} кубов)`
+            }
           >
             Бросок ({dicePool.length})
           </button>
@@ -90,7 +96,7 @@ const DicePoolBlock = ({
           </div>
         )}
       </div>
-    </div>
+    </div >
   );
 };
 
