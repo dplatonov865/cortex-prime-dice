@@ -17,34 +17,28 @@ export const DEFAULT_CHARACTER_INFO = {
 // }
 
 export const DEFAULT_ATTRIBUTES = {
-  '1': { name: 'Мощь', diceType: 'd6' },
+  '1': { name: 'Мощь', diceType: 'd8' },
   '2': { name: 'Ловкость', diceType: 'd8' },
-  '3': { name: 'Чутьё', diceType: 'd10' },
-  '4': { name: 'Разум', diceType: 'd6' },
+  '3': { name: 'Чутьё', diceType: 'd8' },
+  '4': { name: 'Разум', diceType: 'd8' },
   '5': { name: 'Убеждённость', diceType: 'd8' },
-  '6': { name: 'Воля', diceType: 'd10' }
+  '6': { name: 'Воля', diceType: 'd8' }
 };
 
 export const DEFAULT_ROLES = {
-  '1': { name: 'Атлетика', diceType: 'd10' },
-  '2': { name: 'Бой', diceType: 'd8' },
-  '3': { name: 'Выживание', diceType: 'd8' },
-  '4': { name: 'Знание', diceType: 'd6' },
-  '5': { name: 'Медицина', diceType: 'd6' },
-  '6': { name: 'Общение', diceType: 'd6' },
+  '1': { name: 'Атлетика', diceType: 'd4' },
+  '2': { name: 'Бой', diceType: 'd4' },
+  '3': { name: 'Выживание', diceType: 'd4' },
+  '4': { name: 'Знание', diceType: 'd4' },
+  '5': { name: 'Медицина', diceType: 'd4' },
+  '6': { name: 'Общение', diceType: 'd4' },
   '7': { name: 'Расследование', diceType: 'd4' },
   '8': { name: 'Ремесло', diceType: 'd4' },
   '9': { name: 'Скрытность', diceType: 'd4' },
-  '10': { name: 'Стойкость', diceType: 'd6'}
+  '10': { name: 'Стойкость', diceType: 'd4' }
 };
 
 export const DEFAULT_COMPLICATIONS = {
-  '1': { name: 'Ранение', diceType: '0' },
-  '2': { name: 'Истощение', diceType: '0' },
-  '3': { name: 'Деморализация', diceType: '0' },
-  '4': { name: 'Увлечение', diceType: '0'},
-  '5': { name: 'Напряжение', diceType: '0' },
-  '6': { name: 'Подозрения', diceType: '0'}
 };
 
 // Отличия теперь тоже в едином формате
@@ -57,15 +51,9 @@ export const DEFAULT_DISTINCTIONS = {
 
 // Специальности и ресурсы теперь с diceType
 export const DEFAULT_SPECIALTIES = {
-  '1': { name: 'Паркур', diceType: 'd6' },
-  '2': { name: 'Плавание', diceType: 'd6' },
-  '3': { name: 'Рукопашный бой', diceType: 'd6' },
-  '4': { name: 'Выслеживание', diceType: 'd6' }
 };
 
 export const DEFAULT_RESOURCES = {
-  '1': { name: 'Наградной кольт отца', diceType: 'd6' },
-  '2': { name: 'Знакомый коронер', diceType: 'd6' }
 };
 
 // Настройки лимитов
