@@ -237,13 +237,13 @@ const PlotTokens = ({
           - Жетон
         </button>
         {/* КНОПКА ОТМЕНЫ ЭФФЕКТА */}
-        {/* <button
+        <button
           className="cancel-effect-btn"
           onClick={handleCancelEffect}
           title="Отменить эффект и вернуть жетон"
         >
           ✕ Отменить эффект
-        </button> */}
+        </button>
       </div>
 
       <div className="tokens-hint">

@@ -73,13 +73,22 @@
 
 .add-token-btn,
 .remove-token-btn,
-.token-action-btn {
+.token-action-btn,
+.cancel-effect-btn {
   background: var(--accent-success);
   color: white;
   grid-column: 1 / -1;
   margin-top: var(--space-xs);
 }
 
+.remove-token-btn,
+.cancel-effect-btn {
+  /* background: var(--accent-success); */
+  background: #c0392b;
+  color: white;
+  grid-column: 1 / -1;
+  margin-top: var(--space-xs);
+}
 .add-token-btn:hover {
   background: #219653;
 }
