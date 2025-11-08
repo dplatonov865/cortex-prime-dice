@@ -118,7 +118,7 @@ const DistinctionBlock = ({
                   className="distinction-input"
                   value={distinction.name}
                   onChange={(e) => onDistinctionChange(distinctionId, { name: e.target.value })}
-                  placeholder="Введите название отличия..."
+                  placeholder="Введите название ценности..."
                   maxLength={30}
                 />
 
