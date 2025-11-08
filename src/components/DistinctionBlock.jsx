@@ -93,14 +93,14 @@ const DistinctionBlock = ({
           const isLimitReached = isUsageLimitReached && isUsageLimitReached('distinctions', distinction.name);
           const isClickable = !isLimitReached || additionalDieEffect;
 
-          const availableOptions = getAvailableOptions(distinctionId, distinction.name);
+          // const availableOptions = getAvailableOptions(distinctionId, distinction.name);
 
           return (
             <div key={distinctionId} className="distinction-row">
               <h4 className="distinction-title">{getDistinctionTitle(distinctionId)}</h4>
 
               <div className="distinction-controls">
-                <select
+                {/* <select
                   className="distinction-select"
                   value={distinction.name}
                   // onChange={(e) => handleNameChange(distinctionId, e.target.value)}
@@ -112,7 +112,15 @@ const DistinctionBlock = ({
                       {option.label}
                     </option>
                   ))}
-                </select>
+                </select> */}
+                <input
+                  type="text"
+                  className="distinction-input"
+                  value={distinction.name}
+                  onChange={(e) => onDistinctionChange(distinctionId, { name: e.target.value })}
+                  placeholder="Введите название отличия..."
+                  maxLength={30}
+                />
 
                 <div
                   className={`distinction-dice ${!isClickable ? 'dice-disabled' : ''}`}
@@ -138,11 +146,11 @@ const DistinctionBlock = ({
                 </div>
               </div>
 
-              {availableOptions.length === 1 && distinction.name && (
+              {/* {availableOptions.length === 1 && distinction.name && (
                 <div className="distinction-warning">
                   ⚠️ Все группы ценностей уже используются
                 </div>
-              )}
+              )} */}
             </div>
           );
         })}

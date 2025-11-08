@@ -44,9 +44,9 @@ export const DEFAULT_COMPLICATIONS = {
 // Отличия теперь тоже в едином формате
 // Для отличий можно использовать d8 как основной тип
 export const DEFAULT_DISTINCTIONS = {
-  '1': { name: 'Истина', diceType: 'd8' },
-  '2': { name: 'Дружба', diceType: 'd8' },
-  '3': { name: 'Справедливость', diceType: 'd8' }
+  '1': { name: '', diceType: 'd8' },
+  '2': { name: '', diceType: 'd8' },
+  '3': { name: '', diceType: 'd8' }
 };
 
 // Специальности и ресурсы теперь с diceType
