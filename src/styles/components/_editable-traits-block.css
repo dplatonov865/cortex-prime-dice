@@ -1,0 +1,311 @@
+/* Стили для блока редактируемых трейтов (осложнения, специальности, ресурсы) */
+
+.editable-traits-block h3 {
+    border-color: var(--accent-secondary);
+    background: linear-gradient(135deg, var(--accent-secondary) 0%, transparent 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.editable-input-container {
+    display: flex;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+}
+
+.trait-input {
+    flex: 1;
+    border: 1px solid rgba(109, 193, 255, 0.3);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-base);
+    font-family: inherit;
+    background: rgba(30, 35, 50, 0.8);
+    color: var(--text-primary);
+    transition: all var(--transition-fast);
+}
+
+.trait-input:focus {
+    outline: none;
+    border-color: #6dc1ff;
+    box-shadow: 0 0 0 2px rgba(109, 193, 255, 0.2);
+    background: rgba(35, 40, 55, 0.9);
+}
+
+.trait-input:disabled {
+    background: rgba(40, 45, 60, 0.6);
+    color: var(--text-disabled);
+    cursor: not-allowed;
+}
+
+.add-trait-button {
+    width: 45px;
+    border: none;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, #6dc1ff, #3498db);
+    color: white;
+    font-size: var(--text-2xl);
+    font-weight: bold;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-trait-button:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(109, 193, 255, 0.3);
+}
+
+.add-trait-button:disabled {
+    background: rgba(189, 195, 199, 0.3);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.editable-traits-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.editable-trait-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-sm) var(--space-lg);
+    background: var(--bg-card-light);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(109, 193, 255, 0.2);
+    transition: all var(--transition-normal);
+    cursor: pointer;
+    user-select: none;
+}
+
+.editable-trait-row:hover {
+    background: rgba(109, 193, 255, 0.15) !important;
+    transform: translateX(5px);
+    border-color: rgba(109, 193, 255, 0.4);
+}
+
+.trait-name-input {
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.trait-name-input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    padding: var(--space-xs);
+}
+
+.editable-trait-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.traits-counter {
+    text-align: center;
+    font-size: var(--text-xs);
+    color: var(--text-disabled);
+    margin-bottom: var(--space-sm);
+    font-weight: 500;
+}
+
+/* Кнопки управления рангами для редактируемых трейтов */
+.editable-traits-block .rank-buttons-vertical .rank-button {
+    background: #9b59b6;
+}
+
+.editable-traits-block .rank-buttons-vertical .rank-button:hover:not(:disabled) {
+    background: #8e44ad;
+}
+
+.editable-traits-block .rank-buttons-vertical .rank-button:disabled {
+    background: #bdc3c7;
+}
+
+/* Стили для неактивных трейтов */
+.editable-trait-row.row-disabled {
+    cursor: not-allowed !important;
+    opacity: 0.7;
+}
+
+.editable-trait-row.row-disabled:hover {
+    background: var(--bg-card-light) !important;
+    transform: none;
+}
+
+.editable-trait-row.row-disabled .trait-name-input {
+    color: var(--text-disabled);
+}
+
+/* Состояния строк трейтов */
+.editable-trait-row.row-disabled {
+    cursor: not-allowed !important;
+    opacity: 0.6;
+}
+
+.editable-trait-row.row-disabled:hover {
+    transform: none !important;
+    background: var(--bg-card-light) !important;
+}
+
+.editable-trait-row.category-used {
+    opacity: 0.8;
+    position: relative;
+}
+
+.editable-trait-row.category-used::before {
+    content: "✓ В ПУЛЕ";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--accent-success);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: var(--text-xs);
+    font-weight: bold;
+    z-index: 1;
+}
+
+/* Подсказка для блока редактируемых трейтов */
+.trait-hint {
+    padding: var(--space-md);
+    background: rgba(109, 193, 255, 0.15);
+    border-radius: var(--radius-md);
+    font-size: var(--text-xs);
+    color: #a8d7ff;
+    text-align: center;
+    border: 1px solid rgba(109, 193, 255, 0.2);
+    margin-top: var(--space-lg);
+}
+
+/* Анимация разблокировки */
+.editable-trait-row.category-unlocked {
+    border: 2px solid var(--accent-success);
+    animation: pulse-unlock 1s ease-in-out;
+}
+
+/* Отключаем кнопки в использованных трейтах */
+.editable-trait-row.category-used .rank-button:disabled {
+    background: #95a5a6;
+}
+
+/* Индикатор доступности для кубов трейтов */
+.editable-trait-row.row-disabled .dice-clickable {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.editable-trait-row.row-disabled .dice-clickable:hover {
+    transform: none;
+    filter: none;
+}
+
+/* Стили для кубиков трейтов */
+.editable-traits-block .dice-clickable {
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.editable-traits-block .dice-clickable:hover {
+    transform: scale(1.2);
+    filter: brightness(1.1);
+}
+
+.editable-traits-block .dice-clickable:active {
+    transform: scale(1.1);
+}
+
+.editable-traits-block .dice-disabled {
+    cursor: not-allowed !important;
+    opacity: 0.6;
+}
+
+.editable-traits-block .dice-disabled:hover {
+    transform: none !important;
+    background: transparent !important;
+}
+
+/* Сообщение при пустом списке */
+.no-traits-message {
+    text-align: center;
+    padding: var(--space-xl);
+    color: var(--text-disabled);
+    font-style: italic;
+    background: rgba(109, 193, 255, 0.05);
+    border-radius: var(--radius-md);
+    border: 1px dashed rgba(109, 193, 255, 0.3);
+}
+
+/* Адаптивность для редактируемых трейтов */
+@media (max-width: 768px) {
+    .editable-trait-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+        padding: var(--space-md);
+    }
+
+    .editable-trait-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .editable-trait-row:hover {
+        transform: translateY(-2px);
+    }
+}
+/* Кнопка удаления трейта */
+.remove-trait-button {
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: 50%;
+    background: var(--accent-danger);
+    color: white;
+    font-size: var(--text-lg);
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.remove-trait-button:hover {
+    background: #c0392b;
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.4);
+}
+
+.remove-trait-button:active {
+    transform: scale(0.95);
+}
+
+@media (max-width: 480px) {
+    .editable-traits-block {
+        min-height: auto;
+    }
+
+    .editable-trait-row {
+        padding: var(--space-sm);
+    }
+
+    .trait-name-input {
+        font-size: var(--text-base);
+    }
+}

@@ -18,7 +18,7 @@ const ResultsBlock = ({
     if (activeEffect === 'boost_result') {
       onBoostResultSelection(diceId);
     } else {
-      onResultDiceClick(diceId); // boost_effect больше не требует ручного выбора
+      onResultDiceClick(diceId);
     }
   };
 
@@ -34,7 +34,7 @@ const ResultsBlock = ({
         <div className="current-results">
           <ResultStats
             result={result}
-            effectDice={effectDice} // ← ПЕРЕДАТЬ effectDice
+            effectDice={effectDice}
             selectedCount={selectedDice.length}
             maxSelected={maxSelectedDice}
             isBoostResultActive={isBoostResultActive}
@@ -47,7 +47,7 @@ const ResultsBlock = ({
             canSelectDice={canSelectDice}
             maxSelectedDice={maxSelectedDice}
             activeEffect={activeEffect}
-            effectDice={effectDice} // ← ПЕРЕДАТЬ effectDice
+            effectDice={effectDice}
           />
 
           <div className="results-hint">
@@ -82,7 +82,7 @@ const ResultStats = ({ result, effectDice, selectedCount, maxSelected, isBoostRe
       <div className="effect-dice-container">
         {effectDice && effectDice.map((effectDie, index) => (
           <DiceIcon
-            key={effectDie.id} // используем ID вместо index
+            key={effectDie.id}
             type={effectDie.type}
             value={effectDie.type.replace('d', '')}
             clickable={false}
@@ -106,7 +106,7 @@ const ResultsSection = ({
   canSelectDice,
   maxSelectedDice,
   activeEffect,
-  effectDice // ← ДОБАВИТЬ effectDice
+  effectDice
 }) => {
   const isBoostResultActive = activeEffect === 'boost_result';
 
@@ -123,7 +123,7 @@ const ResultsSection = ({
               canSelect={canSelectDice ? canSelectDice(dice.id) : true}
               isLimitReached={selectedDice.length >= maxSelectedDice}
               activeEffect={activeEffect}
-              effectDice={effectDice} // ← ПЕРЕДАТЬ effectDice
+              effectDice={effectDice}
               onClick={() => onDiceClick(dice.id)}
             />
           ))}
@@ -132,7 +132,6 @@ const ResultsSection = ({
     </div>
   );
 };
-
 
 const ResultDiceItem = ({ dice, isSelected, canSelect, isLimitReached, activeEffect, effectDice, onClick }) => {
   const isInactive = dice.isOne || dice.rolledValue === 0;
@@ -170,20 +169,6 @@ const ResultDiceItem = ({ dice, isSelected, canSelect, isLimitReached, activeEff
   );
 };
 
-// ДОБАВИТЕ эту вспомогательную функцию для точного определения куба эффекта
-const isDiceCurrentEffect = (dice, rollResults, effectDice) => {
-  if (!effectDice || effectDice.length === 0) return false;
-
-  // Находим все кубы с типом эффекта
-  const effectDiceType = effectDice[0];
-  const allEffectDice = rollResults.filter(d => d.type === effectDiceType && !d.isOne && d.rolledValue !== 0);
-
-  // Если есть несколько кубов с этим типом, берем первый (или можно добавить дополнительную логику)
-  // В простейшем случае считаем, что куб эффекта - это первый куб максимального типа
-  return dice.type === effectDiceType && allEffectDice.length > 0 && dice.id === allEffectDice[0].id;
-};
-
-
 const RollHistory = ({ rollHistory }) => {
   if (rollHistory.length === 0) return null;
 
@@ -211,16 +196,24 @@ const RollHistory = ({ rollHistory }) => {
   );
 };
 
+// Вспомогательная функция для получения метки категории
 const getCategoryLabel = (category) => {
   switch (category) {
-    case 'attribute': return 'Атрибут';
-    case 'role': return 'Роль';
-    case 'complication': return 'Осложнение';
-    case 'specialty': return 'Специальность';
+    case 'attributes':
+      return 'Атрибут';
+    case 'roles':
+      return 'Навык';
+    case 'complications':
+      return 'Осложнение';
+    case 'distinctions':
+      return 'Ценность';
+    case 'specialties':
+      return 'Специальность';
+    case 'resources':
+      return 'Ресурс';
+    case 'quick':
+      return 'Быстрый куб';
     default:
-      if (category.startsWith('distinction:')) {
-        return 'Отличие';
-      }
       return category;
   }
 };

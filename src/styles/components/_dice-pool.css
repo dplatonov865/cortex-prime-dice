@@ -153,6 +153,44 @@
     color: white;
 }
 
+/* Панель быстрых кубов */
+.quick-dice-panel {
+    margin-bottom: var(--space-lg);
+    padding: var(--space-md);
+    background: rgba(138, 109, 255, 0.1);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(138, 109, 255, 0.2);
+}
+
+.quick-dice-panel h4 {
+    margin: 0 0 var(--space-sm) 0;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.quick-dice-list {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-md);
+}
+
+.quick-dice-item {
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    padding: var(--space-xs);
+    border-radius: var(--radius-md);
+}
+
+.quick-dice-item:hover {
+    background: rgba(138, 109, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.quick-dice-item:active {
+    transform: scale(1.05);
+}
+
 /* Адаптивность для пула кубов */
 @media (max-width: 768px) {
     .dice-pool-list {

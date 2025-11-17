@@ -50,7 +50,8 @@
 }
 
 .token-action-btn,
-.add-token-btn {
+.add-token-btn,
+.remove-token-btn {
   padding: var(--space-sm) var(--space-sm);
   border: none;
   border-radius: var(--radius-sm);
@@ -70,13 +71,24 @@
   background: #2980b9;
 }
 
-.add-token-btn {
+.add-token-btn,
+.remove-token-btn,
+.token-action-btn,
+.cancel-effect-btn {
   background: var(--accent-success);
   color: white;
   grid-column: 1 / -1;
   margin-top: var(--space-xs);
 }
 
+.remove-token-btn,
+.cancel-effect-btn {
+  /* background: var(--accent-success); */
+  background: #c0392b;
+  color: white;
+  grid-column: 1 / -1;
+  margin-top: var(--space-xs);
+}
 .add-token-btn:hover {
   background: #219653;
 }

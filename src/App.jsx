@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="App">
       <header className="app-header">
-        <h1>Лист персонажа для моей настольной игры. Эксклюзивно для Ильи и Матвея</h1>
+        <h1>Лист персонажа для моей настольной игры. Эксклюзивно для Ильи, Матвея и Лизы</h1>
       </header>
       <main>
         <CharacterSheet />

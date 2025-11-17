@@ -9,7 +9,11 @@ const PlotTokens = ({
   onActivateBoostEffect,
   onCancelEffect,
   activeEffect,
-  hasRollResults // ← ДОБАВИТЬ ЭТОТ ПРОПС
+  hasRollResults,
+  usedCategories,
+  onActivateAttributes,
+  onActivateRoles,
+  onActivateDistinctions // ← ДОБАВИТЬ ЭТОТ ПРОПС
 }) => {
   const isEffectActive = activeEffect !== null;
 
@@ -45,9 +49,38 @@ const PlotTokens = ({
       onCancelEffect();
     }
   };
+  const handleRemoveToken = () => {
+    if (tokens > 0 && !isEffectActive) {
+      onSpendToken('remove_token');
+    }
+  };
+
+  const handleActivateAttributes = () => {
+    if (tokens > 0 && !isEffectActive && usedCategories.has('attributes')) {
+      onSpendToken('activate_attributes');
+      onActivateAttributes();
+    }
+  };
+
+  const handleActivateRoles = () => {
+    if (tokens > 0 && !isEffectActive && usedCategories.has('roles')) {
+      onSpendToken('activate_roles');
+      onActivateRoles();
+    }
+  };
+
+  const handleActivateDistinctions = () => {
+    if (tokens > 0 && !isEffectActive && usedCategories.has('distinctions')) {
+      onSpendToken('activate_distinctions');
+      onActivateDistinctions();
+    }
+  };
 
   const canUseBoostResult = tokens > 0 && !isEffectActive && hasRollResults;
   const canUseBoostEffect = tokens > 0 && !isEffectActive && hasRollResults;
+  const canActivateAttributes = tokens > 0 && !isEffectActive && usedCategories.has('attributes');
+  const canActivateRoles = tokens > 0 && !isEffectActive && usedCategories.has('roles');
+  const canActivateDistinctions = tokens > 0 && !isEffectActive && usedCategories.has('distinctions');
 
   const getEffectDescription = () => {
     switch (activeEffect) {
@@ -79,7 +112,7 @@ const PlotTokens = ({
       </div>
 
       <div className="tokens-actions">
-        <button
+        {/* <button
           className="token-action-btn"
           onClick={handleAddCubeToPool}
           disabled={tokens === 0 || isEffectActive}
@@ -92,8 +125,57 @@ const PlotTokens = ({
           }
         >
           + 🎲 В пул
+        </button> */}
+        <button
+          className="token-action-btn"
+          onClick={handleActivateAttributes}
+          disabled={!canActivateAttributes}
+          title={
+            !usedCategories.has('attributes')
+              ? "Атрибуты ещё не использованы"
+              : isEffectActive
+                ? "Дождитесь завершения активного эффекта"
+                : tokens === 0
+                  ? "Недостаточно жетонов"
+                  : "Разблокировать атрибуты для повторного использования"
+          }
+        >
+          + Атрибут
         </button>
 
+        <button
+          className="token-action-btn"
+          onClick={handleActivateRoles}
+          disabled={!canActivateRoles}
+          title={
+            !usedCategories.has('roles')
+              ? "Навыки ещё не использованы"
+              : isEffectActive
+                ? "Дождитесь завершения активного эффекта"
+                : tokens === 0
+                  ? "Недостаточно жетонов"
+                  : "Разблокировать навыки для повторного использования"
+          }
+        >
+          + Навык
+        </button>
+
+        <button
+          className="token-action-btn"
+          onClick={handleActivateDistinctions}
+          disabled={!canActivateDistinctions}
+          title={
+            !usedCategories.has('distinctions')
+              ? "Отличия ещё не использованы"
+              : isEffectActive
+                ? "Дождитесь завершения активного эффекта"
+                : tokens === 0
+                  ? "Недостаточно жетонов"
+                  : "Разблокировать отличия для повторного использования"
+          }
+        >
+          + Ценность
+        </button>
         <button
           className="token-action-btn"
           onClick={handleBoostResult}
@@ -108,10 +190,10 @@ const PlotTokens = ({
                   : "Повысить результат броска"
           }
         >
-          + 📊 Результат
+          + Результат
         </button>
 
-        <button
+        {/* <button
           className="token-action-btn"
           onClick={handleBoostEffect}
           disabled={!canUseBoostEffect}
@@ -126,7 +208,7 @@ const PlotTokens = ({
           }
         >
           + ⚡ Эффект
-        </button>
+        </button> */}
 
         <button
           className="add-token-btn"
@@ -140,7 +222,20 @@ const PlotTokens = ({
         >
           + Жетон
         </button>
-
+        <button
+          className="remove-token-btn"
+          onClick={handleRemoveToken}
+          disabled={tokens === 0 || isEffectActive}
+          title={
+            isEffectActive
+              ? "Дождитесь завершения активного эффекта"
+              : tokens === 0
+                ? "Нет доступных жетонов"
+                : "Убрать жетон сюжета"
+          }
+        >
+          - Жетон
+        </button>
         {/* КНОПКА ОТМЕНЫ ЭФФЕКТА */}
         <button
           className="cancel-effect-btn"

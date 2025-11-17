@@ -1,10 +1,11 @@
 import React, { useRef } from 'react';
 
-const CharacterHeader = ({ 
-  characterInfo, 
+const CharacterHeader = ({
+  characterInfo,
   onCharacterInfoChange,
   onExportCharacter,
-  onImportCharacter 
+  onImportCharacter,
+  onResetCharacter
 }) => {
   const fileInputRef = useRef(null);
 
@@ -18,6 +19,12 @@ const CharacterHeader = ({
 
   const handleImportClick = () => {
     fileInputRef.current?.click();
+  };
+
+  const handleResetClick = () => {
+    if (window.confirm('Вы уверены, что хотите сбросить персонажа к начальным значениям? Все данные будут потеряны.')) {
+      onResetCharacter();
+    }
   };
 
   const handleFileSelect = (event) => {
@@ -39,29 +46,36 @@ const CharacterHeader = ({
         accept=".json"
         style={{ display: 'none' }}
       />
-      
+
       <div className="character-header-top">
-        
+
         <div className="character-actions">
-          <button 
+          <button
             className="export-button"
             onClick={handleExportClick}
             title="Экспортировать лист персонажа"
           >
             💾 Экспорт
           </button>
-          <button 
+          <button
             className="import-button"
             onClick={handleImportClick}
             title="Импортировать лист персонажа"
           >
             📂 Импорт
           </button>
+          <button
+            className="reset-button"
+            onClick={handleResetClick}
+            title="Сбросить персонажа к начальным значениям"
+          >
+            🔄 Сброс
+          </button>
         </div>
       </div>
-      
+
       <div className="character-details-grid">
-      
+
         {/* <div className="character-name-section"> */}
         <div className="detail-item">
           <label className="detail-label">Имя</label>
@@ -75,7 +89,7 @@ const CharacterHeader = ({
             maxLength={50}
           />
         </div>
-        
+
         <div className="detail-item">
           <label className="detail-label">Возраст</label>
           <input
@@ -88,8 +102,8 @@ const CharacterHeader = ({
           />
         </div>
       </div>
-      
-      <div className="character-description-section">
+
+      {/* <div className="character-description-section">
         <label className="description-label">Описание персонажа</label>
         <textarea
           className="character-description"
@@ -102,7 +116,7 @@ const CharacterHeader = ({
         <div className="description-counter">
           {characterInfo.description.length}/500 символов
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

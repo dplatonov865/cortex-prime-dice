@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import CharacterHeader from './CharacterHeader';
-import AttributeBlock from './AttributeBlock';
-import RoleBlock from './RoleBlock';
-import ComplicationBlock from './ComplicationBlock';
+import FixedTraitsBlock from './FixedTraitsBlock';
+import EditableTraitsBlock from './EditableTraitsBlock';
 import DistinctionBlock from './DistinctionBlock';
-import SpecialtiesBlock from './SpecialtiesBlock';
 import DicePoolBlock from './DicePoolBlock';
 import ResultsBlock from './ResultsBlock';
 import PlotTokens from './PlotTokens';
 import { useDicePool } from '../hooks/useDicePool';
 import { useDiceRoll } from '../hooks/useDiceRoll';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 import { calculateEffectDie } from '../utils/diceLogic';
 import { exportCharacter, importCharacter, validateCharacterData } from '../utils/fileHandler';
 import {
@@ -19,20 +18,22 @@ import {
   DEFAULT_COMPLICATIONS,
   DEFAULT_DISTINCTIONS,
   DEFAULT_SPECIALTIES,
-  LIMITS
+  DEFAULT_RESOURCES,
+  TRAIT_TYPES
 } from '../constants/characterData';
 
 const CharacterSheet = () => {
   // Информация о персонаже
-  const [characterInfo, setCharacterInfo] = useState(DEFAULT_CHARACTER_INFO);
+  const [characterInfo, setCharacterInfo] = useLocalStorage('characterInfo', DEFAULT_CHARACTER_INFO);
 
-  // Состояния характеристик
-  const [attributes, setAttributes] = useState(DEFAULT_ATTRIBUTES);
-  const [roles, setRoles] = useState(DEFAULT_ROLES);
-  const [complications, setComplications] = useState(DEFAULT_COMPLICATIONS);
-  const [distinctions, setDistinctions] = useState(DEFAULT_DISTINCTIONS);
-  const [specialties, setSpecialties] = useState(DEFAULT_SPECIALTIES);
-  const [plotTokens, setPlotTokens] = useState(1);
+  // Состояния характеристик в ЕДИНОМ ФОРМАТЕ
+  const [attributes, setAttributes] = useLocalStorage('attributes', DEFAULT_ATTRIBUTES);
+  const [roles, setRoles] = useLocalStorage('roles', DEFAULT_ROLES);
+  const [complications, setComplications] = useLocalStorage('complications', DEFAULT_COMPLICATIONS);
+  const [distinctions, setDistinctions] = useLocalStorage('distinctions', DEFAULT_DISTINCTIONS);
+  const [specialties, setSpecialties] = useLocalStorage('specialties', DEFAULT_SPECIALTIES);
+  const [resources, setResources] = useLocalStorage('resources', DEFAULT_RESOURCES);
+  const [plotTokens, setPlotTokens] = useLocalStorage('plotTokens', 1);
 
   // Состояние активного эффекта
   const [activeEffect, setActiveEffect] = useState(null);
@@ -40,17 +41,20 @@ const CharacterSheet = () => {
   // Хуки для управления логикой
   const {
     dicePool,
-    usedCategories,
+    usageCounters,
+    usedDistinctionGroups,
     additionalDieEffect,
+    usedCategories, // ← ДОБАВИТЬ
+    removeFromUsedCategories, // ← ДОБАВИТЬ (нужно будет добавить в useDicePool)
     addToDicePool,
     removeFromDicePool,
     clearDicePool,
-    clearUsedCategories,
-    activatePlotTokenMode,
-    isCategoryAvailable,
-    setDicePool,
+    clearUsageCounters,
+    getUsageCount,
+    isUsageLimitReached,
     activateAdditionalDie,
-    deactivateAdditionalDie
+    deactivateAdditionalDie,
+    addQuickDie
   } = useDicePool();
 
   const {
@@ -68,7 +72,181 @@ const CharacterSheet = () => {
     setEffectDice
   } = useDiceRoll();
 
-  // Функция экспорта
+  // УНИВЕРСАЛЬНЫЕ ОБРАБОТЧИКИ
+
+  // Обработчик изменения информации о персонаже
+  const handleCharacterInfoChange = (field, value) => {
+    setCharacterInfo(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  // Универсальный обработчик клика по трейту
+  const handleTraitClick = (traitId, traitName, diceType, category) => {
+    if (isUsageLimitReached && isUsageLimitReached(category, traitName) && !additionalDieEffect) {
+      return;
+    }
+
+    if (activeEffect === 'additional_die') {
+      addToDicePool(traitId, traitName, diceType, category);
+      deactivateEffect();
+    } else {
+      addToDicePool(traitId, traitName, diceType, category);
+    }
+  };
+
+  // Универсальный обработчик изменения трейта (для FixedTraitsBlock и DistinctionBlock)
+  const handleTraitChange = (type, traitId, updates) => {
+    const setters = {
+      [TRAIT_TYPES.ATTRIBUTES]: setAttributes,
+      [TRAIT_TYPES.ROLES]: setRoles,
+      [TRAIT_TYPES.DISTINCTIONS]: setDistinctions
+    };
+
+    const setter = setters[type];
+    if (setter) {
+      setter(prev => ({
+        ...prev,
+        [traitId]: { ...prev[traitId], ...updates }
+      }));
+    }
+  };
+
+  // Универсальный обработчик для EditableTraitsBlock
+  const handleEditableTraitChange = (type, action, traitId, updates = {}) => {
+    const setters = {
+      [TRAIT_TYPES.COMPLICATIONS]: setComplications,
+      [TRAIT_TYPES.SPECIALTIES]: setSpecialties,
+      [TRAIT_TYPES.RESOURCES]: setResources
+    };
+
+    const setter = setters[type];
+    if (!setter) return;
+
+    if (action === 'add') {
+      const newId = Date.now().toString();
+      setter(prev => ({
+        ...prev,
+        [newId]: {
+          name: updates.name || '',
+          diceType: updates.diceType || (type === 'complications' ? '0' : 'd6')
+        }
+      }));
+    } else if (action === 'remove') {
+      setter(prev => {
+        const newTraits = { ...prev };
+        delete newTraits[traitId];
+        return newTraits;
+      });
+    } else if (action === 'update') {
+      setter(prev => ({
+        ...prev,
+        [traitId]: { ...prev[traitId], ...updates }
+      }));
+    }
+  };
+
+  // Функции управления эффектами
+  const deactivateEffect = () => {
+    setActiveEffect(null);
+    deactivateAdditionalDie();
+  };
+
+  const handleActivateAdditionalDie = () => {
+    if (plotTokens > 0) {
+      setActiveEffect('additional_die');
+      activateAdditionalDie();
+    }
+  };
+
+  const handleActivateBoostResult = () => {
+    if (plotTokens > 0) {
+      setActiveEffect('boost_result');
+    }
+  };
+
+  const handleActivateBoostEffect = () => {
+    if (plotTokens > 0 && rollResults.length > 0) {
+      const availableForEffect = rollResults.filter(dice =>
+        !dice.isOne &&
+        dice.rolledValue !== 0 &&
+        !selectedDice.includes(dice.id) &&
+        !effectDice.some(effect => effect.id === dice.id)
+      );
+
+      if (availableForEffect.length > 0) {
+        const bestEffectDie = availableForEffect.reduce((max, dice) => {
+          const diceValue = parseInt(dice.type.replace('d', ''));
+          const maxValue = parseInt(max.type.replace('d', ''));
+          return diceValue > maxValue ? dice : max;
+        }, availableForEffect[0]);
+
+        const newEffectDie = {
+          id: bestEffectDie.id,
+          type: bestEffectDie.type,
+          name: bestEffectDie.name
+        };
+
+        const newEffectDice = [...effectDice, newEffectDie];
+        setEffectDice(newEffectDice);
+      } else {
+        alert('Нет доступных кубов для повышения эффекта!');
+      }
+    }
+  };
+
+  const handleCancelEffect = () => {
+    if (activeEffect) {
+      setPlotTokens(prev => prev + 1);
+      deactivateEffect();
+    }
+  };
+
+  const handleAddToken = () => {
+    setPlotTokens(prev => prev + 1);
+  };
+  const handleRemoveToken = () => {
+    setPlotTokens(prev => Math.max(0, prev - 1));
+  };
+
+  const handleSpendToken = () => {
+    setPlotTokens(prev => Math.max(0, prev - 1));
+  };
+
+  // Обработчик броска
+  const handleRollDice = () => {
+    rollDicePool(dicePool, clearDicePool, clearUsageCounters);
+  };
+
+  const handleBoostResultSelection = (diceId) => {
+    if (activeEffect === 'boost_result') {
+      // Находим куб
+      const dice = rollResults.find(d => d.id === diceId);
+      if (dice && !dice.isOne && dice.rolledValue !== 0 && !selectedDice.includes(diceId)) {
+        // Добавляем в выбранные (можно сверх лимита)
+        const newSelectedDice = [...selectedDice, diceId];
+        setSelectedDice(newSelectedDice);
+
+        // Пересчитываем результат
+        const newResult = newSelectedDice.reduce((total, id) => {
+          const selectedDice = rollResults.find(d => d.id === id);
+          return total + (selectedDice ? selectedDice.rolledValue : 0);
+        }, 0);
+        setResult(newResult);
+
+        // Пересчитываем куб эффекта
+        calculateEffectDie(rollResults, newSelectedDice, setEffectDice);
+
+        // Завершаем эффект и тратим жетон
+        deactivateEffect();
+        handleSpendToken();
+
+        console.log(`Куб "${dice.name}" добавлен в результат! Новый результат: ${newResult}`);
+      }
+    }
+  };
+  // Функции экспорта/импорта
   const handleExportCharacter = () => {
     const characterData = {
       characterInfo,
@@ -77,15 +255,13 @@ const CharacterSheet = () => {
       complications,
       distinctions,
       specialties,
-      plotTokens,
+      resources,
       exportDate: new Date().toISOString(),
-      version: '1.0'
+      version: '2.0'
     };
-
     exportCharacter(characterData);
   };
 
-  // Функция импорта
   const handleImportCharacter = async (file) => {
     try {
       const data = await importCharacter(file);
@@ -102,6 +278,7 @@ const CharacterSheet = () => {
         setComplications(data.complications || DEFAULT_COMPLICATIONS);
         setDistinctions(data.distinctions || DEFAULT_DISTINCTIONS);
         setSpecialties(data.specialties || DEFAULT_SPECIALTIES);
+        setResources(data.resources || DEFAULT_RESOURCES);
         clearDicePool();
         alert('Персонаж успешно загружен!');
       }
@@ -110,221 +287,52 @@ const CharacterSheet = () => {
     }
   };
 
-  const handleAddToken = () => {
-    setPlotTokens(prev => prev + 1);
+  const handleResetCharacter = () => {
+    setCharacterInfo(DEFAULT_CHARACTER_INFO);
+    setAttributes(DEFAULT_ATTRIBUTES);
+    setRoles(DEFAULT_ROLES);
+    setComplications(DEFAULT_COMPLICATIONS);
+    setDistinctions(DEFAULT_DISTINCTIONS);
+    setSpecialties(DEFAULT_SPECIALTIES);
+    setResources(DEFAULT_RESOURCES);
+    setPlotTokens(1);
+    clearDicePool();
+    setActiveEffect(null);
+
+    // Очищаем localStorage
+    const keys = [
+      'characterInfo', 'attributes', 'roles', 'complications',
+      'distinctions', 'specialties', 'resources', 'plotTokens'
+    ];
+    keys.forEach(key => localStorage.removeItem(key));
   };
 
-  const handleSpendToken = (action) => {
-    if (plotTokens === 0) return;
-
-    setPlotTokens(prev => Math.max(0, prev - 1));
+  const handleAddQuickDie = (diceType) => {
+    addQuickDie(diceType);
   };
 
-  // Обработчик изменения информации о персонаже
-  const handleCharacterInfoChange = (field, value) => {
-    setCharacterInfo(prev => ({
-      ...prev,
-      [field]: value
-    }));
+  const handleActivateAttributes = () => {
+    removeFromUsedCategories('attributes');
   };
 
-  // Обработчики кликов с поддержкой эффектов
-  const handleAttributeClick = (attributeName, diceType) => {
-    if (activeEffect === 'additional_die') {
-      addToDicePool(attributeName, diceType, 'attribute');
-      deactivateEffect();
-    } else {
-      addToDicePool(attributeName, diceType, 'attribute');
-    }
+  const handleActivateRoles = () => {
+    removeFromUsedCategories('roles');
   };
 
-  const handleRoleClick = (roleName, diceType) => {
-    if (activeEffect === 'additional_die') {
-      addToDicePool(roleName, diceType, 'role');
-      deactivateEffect();
-    } else {
-      addToDicePool(roleName, diceType, 'role');
-    }
+  const handleActivateDistinctions = () => {
+    removeFromUsedCategories('distinctions');
   };
 
-  const handleComplicationClick = (complicationName, diceType) => {
-    if (activeEffect === 'additional_die') {
-      addToDicePool(complicationName, diceType, 'complication');
-      deactivateEffect();
-    } else {
-      addToDicePool(complicationName, diceType, 'complication');
-    }
+  const checkMinimumRequirements = () => {
+    const hasAttribute = dicePool.some(dice => dice.category === 'attributes');
+    const hasRole = dicePool.some(dice => dice.category === 'roles');
+    const hasDistinction = dicePool.some(dice => dice.category === 'distinctions');
+
+    return hasAttribute && hasRole && hasDistinction;
   };
 
-  const handleDistinctionClick = (distinctionName, diceType, category) => {
-    if (activeEffect === 'additional_die') {
-      addToDicePool(distinctionName, diceType, `distinction: ${category}`);
-      deactivateEffect();
-    } else {
-      addToDicePool(distinctionName, diceType, `distinction: ${category}`);
-    }
-  };
+  const canRoll = checkMinimumRequirements();
 
-  const handleSpecialtyClick = (specialtyName, diceType) => {
-    if (activeEffect === 'additional_die') {
-      addToDicePool(specialtyName, diceType, 'specialty');
-      deactivateEffect();
-    } else {
-      addToDicePool(specialtyName, diceType, 'specialty');
-    }
-  };
-
-  // Обработчики изменения данных
-  const handleAttributeChange = (attributeName, newRank) => {
-    setAttributes(prev => ({
-      ...prev,
-      [attributeName]: newRank
-    }));
-  };
-
-  const handleRoleChange = (roleName, newRank) => {
-    setRoles(prev => ({
-      ...prev,
-      [roleName]: newRank
-    }));
-  };
-
-  const handleComplicationChange = (complicationName, newRank) => {
-    setComplications(prev => ({
-      ...prev,
-      [complicationName]: newRank
-    }));
-  };
-
-  const handleDistinctionChange = (category, newName) => {
-    setDistinctions(prev => ({
-      ...prev,
-      [category]: {
-        ...prev[category],
-        name: newName
-      }
-    }));
-  };
-
-  const handleSpecialtiesChange = (action, id, name) => {
-    if (action === 'add' && Object.keys(specialties).length < LIMITS.MAX_SPECIALTIES) {
-      const newId = Date.now().toString();
-      setSpecialties(prev => ({ ...prev, [newId]: { name } }));
-    } else if (action === 'remove') {
-      setSpecialties(prev => {
-        const newSpecialties = { ...prev };
-        delete newSpecialties[id];
-        return newSpecialties;
-      });
-    } else if (action === 'edit') {
-      setSpecialties(prev => ({ ...prev, [id]: { name } }));
-    }
-  };
-
-  // Обработчик броска
-  const handleRollDice = () => {
-    rollDicePool(dicePool, setDicePool, clearUsedCategories);
-  };
-
-  // Функции управления эффектами
-  const handleActivateAdditionalDie = () => {
-    if (plotTokens > 0) {
-      setActiveEffect('additional_die');
-      activateAdditionalDie();
-    }
-  };
-
-  const handleActivateBoostResult = () => {
-    if (plotTokens > 0) {
-      setActiveEffect('boost_result');
-      // setPlotTokens(prev => prev - 1);
-    }
-  };
-
-  // CharacterSheet.jsx - полностью новая логика для handleActivateBoostEffect
-  const handleActivateBoostEffect = () => {
-    if (plotTokens > 0 && rollResults.length > 0) {
-      // Находим доступные кубы для эффекта (не "1", не в результате, не уже используемые как эффект)
-      const availableForEffect = rollResults.filter(dice =>
-        !dice.isOne &&
-        dice.rolledValue !== 0 &&
-        !selectedDice.includes(dice.id) &&
-        !effectDice.some(effect => effect.id === dice.id) // ← проверяем по ID
-      );
-
-      if (availableForEffect.length > 0) {
-        // Находим куб с максимальным номиналом среди доступных
-        const bestEffectDie = availableForEffect.reduce((max, dice) => {
-          const diceValue = parseInt(dice.type.replace('d', ''));
-          const maxValue = parseInt(max.type.replace('d', ''));
-          return diceValue > maxValue ? dice : max;
-        }, availableForEffect[0]);
-
-        // ДОБАВЛЯЕМ новый куб эффекта к существующим как объект с ID
-        const newEffectDie = {
-          id: bestEffectDie.id,
-          type: bestEffectDie.type,
-          name: bestEffectDie.name
-        };
-
-        const newEffectDice = [...effectDice, newEffectDie];
-        setEffectDice(newEffectDice);
-
-        // Тратим жетон
-        // setPlotTokens(prev => prev - 1);
-
-        console.log(`Добавлен куб эффекта ${bestEffectDie.type}! Теперь эффекты: ${newEffectDice.map(e => e.type).join(', ')}`);
-      } else {
-        alert('Нет доступных кубов для повышения эффекта!');
-      }
-    }
-  };
-
-
-  const deactivateEffect = () => {
-    if (activeEffect !== 'boost_effect') { // boost_effect теперь мгновенный, не требует деактивации
-      setActiveEffect(null);
-      deactivateAdditionalDie();
-    }
-  };
-
-  // Обработчик для эффекта повышения результата
-  const handleBoostResultSelection = (diceId) => {
-    if (activeEffect === 'boost_result') {
-      const dice = rollResults.find(d => d.id === diceId);
-      if (dice && !dice.isOne && dice.rolledValue !== 0 && !selectedDice.includes(diceId)) {
-
-        // Создаем новый массив выбранных кубов с добавленным кубом
-        const newSelectedDice = [...selectedDice, diceId];
-        setSelectedDice(newSelectedDice);
-
-        // Пересчитываем сумму ВСЕХ выбранных кубов
-        const newResult = newSelectedDice.reduce((total, id) => {
-          const selectedDice = rollResults.find(d => d.id === id);
-          return total + (selectedDice ? selectedDice.rolledValue : 0);
-        }, 0);
-
-        setResult(newResult);
-
-        // Пересчитываем куб эффекта
-        calculateEffectDie(rollResults, newSelectedDice, setEffectDice);
-
-        // Деактивируем эффект
-        deactivateEffect();
-
-        console.log(`Куб "${dice.name}" добавлен в результат! Новый результат: ${newResult}`);
-      }
-    }
-  };
-  const handleCancelEffect = () => {
-    if (activeEffect) {
-      // Возвращаем жетон
-      setPlotTokens(prev => prev + 1);
-      // Деактивируем эффект
-      deactivateEffect();
-      console.log(`Эффект ${activeEffect} отменен, жетон возвращен`);
-    }
-  };
 
   return (
     <div className="character-sheet">
@@ -333,82 +341,148 @@ const CharacterSheet = () => {
         onCharacterInfoChange={handleCharacterInfoChange}
         onExportCharacter={handleExportCharacter}
         onImportCharacter={handleImportCharacter}
+        onResetCharacter={handleResetCharacter}
       />
 
-      <div className="main-columns">
-        <AttributeBlock
-          attributes={attributes}
-          onAttributeClick={handleAttributeClick}
-          onAttributeChange={handleAttributeChange}
-          isCategoryAvailable={isCategoryAvailable}
-          additionalDieEffect={activeEffect === 'additional_die'}
-        />
-
-        <RoleBlock
-          roles={roles}
-          onRoleClick={handleRoleClick}
-          onRoleChange={handleRoleChange}
-          isCategoryAvailable={isCategoryAvailable}
-          additionalDieEffect={activeEffect === 'additional_die'}
-        />
-
-        <ComplicationBlock
-          complications={complications}
-          onComplicationClick={handleComplicationClick}
-          onComplicationChange={handleComplicationChange}
-          isCategoryAvailable={isCategoryAvailable}
-          additionalDieEffect={activeEffect === 'additional_die'}
-        />
-
+      {/* Строка отличий */}
+      <div className="distinctions-row">
         <DistinctionBlock
           distinctions={distinctions}
-          onDistinctionClick={handleDistinctionClick}
-          onDistinctionChange={handleDistinctionChange}
-          isCategoryAvailable={isCategoryAvailable}
-          additionalDieEffect={activeEffect === 'additional_die'}
-        />
-
-        <SpecialtiesBlock
-          specialties={specialties}
-          onSpecialtyClick={handleSpecialtyClick}
-          onSpecialtiesChange={handleSpecialtiesChange}
-          isCategoryAvailable={isCategoryAvailable}
+          onTraitClick={handleTraitClick}
+          onDistinctionChange={(distinctionId, updates) =>
+            handleTraitChange('distinctions', distinctionId, updates)}
+          getUsageCount={getUsageCount}
+          isUsageLimitReached={isUsageLimitReached}
+          usedDistinctionGroups={usedDistinctionGroups}
+          usedCategories={usedCategories}
           additionalDieEffect={activeEffect === 'additional_die'}
         />
       </div>
 
-      <PlotTokens
-        tokens={plotTokens}
-        onAddToken={handleAddToken}
-        onSpendToken={handleSpendToken}
-        onActivateAdditionalDie={handleActivateAdditionalDie}
-        onActivateBoostResult={handleActivateBoostResult}
-        onActivateBoostEffect={handleActivateBoostEffect}
-        onCancelEffect={handleCancelEffect}
-        activeEffect={activeEffect}
-        hasRollResults={rollResults.length > 0} // ← ДОБАВЬТЕ ЭТОТ ПРОПС
-      />
+      {/* Три колонки */}
+      <div className="three-columns-layout">
+        {/* Левая колонка */}
+        <div className="column left-column">
+          <FixedTraitsBlock
+            type={TRAIT_TYPES.ATTRIBUTES}
+            title="Атрибуты"
+            traits={attributes}
+            onTraitClick={handleTraitClick}
+            onTraitChange={handleTraitChange}
+            getUsageCount={getUsageCount}
+            isUsageLimitReached={isUsageLimitReached}
+            additionalDieEffect={activeEffect === 'additional_die'}
+            hint={activeEffect === 'additional_die'
+              ? '🎯 Эффект дополнительного куба: можно добавить любой атрибут'
+              : '💡 Кликайте по атрибутам чтобы добавить кубы в пул'
+            }
+          />
 
-      <DicePoolBlock
-        dicePool={dicePool}
-        onRemoveFromPool={removeFromDicePool}
-        onRollDice={handleRollDice}
-        onClearPool={clearDicePool}
-      />
+          <EditableTraitsBlock
+            type={TRAIT_TYPES.COMPLICATIONS}
+            title="Осложнения"
+            traits={complications}
+            onTraitClick={handleTraitClick}
+            onTraitChange={handleEditableTraitChange}
+            getUsageCount={getUsageCount}
+            isUsageLimitReached={isUsageLimitReached}
+            maxItems={10}
+            hint="💡 В пул можно добавлять осложнения ранга d4"
+          />
+        </div>
 
-      <ResultsBlock
-        rollResults={rollResults}
-        selectedDice={selectedDice}
-        result={result}
-        effectDice={effectDice}
-        rollHistory={rollHistory}
-        onResultDiceClick={handleResultDiceClick}
-        onBoostResultSelection={handleBoostResultSelection}
-        // onBoostEffectSelection УБРАТЬ - больше не нужно
-        canSelectDice={canSelectDice}
-        maxSelectedDice={maxSelectedDice}
-        activeEffect={activeEffect}
-      />
+        {/* Центральная колонка */}
+        <div className="column center-column">
+          <FixedTraitsBlock
+            type={TRAIT_TYPES.ROLES}
+            title="Навыки"
+            traits={roles}
+            onTraitClick={handleTraitClick}
+            onTraitChange={handleTraitChange}
+            getUsageCount={getUsageCount}
+            isUsageLimitReached={isUsageLimitReached}
+            additionalDieEffect={activeEffect === 'additional_die'}
+            hint={activeEffect === 'additional_die'
+              ? '🎯 Эффект дополнительного куба: можно добавить любой навык'
+              : '💡 Кликайте по навыкам чтобы добавить кубы в пул'
+            }
+          />
+
+          <EditableTraitsBlock
+            type={TRAIT_TYPES.SPECIALTIES}
+            title="Специальности"
+            traits={specialties}
+            onTraitClick={handleTraitClick}
+            onTraitChange={handleEditableTraitChange}
+            getUsageCount={getUsageCount}
+            isUsageLimitReached={isUsageLimitReached}
+            maxItems={10}
+            additionalDieEffect={activeEffect === 'additional_die'}
+            hint={activeEffect === 'additional_die'
+              ? '🎯 Эффект дополнительного куба: можно добавить любую специальность'
+              : '💡 Кликайте по кубам чтобы добавить их в пул.'
+            }
+          />
+          usedCategories={usedCategories} // ← ДОБАВИТЬ (из useDicePool)
+          <EditableTraitsBlock
+            type={TRAIT_TYPES.RESOURCES}
+            title="Ресурсы"
+            traits={resources}
+            onTraitClick={handleTraitClick}
+            onTraitChange={handleEditableTraitChange}
+            getUsageCount={getUsageCount}
+            isUsageLimitReached={isUsageLimitReached}
+            maxItems={10}
+            additionalDieEffect={activeEffect === 'additional_die'}
+            hint={activeEffect === 'additional_die'
+              ? '🎯 Эффект дополнительного куба: можно добавить любой ресурс'
+              : '💡 Кликайте по кубам чтобы добавить их в пул.'
+            }
+          />
+        </div>
+
+        {/* Правая колонка */}
+        <div className="column right-column">
+          <DicePoolBlock
+            dicePool={dicePool}
+            onRemoveFromPool={removeFromDicePool}
+            onRollDice={handleRollDice}
+            onClearPool={clearDicePool}
+            onAddQuickDie={handleAddQuickDie}
+            canRoll={canRoll}
+          />
+
+          <ResultsBlock
+            rollResults={rollResults}
+            selectedDice={selectedDice}
+            result={result}
+            effectDice={effectDice}
+            rollHistory={rollHistory}
+            onResultDiceClick={handleResultDiceClick}
+            onBoostResultSelection={handleBoostResultSelection}
+            canSelectDice={canSelectDice}
+            maxSelectedDice={maxSelectedDice}
+            activeEffect={activeEffect}
+          />
+
+          <PlotTokens
+            tokens={plotTokens}
+            onAddToken={handleAddToken}
+            onRemoveToken={handleRemoveToken} // ← ДОБАВИТЬ ЭТОТ ПРОПС
+            onSpendToken={handleSpendToken}
+            onActivateAdditionalDie={handleActivateAdditionalDie}
+            onActivateBoostResult={handleActivateBoostResult}
+            onActivateBoostEffect={handleActivateBoostEffect}
+            onCancelEffect={handleCancelEffect}
+            onActivateAttributes={handleActivateAttributes} // ← ДОБАВИТЬ
+            onActivateRoles={handleActivateRoles} // ← ДОБАВИТЬ
+            onActivateDistinctions={handleActivateDistinctions} // ← ДОБАВИТЬ
+            activeEffect={activeEffect}
+            hasRollResults={rollResults.length > 0}
+            usedCategories={usedCategories} // ← ДОБАВИТЬ (из useDicePool)
+          />
+        </div>
+      </div>
     </div>
   );
 };
