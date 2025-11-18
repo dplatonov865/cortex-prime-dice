@@ -52,37 +52,117 @@ export const useDiceRoll = () => {
   };
 
   // Обработчик кликов по результатам броска
+  // const handleResultDiceClick = (diceId) => {
+  //   const dice = rollResults.find(d => d.id === diceId);
+  //   if (!dice || dice.isOne || dice.rolledValue === 0) return;
+
+  //   const isAtLimit = selectedDice.length >= MAX_SELECTED_DICE;
+  //   const isAlreadySelected = selectedDice.includes(diceId);
+
+  //   if (isAlreadySelected) {
+  //     // Удаляем из выбранных
+  //     const newSelected = selectedDice.filter(id => id !== diceId);
+  //     setSelectedDice(newSelected);
+  //     updateResultAndEffect(newSelected);
+  //   } else if (!isAtLimit) {
+  //     // Добавляем в выбранные
+  //     const newSelected = [...selectedDice, diceId];
+  //     setSelectedDice(newSelected);
+  //     updateResultAndEffect(newSelected);
+  //   }
+  // };
   const handleResultDiceClick = (diceId) => {
-    const dice = rollResults.find(d => d.id === diceId);
-    if (!dice || dice.isOne || dice.rolledValue === 0) return;
+    const clickedDice = rollResults.find(d => d.id === diceId);
+    if (!clickedDice || clickedDice.isOne || clickedDice.rolledValue === 0) return;
 
-    const isAtLimit = selectedDice.length >= MAX_SELECTED_DICE;
-    const isAlreadySelected = selectedDice.includes(diceId);
+    // Находим все кубы с таким же значением (дубли)
+    const matchingDice = rollResults.filter(d =>
+      d.rolledValue === clickedDice.rolledValue &&
+      !d.isOne &&
+      d.rolledValue !== 0
+    );
 
-    if (isAlreadySelected) {
-      // Удаляем из выбранных
-      const newSelected = selectedDice.filter(id => id !== diceId);
+    // Проверяем, выбрана ли уже вся группа
+    const isGroupSelected = matchingDice.every(dice => selectedDice.includes(dice.id));
+
+    // Подсчитываем количество УНИКАЛЬНЫХ ГРУПП в выбранных кубах
+    const selectedGroups = new Set();
+    selectedDice.forEach(id => {
+      const dice = rollResults.find(d => d.id === id);
+      if (dice) {
+        selectedGroups.add(dice.rolledValue);
+      }
+    });
+
+    const isAtLimit = selectedGroups.size >= MAX_SELECTED_DICE;
+
+    if (isGroupSelected) {
+      // Удаляем всю группу из выбранных
+      const newSelected = selectedDice.filter(id =>
+        !matchingDice.some(dice => dice.id === id)
+      );
       setSelectedDice(newSelected);
       updateResultAndEffect(newSelected);
     } else if (!isAtLimit) {
-      // Добавляем в выбранные
-      const newSelected = [...selectedDice, diceId];
+      // Добавляем всю группу в выбранные
+      const newSelected = [...new Set([...selectedDice, ...matchingDice.map(d => d.id)])];
       setSelectedDice(newSelected);
       updateResultAndEffect(newSelected);
     }
   };
 
+
   // Проверка, можно ли выбрать куб
+  // const canSelectDice = (diceId) => {
+  //   const dice = rollResults.find(d => d.id === diceId);
+  //   if (!dice || dice.isOne || dice.rolledValue === 0) return false;
+
+  //   const isAlreadySelected = selectedDice.includes(diceId);
+  //   const isAtLimit = selectedDice.length >= MAX_SELECTED_DICE;
+
+  //   return isAlreadySelected || !isAtLimit;
+  // };
   const canSelectDice = (diceId) => {
     const dice = rollResults.find(d => d.id === diceId);
     if (!dice || dice.isOne || dice.rolledValue === 0) return false;
 
-    const isAlreadySelected = selectedDice.includes(diceId);
-    const isAtLimit = selectedDice.length >= MAX_SELECTED_DICE;
+    // Находим все кубы с таким же значением
+    const matchingDice = rollResults.filter(d =>
+      d.rolledValue === dice.rolledValue &&
+      !d.isOne &&
+      d.rolledValue !== 0
+    );
 
-    return isAlreadySelected || !isAtLimit;
+    // Проверяем, выбрана ли уже вся группа
+    const isGroupSelected = matchingDice.every(d => selectedDice.includes(d.id));
+
+    // Подсчитываем количество уникальных групп в выбранных кубах
+    const selectedGroups = new Set();
+    selectedDice.forEach(id => {
+      const selectedDice = rollResults.find(d => d.id === id);
+      if (selectedDice) {
+        selectedGroups.add(selectedDice.rolledValue);
+      }
+    });
+
+    const isAtLimit = selectedGroups.size >= MAX_SELECTED_DICE;
+
+    // Можно выбрать если:
+    // - группа уже выбрана (можно снять выбор)
+    // - или есть место для новой группы
+    return isGroupSelected || !isAtLimit;
   };
 
+  const getSelectedGroupsCount = () => {
+    const selectedGroups = new Set();
+    selectedDice.forEach(id => {
+      const dice = rollResults.find(d => d.id === id);
+      if (dice) {
+        selectedGroups.add(dice.rolledValue);
+      }
+    });
+    return selectedGroups.size;
+  };
   const handleBoostResultSelection = (diceId) => {
     const dice = rollResults.find(d => d.id === diceId);
     if (dice && !dice.isOne && dice.rolledValue !== 0 && !selectedDice.includes(diceId)) {

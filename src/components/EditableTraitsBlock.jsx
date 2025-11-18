@@ -42,7 +42,7 @@ const EditableTraitsBlock = ({
         if (isUsageLimitReached && isUsageLimitReached(type, traitName) && !additionalDieEffect) {
             return;
         }
-        onTraitClick(traitId, traitName, diceType, type);
+        // onTraitClick(traitId, traitName, diceType, type);
     };
 
     // Обработчик добавления нового трейта
@@ -85,13 +85,13 @@ const EditableTraitsBlock = ({
             <h3>{title}</h3>
 
             {/* Поле для добавления нового трейта */}
-            <div className="editable-input-container">
+            {/* <div className="editable-input-container">
                 <input
                     type="text"
                     className="trait-input"
                     value={newTraitName}
                     onChange={(e) => setNewTraitName(e.target.value)}
-                    onKeyPress={handleKeyPress}
+                    // onKeyPress={handleKeyPress}
                     placeholder={`Добавить ${title.toLowerCase()}...`}
                     disabled={!canAddNew}
                     maxLength={30}
@@ -104,7 +104,7 @@ const EditableTraitsBlock = ({
                 >
                     +
                 </button>
-            </div>
+            </div> */}
 
             {/* Список трейтов */}
             <div className="editable-traits-list">
@@ -120,27 +120,31 @@ const EditableTraitsBlock = ({
 
                     const isMinRank = type === 'complications'
                         ? trait.diceType === '0'
-                        : trait.diceType === 'd4';
+                        : trait.diceType === 'd6';
 
                     return (
-                        <div key={id} className={`editable-trait-row ${!isClickable ? 'row-disabled' : ''}`}>
-                            <input
-                                type="text"
-                                className="trait-name-input"
-                                value={trait.name}
-                                onChange={(e) => handleNameChange(id, e.target.value)}
-                                onKeyPress={(e) => {
-                                    if (e.key === 'Enter') e.target.blur();
-                                }}
-                                placeholder={`Название ${title.toLowerCase()}...`}
-                                maxLength={30}
-                            />
+                        <div
+                            key={id}
+                            className={`fixed-trait-row ${!isClickable ? 'row-disabled' : ''}`}
+                            onClick={() => handleTraitClick(id, trait.name, trait.diceType)}
+                            title={
+                                !isClickable
+                                    ? 'Достигнут лимит в 3 использования'
+                                    : additionalDieEffect
+                                        ? 'Эффект дополнительного куба: можно добавить в пул'
+                                        : `Клик чтобы добавить куб в пул (использовано: ${usageCount}/3)`
+                            }
+                        >
+                            <div className="fixed-trait-name-container">
+                                <span className="trait-name">{trait.name}</span>
+                                {usageCount > 0 && (
+                                    <span className="usage-counter"> x {usageCount}</span>
+                                )}
+                            </div>
 
-                            <div className="editable-trait-controls">
+                            <div className="fixed-trait-controls">
                                 <div className="trait-usage">
-                                    {usageCount > 0 && (
-                                        <span className="usage-counter"> x {usageCount}</span>
-                                    )}
+                                    {/* Пустой контейнер для выравнивания */}
                                 </div>
 
                                 <div
@@ -156,12 +160,11 @@ const EditableTraitsBlock = ({
                                 >
                                     <DiceIcon
                                         type={trait.diceType}
-                                        value={trait.diceType === '0' ? '0' : trait.diceType.replace('d', '')}
+                                        value={trait.diceType.replace('d', '')}
                                         clickable={isClickable}
                                     />
                                 </div>
 
-                                {/* Кнопки управления рангом для ВСЕХ типов */}
                                 <div className="rank-buttons-vertical">
                                     <button
                                         className="rank-button increase-button"
@@ -169,7 +172,7 @@ const EditableTraitsBlock = ({
                                             e.stopPropagation();
                                             handleRankChange(id, trait.diceType, 'increase');
                                         }}
-                                        disabled={isMaxRank}
+                                        disabled={trait.diceType === 'd12'}
                                         title="Повысить ранг"
                                     >
                                         ▲
@@ -181,35 +184,16 @@ const EditableTraitsBlock = ({
                                             e.stopPropagation();
                                             handleRankChange(id, trait.diceType, 'decrease');
                                         }}
-                                        disabled={isMinRank}
+                                        disabled={trait.diceType === '0'}
                                         title="Понизить ранг"
                                     >
                                         ▼
                                     </button>
                                 </div>
-
-                                <button
-                                    className="remove-trait-button"
-                                    onClick={() => handleRemoveTrait(id)}
-                                    title={`Удалить ${title.toLowerCase()}`}
-                                >
-                                    ×
-                                </button>
                             </div>
                         </div>
                     );
                 })}
-
-                {Object.keys(traits).length === 0 && (
-                    <div className="no-traits-message">
-                        Нет добавленных {title.toLowerCase()}
-                    </div>
-                )}
-            </div>
-
-            {/* Счетчик и подсказка */}
-            <div className="traits-counter">
-                {Object.keys(traits).length}/{maxItems} {title.toLowerCase()}
             </div>
 
             {hint && (
@@ -220,5 +204,6 @@ const EditableTraitsBlock = ({
         </div>
     );
 };
+
 
 export default EditableTraitsBlock;

@@ -77,9 +77,9 @@ const DistinctionBlock = ({
   // Функция для получения заголовка отличия по ID
   const getDistinctionTitle = (distinctionId) => {
     const titles = {
-      '1': 'Первая ценность',
-      '2': 'Вторая ценность',
-      '3': 'Третья ценность'
+      '1': 'Первая черта',
+      '2': 'Вторая черта',
+      '3': 'Третья черта'
     };
     return titles[distinctionId] || `Черта ${distinctionId}`;
   };
@@ -118,7 +118,7 @@ const DistinctionBlock = ({
                   className="distinction-input"
                   value={distinction.name}
                   onChange={(e) => onDistinctionChange(distinctionId, { name: e.target.value })}
-                  placeholder="Введите название ценности..."
+                  placeholder="Введите название черты..."
                   maxLength={30}
                 />
 
@@ -127,7 +127,7 @@ const DistinctionBlock = ({
                   onClick={() => handleDistinctionClick(distinctionId, distinction.name)}
                   title={
                     !distinction.name
-                      ? 'Сначала выберите ценность'
+                      ? 'Сначала выберите черту'
                       : !isClickable
                         ? 'Достигнут лимит в 3 использования'
                         : additionalDieEffect
@@ -155,7 +155,7 @@ const DistinctionBlock = ({
           );
         })}
       </div>
-      <div className="distinction-d4-row">
+      {/* <div className="distinction-d4-row">
         <div className="distinction-d4-info">
           <span className="d4-label">Если ни одна из ценностей не подходит:</span>
         </div>
@@ -180,13 +180,13 @@ const DistinctionBlock = ({
             <span className="d4-description">добавить d4</span>
           </div>
         </div>
-      </div>
-      <div className="distinction-hint">
+      </div> */}
+      {/* <div className="distinction-hint">
         {additionalDieEffect
           ? '🎯 Эффект дополнительного куба: можно добавить любое отличие'
           : '💡 Выберите отличия из разных групп. При выборе отличия из группы, другие отличия из этой группы становятся недоступны.'
         }
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -26,19 +26,21 @@ export const DEFAULT_ATTRIBUTES = {
 };
 
 export const DEFAULT_ROLES = {
-  '1': { name: 'Атлетика', diceType: 'd4' },
-  '2': { name: 'Бой', diceType: 'd4' },
-  '3': { name: 'Выживание', diceType: 'd4' },
-  '4': { name: 'Знание', diceType: 'd4' },
-  '5': { name: 'Медицина', diceType: 'd4' },
-  '6': { name: 'Общение', diceType: 'd4' },
-  '7': { name: 'Расследование', diceType: 'd4' },
-  '8': { name: 'Ремесло', diceType: 'd4' },
-  '9': { name: 'Скрытность', diceType: 'd4' },
-  '10': { name: 'Стойкость', diceType: 'd4' }
+  '1': { name: 'Атлетика', diceType: 'd6' },
+  '2': { name: 'Бой', diceType: 'd6' },
+  '3': { name: 'Выживание', diceType: 'd6' },
+  '4': { name: 'Знание', diceType: 'd6' },
+  '5': { name: 'Медицина', diceType: 'd6' },
+  '6': { name: 'Общение', diceType: 'd6' },
+  '7': { name: 'Расследование', diceType: 'd6' },
+  '8': { name: 'Скрытность', diceType: 'd6' },
+  '9': { name: 'Стойкость', diceType: 'd6' }
 };
 
 export const DEFAULT_COMPLICATIONS = {
+  '1': {name: 'Физический стресс', diceType: '0'},
+  '2': {name: 'Ментальный стресс', diceType: '0'},
+  '3': {name: 'Духовный стресс', diceType: '0'}
 };
 
 // Отличия теперь тоже в едином формате
@@ -67,8 +69,8 @@ export const LIMITS = {
 
 // Порядок рангов
 export const RANK_ORDER = {
-  ATTRIBUTES: ['d4', 'd6', 'd8', 'd10', 'd12'],
-  COMPLICATIONS: ['0', 'd4', 'd6', 'd8', 'd10', 'd12']
+  ATTRIBUTES: ['d6', 'd8', 'd10', 'd12'],
+  COMPLICATIONS: ['0', 'd6', 'd8', 'd10', 'd12']
 };
 
 // Типы трейтов для универсальной обработки

@@ -66,18 +66,18 @@ const ResultStats = ({ result, effectDice, selectedCount, maxSelected, isBoostRe
     <div className="result-stat">
       <div className="result-stat-header">
         <strong>Результат:</strong>
-        {!isBoostResultActive && (
+        {/* {!isBoostResultActive && (
           <span className="selection-counter">
             {selectedCount}/{maxSelected}
           </span>
-        )}
+        )} */}
       </div>
       <span className={`result-value ${isBoostResultActive ? 'boost-highlight' : ''}`}>
         {result}
         {isBoostResultActive && ' ⚡'}
       </span>
     </div>
-    <div className="result-stat">
+    {/* <div className="result-stat">
       <strong>Кубы эффекта:</strong>
       <div className="effect-dice-container">
         {effectDice && effectDice.map((effectDie, index) => (
@@ -89,7 +89,7 @@ const ResultStats = ({ result, effectDice, selectedCount, maxSelected, isBoostRe
           />
         ))}
       </div>
-    </div>
+    </div> */}
 
     {isBoostResultActive && (
       <div className="boost-result-notice">
@@ -206,7 +206,7 @@ const getCategoryLabel = (category) => {
     case 'complications':
       return 'Осложнение';
     case 'distinctions':
-      return 'Ценность';
+      return 'Черта';
     case 'specialties':
       return 'Специальность';
     case 'resources':

@@ -126,7 +126,7 @@ const PlotTokens = ({
         >
           + 🎲 В пул
         </button> */}
-        <button
+        {/* <button
           className="token-action-btn"
           onClick={handleActivateAttributes}
           disabled={!canActivateAttributes}
@@ -158,7 +158,7 @@ const PlotTokens = ({
           }
         >
           + Навык
-        </button>
+        </button> */}
 
         <button
           className="token-action-btn"
@@ -174,9 +174,9 @@ const PlotTokens = ({
                   : "Разблокировать отличия для повторного использования"
           }
         >
-          + Ценность
+          + Черта
         </button>
-        <button
+        {/* <button
           className="token-action-btn"
           onClick={handleBoostResult}
           disabled={!canUseBoostResult}
@@ -191,7 +191,7 @@ const PlotTokens = ({
           }
         >
           + Результат
-        </button>
+        </button> */}
 
         {/* <button
           className="token-action-btn"
@@ -237,13 +237,13 @@ const PlotTokens = ({
           - Жетон
         </button>
         {/* КНОПКА ОТМЕНЫ ЭФФЕКТА */}
-        <button
+        {/* <button
           className="cancel-effect-btn"
           onClick={handleCancelEffect}
           title="Отменить эффект и вернуть жетон"
         >
           ✕ Отменить эффект
-        </button>
+        </button> */}
       </div>
 
       <div className="tokens-hint">

@@ -326,9 +326,9 @@ const CharacterSheet = () => {
   const checkMinimumRequirements = () => {
     const hasAttribute = dicePool.some(dice => dice.category === 'attributes');
     const hasRole = dicePool.some(dice => dice.category === 'roles');
-    const hasDistinction = dicePool.some(dice => dice.category === 'distinctions');
+    // const hasDistinction = dicePool.some(dice => dice.category === 'distinctions');
 
-    return hasAttribute && hasRole && hasDistinction;
+    return hasAttribute && hasRole;
   };
 
   const canRoll = checkMinimumRequirements();
@@ -380,69 +380,19 @@ const CharacterSheet = () => {
 
           <EditableTraitsBlock
             type={TRAIT_TYPES.COMPLICATIONS}
-            title="Осложнения"
+            title="Стресс"
             traits={complications}
             onTraitClick={handleTraitClick}
             onTraitChange={handleEditableTraitChange}
             getUsageCount={getUsageCount}
             isUsageLimitReached={isUsageLimitReached}
-            maxItems={10}
-            hint="💡 В пул можно добавлять осложнения ранга d4"
+            // maxItems={10}
+            // hint="💡 В пул можно добавлять осложнения ранга d4"
           />
         </div>
 
         {/* Центральная колонка */}
         <div className="column center-column">
-          <FixedTraitsBlock
-            type={TRAIT_TYPES.ROLES}
-            title="Навыки"
-            traits={roles}
-            onTraitClick={handleTraitClick}
-            onTraitChange={handleTraitChange}
-            getUsageCount={getUsageCount}
-            isUsageLimitReached={isUsageLimitReached}
-            additionalDieEffect={activeEffect === 'additional_die'}
-            hint={activeEffect === 'additional_die'
-              ? '🎯 Эффект дополнительного куба: можно добавить любой навык'
-              : '💡 Кликайте по навыкам чтобы добавить кубы в пул'
-            }
-          />
-
-          <EditableTraitsBlock
-            type={TRAIT_TYPES.SPECIALTIES}
-            title="Специальности"
-            traits={specialties}
-            onTraitClick={handleTraitClick}
-            onTraitChange={handleEditableTraitChange}
-            getUsageCount={getUsageCount}
-            isUsageLimitReached={isUsageLimitReached}
-            maxItems={10}
-            additionalDieEffect={activeEffect === 'additional_die'}
-            hint={activeEffect === 'additional_die'
-              ? '🎯 Эффект дополнительного куба: можно добавить любую специальность'
-              : '💡 Кликайте по кубам чтобы добавить их в пул.'
-            }
-          />
-          usedCategories={usedCategories} // ← ДОБАВИТЬ (из useDicePool)
-          <EditableTraitsBlock
-            type={TRAIT_TYPES.RESOURCES}
-            title="Ресурсы"
-            traits={resources}
-            onTraitClick={handleTraitClick}
-            onTraitChange={handleEditableTraitChange}
-            getUsageCount={getUsageCount}
-            isUsageLimitReached={isUsageLimitReached}
-            maxItems={10}
-            additionalDieEffect={activeEffect === 'additional_die'}
-            hint={activeEffect === 'additional_die'
-              ? '🎯 Эффект дополнительного куба: можно добавить любой ресурс'
-              : '💡 Кликайте по кубам чтобы добавить их в пул.'
-            }
-          />
-        </div>
-
-        {/* Правая колонка */}
-        <div className="column right-column">
           <DicePoolBlock
             dicePool={dicePool}
             onRemoveFromPool={removeFromDicePool}
@@ -480,6 +430,24 @@ const CharacterSheet = () => {
             activeEffect={activeEffect}
             hasRollResults={rollResults.length > 0}
             usedCategories={usedCategories} // ← ДОБАВИТЬ (из useDicePool)
+          />
+        </div>
+
+        {/* Правая колонка */}
+        <div className="column right-column">
+          <FixedTraitsBlock
+            type={TRAIT_TYPES.ROLES}
+            title="Навыки"
+            traits={roles}
+            onTraitClick={handleTraitClick}
+            onTraitChange={handleTraitChange}
+            getUsageCount={getUsageCount}
+            isUsageLimitReached={isUsageLimitReached}
+            additionalDieEffect={activeEffect === 'additional_die'}
+            hint={activeEffect === 'additional_die'
+              ? '🎯 Эффект дополнительного куба: можно добавить любой навык'
+              : '💡 Кликайте по навыкам чтобы добавить кубы в пул'
+            }
           />
         </div>
       </div>
