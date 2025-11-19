@@ -70,7 +70,7 @@ const FixedTraitsBlock = ({
 
                                 <div
                                     className={`trait-dice ${!isClickable ? 'dice-disabled' : ''}`}
-                                    onClick={() => handleTraitClick(id, trait.name, trait.diceType)}
+                                    // onClick={() => handleTraitClick(id, trait.name, trait.diceType)}
                                     title={
                                         !isClickable
                                             ? 'Достигнут лимит в 3 использования'
