@@ -6,13 +6,14 @@ export const useDicePool = () => {
   const [usedCategories, setUsedCategories] = useState(new Set());
   const [usedDistinctionGroups, setUsedDistinctionGroups] = useState(new Set());
   const [additionalDieEffect, setAdditionalDieEffect] = useState(false);
+  const [unlockedCategories, setUnlockedCategories] = useState(new Set()); // ← НОВОЕ СОСТОЯНИЕ
 
   // Добавление куба в пул
   const addToDicePool = (traitId, traitName, diceType, category) => {
     if (diceType === '0') return;
 
-    // Проверяем, использовалась ли уже эта категория
-    if (usedCategories.has(category) && !additionalDieEffect) {
+    // ПРОВЕРЯЕМ РАЗБЛОКИРОВАНА ЛИ КАТЕГОРИЯ (для отличий)
+    if (category === 'distinctions' && !unlockedCategories.has('distinctions') && !additionalDieEffect) {
       return;
     }
 
@@ -53,6 +54,10 @@ export const useDicePool = () => {
     };
 
     setDicePool(prev => [...prev, newDice]);
+  };
+
+  const unlockCategory = (category) => {
+    setUnlockedCategories(prev => new Set([...prev, category]));
   };
 
   // Удаление куба из пула
@@ -104,6 +109,7 @@ export const useDicePool = () => {
     setDicePool([]);
     setUsedCategories(new Set());
     setUsedDistinctionGroups(new Set());
+    setUnlockedCategories(new Set()); // ← СБРАСЫВАЕМ
     setAdditionalDieEffect(false);
   };
 
@@ -111,6 +117,7 @@ export const useDicePool = () => {
   const clearUsageCounters = () => {
     setUsedCategories(new Set());
     setUsedDistinctionGroups(new Set());
+    setUnlockedCategories(new Set()); // ← СБРАСЫВАЕМ
     setAdditionalDieEffect(false);
   };
 
@@ -149,6 +156,8 @@ export const useDicePool = () => {
     additionalDieEffect,
     usedCategories, // ← ДОБАВИТЬ
     removeFromUsedCategories, // ← ДОБАВИТЬ
+    unlockedCategories, // ← ДОБАВИТЬ
+    unlockCategory, // ← ДОБАВИТЬ
     addToDicePool,
     removeFromDicePool,
     clearDicePool,

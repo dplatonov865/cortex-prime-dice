@@ -6,7 +6,9 @@ export const useDiceRoll = () => {
   const [selectedDice, setSelectedDice] = useState([]);
   const [result, setResult] = useState(0);
   const [effectDice, setEffectDice] = useState([]);
-  const [rollHistory, setRollHistory] = useState([]);
+  // const [rollHistory, setRollHistory] = useState([]);
+  const [rerollMode, setRerollMode] = useState(false);
+  const [originalResults, setOriginalResults] = useState([]);
 
   const MAX_SELECTED_DICE = 2;
 
@@ -36,19 +38,61 @@ export const useDiceRoll = () => {
     // Автоматически вычисляем первый куб эффекта
     calculateEffectDie(results, [], setEffectDice);
 
-    setRollHistory(prev => [
-      {
-        id: Date.now(),
-        results: results,
-        timestamp: new Date().toLocaleTimeString()
-      },
-      ...prev.slice(0, 4)
-    ]);
+    // setRollHistory(prev => [
+    //   {
+    //     id: Date.now(),
+    //     results: results,
+    //     timestamp: new Date().toLocaleTimeString()
+    //   },
+    //   ...prev.slice(0, 4)
+    // ]);
 
     setDicePool([]);
     if (clearUsedCategories) {
       clearUsedCategories();
     }
+  };
+  const activateRerollMode = () => {
+    setRerollMode(true);
+    setOriginalResults([...rollResults]); // Сохраняем оригинальные результаты
+  };
+
+  // Функция реролла конкретного куба
+  const rerollDice = (diceId) => {
+    if (!rerollMode) return;
+
+    const diceIndex = rollResults.findIndex(d => d.id === diceId);
+    if (diceIndex === -1) return;
+
+    const dice = rollResults[diceIndex];
+    const diceValue = dice.type === '0' ? 0 : parseInt(dice.type.replace('d', ''));
+    const newRolledValue = diceValue === 0 ? 0 : Math.floor(Math.random() * diceValue) + 1;
+
+    // Создаем новый массив с обновленным кубом
+    const newResults = [...rollResults];
+    newResults[diceIndex] = {
+      ...dice,
+      rolledValue: newRolledValue,
+      isOne: newRolledValue === 1,
+      wasRerolled: true // Добавляем метку что куб был переброшен
+    };
+
+    setRollResults(newResults);
+
+    // Если этот куб был в выбранных, обновляем результат
+    if (selectedDice.includes(diceId)) {
+      updateResultAndEffect(selectedDice);
+    }
+
+    // Автоматически выходим из режима реролла после одного переброса
+    setRerollMode(false);
+    setOriginalResults([]);
+  };
+
+  // Функция отмены реролла
+  const cancelRerollMode = () => {
+    setRerollMode(false);
+    setOriginalResults([]);
   };
 
   // Обработчик кликов по результатам броска
@@ -206,7 +250,7 @@ export const useDiceRoll = () => {
     selectedDice,
     result,
     effectDice,
-    rollHistory,
+    // rollHistory,
     rollDicePool,
     handleResultDiceClick,
     handleBoostResultSelection,
@@ -215,6 +259,10 @@ export const useDiceRoll = () => {
     setRollResults,
     setSelectedDice,
     setResult,
-    setEffectDice // ← УБЕДИТЕСЬ ЧТО ЭТО ЕСТЬ
+    setEffectDice,
+    rerollMode,
+    activateRerollMode,
+    rerollDice,
+    cancelRerollMode // ← УБЕДИТЕСЬ ЧТО ЭТО ЕСТЬ
   };
 };

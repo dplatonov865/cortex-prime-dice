@@ -11,7 +11,6 @@ const DicePoolBlock = ({
 }) => {
   // Быстрые кубы для добавления
   const quickDice = [
-    { type: 'd4', value: '4' },
     { type: 'd6', value: '6' },
     { type: 'd8', value: '8' },
     { type: 'd10', value: '10' },
@@ -47,7 +46,7 @@ const DicePoolBlock = ({
 
       {/* Панель быстрых кубов */}
       <div className="quick-dice-panel">
-        <h4>Быстрые кубы:</h4>
+        <h4>Дополнительные кубы:</h4>
         <div className="quick-dice-list">
           {quickDice.map(dice => (
             <div
@@ -69,7 +68,7 @@ const DicePoolBlock = ({
       <div className="dice-pool">
         {dicePool.length === 0 ? (
           <p className="empty-pool-message">
-            Кликайте по атрибутам, наборам навыков, специальностям или ресурсам, чтобы добавить кубы в пул
+            Кликайте по кубам, чтобы добавить их в пул
           </p>
         ) : (
           <div className="dice-pool-list">

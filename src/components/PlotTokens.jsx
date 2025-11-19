@@ -8,9 +8,12 @@ const PlotTokens = ({
   onActivateBoostResult,
   onActivateBoostEffect,
   onCancelEffect,
+  onActivateReroll, // ← НОВЫЙ ПРОПС
+  onUnlockDistinctions, // ← НОВЫЙ ПРОПС
   activeEffect,
   hasRollResults,
   usedCategories,
+  unlockedCategories, // ← НОВЫЙ ПРОПС
   onActivateAttributes,
   onActivateRoles,
   onActivateDistinctions // ← ДОБАВИТЬ ЭТОТ ПРОПС
@@ -76,6 +79,14 @@ const PlotTokens = ({
     }
   };
 
+  const handleUnlockDistinctions = () => {
+    if (tokens > 0 && !isEffectActive && !unlockedCategories.has('distinctions')) {
+      onSpendToken('unlock_distinctions');
+      onUnlockDistinctions('distinctions');
+    }
+  };
+
+  const canUnlockDistinctions = tokens > 0 && !isEffectActive && !unlockedCategories.has('distinctions');
   const canUseBoostResult = tokens > 0 && !isEffectActive && hasRollResults;
   const canUseBoostEffect = tokens > 0 && !isEffectActive && hasRollResults;
   const canActivateAttributes = tokens > 0 && !isEffectActive && usedCategories.has('attributes');
@@ -94,6 +105,13 @@ const PlotTokens = ({
         return '';
     }
   };
+  const handleActivateReroll = () => {
+    if (tokens > 0 && !isEffectActive && hasRollResults) {
+      onSpendToken('reroll');
+      onActivateReroll();
+    }
+  };
+  const canUseReroll = tokens > 0 && !isEffectActive && hasRollResults;
 
   return (
     <div className={`plot-tokens-block ${isEffectActive ? 'effect-active' : ''}`}>
@@ -160,7 +178,24 @@ const PlotTokens = ({
           + Навык
         </button> */}
 
+        {/* НОВАЯ КНОПКА РАЗБЛОКИРОВКИ ОТЛИЧИЙ */}
         <button
+          className="token-action-btn"
+          onClick={handleUnlockDistinctions}
+          disabled={!canUnlockDistinctions}
+          title={
+            unlockedCategories.has('distinctions')
+              ? "Отличия уже разблокированы"
+              : isEffectActive
+                ? "Дождитесь завершения активного эффекта"
+                : tokens === 0
+                  ? "Недостаточно жетонов"
+                  : "Разблокировать отличия для использования в этом броске"
+          }
+        >
+          🔓 Черта
+        </button>
+        {/* <button
           className="token-action-btn"
           onClick={handleActivateDistinctions}
           disabled={!canActivateDistinctions}
@@ -175,6 +210,22 @@ const PlotTokens = ({
           }
         >
           + Черта
+        </button> */}
+        <button
+          className="token-action-btn"
+          onClick={handleActivateReroll}
+          disabled={!canUseReroll}
+          title={
+            !hasRollResults
+              ? "Сначала выполните бросок кубов"
+              : isEffectActive
+                ? "Дождитесь завершения активного эффекта"
+                : tokens === 0
+                  ? "Недостаточно жетонов"
+                  : "Перебросить один куб из результатов"
+          }
+        >
+          ↻ Реролл
         </button>
         {/* <button
           className="token-action-btn"

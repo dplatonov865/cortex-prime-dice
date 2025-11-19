@@ -1,8 +1,8 @@
 // Порядок рангов для атрибутов и ролей (без 0)
-export const ATTRIBUTE_RANK_ORDER = ['0', 'd6', 'd8', 'd10', 'd12'];
+export const ATTRIBUTE_RANK_ORDER = ['0', 'd4', 'd6', 'd8', 'd10', 'd12'];
 
 // Порядок рангов для осложнений
-export const COMPLICATION_RANK_ORDER = ['0', 'd6', 'd8', 'd10', 'd12'];
+export const COMPLICATION_RANK_ORDER = ['0', 'd4', 'd6', 'd8', 'd10', 'd12'];
 
 // Получение следующего ранга для атрибутов/ролей
 export const getNextRank = (currentRank) => {

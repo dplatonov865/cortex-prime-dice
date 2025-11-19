@@ -45,6 +45,7 @@ const CharacterSheet = () => {
     usedDistinctionGroups,
     additionalDieEffect,
     usedCategories, // ← ДОБАВИТЬ
+    unlockedCategories, // ← НОВОЕ
     removeFromUsedCategories, // ← ДОБАВИТЬ (нужно будет добавить в useDicePool)
     addToDicePool,
     removeFromDicePool,
@@ -54,6 +55,7 @@ const CharacterSheet = () => {
     isUsageLimitReached,
     activateAdditionalDie,
     deactivateAdditionalDie,
+    unlockCategory, // ← НОВАЯ ФУНКЦИЯ
     addQuickDie
   } = useDicePool();
 
@@ -62,9 +64,13 @@ const CharacterSheet = () => {
     selectedDice,
     result,
     effectDice,
-    rollHistory,
+    // rollHistory,
+    rerollMode,
     rollDicePool,
     handleResultDiceClick,
+    activateRerollMode,
+    rerollDice,
+    cancelRerollMode,
     canSelectDice,
     maxSelectedDice,
     setResult,
@@ -163,6 +169,16 @@ const CharacterSheet = () => {
   const handleActivateBoostResult = () => {
     if (plotTokens > 0) {
       setActiveEffect('boost_result');
+    }
+  };
+  const handleActivateReroll = () => {
+    if (plotTokens > 0) {
+      activateRerollMode();
+    }
+  };
+  const handleUnlockDistinctions = () => {
+    if (plotTokens > 0) {
+      unlockCategory('distinctions');
     }
   };
 
@@ -355,6 +371,7 @@ const CharacterSheet = () => {
           isUsageLimitReached={isUsageLimitReached}
           usedDistinctionGroups={usedDistinctionGroups}
           usedCategories={usedCategories}
+          unlockedCategories={unlockedCategories} // ← НОВОЕ
           additionalDieEffect={activeEffect === 'additional_die'}
         />
       </div>
@@ -386,8 +403,8 @@ const CharacterSheet = () => {
             onTraitChange={handleEditableTraitChange}
             getUsageCount={getUsageCount}
             isUsageLimitReached={isUsageLimitReached}
-            // maxItems={10}
-            // hint="💡 В пул можно добавлять осложнения ранга d4"
+          // maxItems={10}
+          // hint="💡 В пул можно добавлять осложнения ранга d4"
           />
         </div>
 
@@ -407,12 +424,14 @@ const CharacterSheet = () => {
             selectedDice={selectedDice}
             result={result}
             effectDice={effectDice}
-            rollHistory={rollHistory}
+            // rollHistory={rollHistory}
             onResultDiceClick={handleResultDiceClick}
             onBoostResultSelection={handleBoostResultSelection}
+            onRerollDice={rerollDice} // ← НОВОЕ
             canSelectDice={canSelectDice}
             maxSelectedDice={maxSelectedDice}
             activeEffect={activeEffect}
+            rerollMode={rerollMode} // ← НОВОЕ
           />
 
           <PlotTokens
@@ -430,6 +449,9 @@ const CharacterSheet = () => {
             activeEffect={activeEffect}
             hasRollResults={rollResults.length > 0}
             usedCategories={usedCategories} // ← ДОБАВИТЬ (из useDicePool)
+            onActivateReroll={handleActivateReroll} // ← НОВОЕ
+            onUnlockDistinctions={handleUnlockDistinctions} // ← НОВОЕ
+            unlockedCategories={unlockedCategories} // ← НОВОЕ
           />
         </div>
 

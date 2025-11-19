@@ -33,8 +33,9 @@ export const DEFAULT_ROLES = {
   '5': { name: 'Медицина', diceType: 'd6' },
   '6': { name: 'Общение', diceType: 'd6' },
   '7': { name: 'Расследование', diceType: 'd6' },
-  '8': { name: 'Скрытность', diceType: 'd6' },
-  '9': { name: 'Стойкость', diceType: 'd6' }
+  '8': { name: 'Ремесло', diceType: 'd6'},
+  '9': { name: 'Скрытность', diceType: 'd6' },
+  '10': { name: 'Стойкость', diceType: 'd6' }
 };
 
 export const DEFAULT_COMPLICATIONS = {

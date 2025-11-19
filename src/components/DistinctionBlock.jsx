@@ -10,6 +10,7 @@ const DistinctionBlock = ({
   isUsageLimitReached,
   usedDistinctionGroups,
   usedCategories,
+  unlockedCategories, // ← НОВЫЙ ПРОПС
   additionalDieEffect = false
 }) => {
   // const handleDistinctionClick = (distinctionId, distinctionName) => {
@@ -20,17 +21,21 @@ const DistinctionBlock = ({
   // };
 
   const handleDistinctionClick = (distinctionId, distinctionName, diceType = 'd8') => {
+    // ПРОВЕРЯЕМ РАЗБЛОКИРОВКУ ТОЛЬКО ДЛЯ КУБОВ
+    const isUnlocked = unlockedCategories.has('distinctions') || additionalDieEffect;
+
+    if (!isUnlocked) {
+      return; // Блокируем клик на кубе если не разблокировано
+    }
+
     if (isUsageLimitReached && isUsageLimitReached('distinctions', distinctionName) && !additionalDieEffect) {
       return;
     }
 
-    // Для d4_fallback передаем 'd4', для остальных - 'd8'
     const actualDiceType = distinctionId === 'd4_fallback' ? 'd4' : diceType;
     onTraitClick(distinctionId, distinctionName, actualDiceType, 'distinctions');
   };
-  const handleNameChange = (distinctionId, newName) => {
-    onDistinctionChange(distinctionId, { name: newName });
-  };
+
 
   // Функция для получения доступных опций для отличия
   const getAvailableOptions = (currentDistinctionId, currentValue) => {
@@ -85,34 +90,28 @@ const DistinctionBlock = ({
   };
 
   return (
-    <div className={`block distinctions-block ${additionalDieEffect ? 'bonus-mode' : ''}`}>
-      <h3>Ценности</h3>
+    <div className={`block distinctions-block ${additionalDieEffect ? 'bonus-mode' :
+        !unlockedCategories.has('distinctions') ? 'locked-mode' : ''
+      }`}>
+      <h3>
+        Черты
+        {!unlockedCategories.has('distinctions') && !additionalDieEffect && ' 🔒'}
+        {unlockedCategories.has('distinctions') && ' ✅'}
+      </h3>
+
       <div className="distinctions-list">
         {Object.entries(distinctions).map(([distinctionId, distinction]) => {
           const usageCount = getUsageCount ? getUsageCount('distinctions', distinction.name) : 0;
           const isLimitReached = isUsageLimitReached && isUsageLimitReached('distinctions', distinction.name);
-          const isClickable = !isLimitReached || additionalDieEffect;
-
-          // const availableOptions = getAvailableOptions(distinctionId, distinction.name);
+          const isUnlocked = unlockedCategories.has('distinctions') || additionalDieEffect;
+          const isClickable = isUnlocked && (!isLimitReached || additionalDieEffect);
 
           return (
             <div key={distinctionId} className="distinction-row">
               <h4 className="distinction-title">{getDistinctionTitle(distinctionId)}</h4>
 
               <div className="distinction-controls">
-                {/* <select
-                  className="distinction-select"
-                  value={distinction.name}
-                  // onChange={(e) => handleNameChange(distinctionId, e.target.value)}
-                  onChange={(e) => onDistinctionChange(distinctionId, { name: e.target.value })}
-                >
-                  <option value="">Выберите ценность...</option>
-                  {availableOptions.map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select> */}
+                {/* INPUT ВСЕГДА РЕДАКТИРУЕМЫЙ */}
                 <input
                   type="text"
                   className="distinction-input"
@@ -120,41 +119,41 @@ const DistinctionBlock = ({
                   onChange={(e) => onDistinctionChange(distinctionId, { name: e.target.value })}
                   placeholder="Введите название черты..."
                   maxLength={30}
+                // УБИРАЕМ disabled - input всегда активен
                 />
 
                 <div
-                  className={`distinction-dice ${!isClickable ? 'dice-disabled' : ''}`}
+                  className={`distinction-dice ${!isClickable ? 'dice-disabled' : ''
+                    } ${!isUnlocked ? 'dice-locked' : ''}`}
                   onClick={() => handleDistinctionClick(distinctionId, distinction.name)}
                   title={
-                    !distinction.name
-                      ? 'Сначала выберите черту'
-                      : !isClickable
-                        ? 'Достигнут лимит в 3 использования'
-                        : additionalDieEffect
-                          ? 'Эффект дополнительного куба: можно добавить в пул'
-                          : `Клик чтобы добавить d8 в пул (использовано: ${usageCount}/3)`
+                    !isUnlocked
+                      ? 'Используйте жетон сюжета чтобы разблокировать черту'
+                      : !distinction.name
+                        ? 'Сначала введите название черты'
+                        : !isClickable
+                          ? 'Достигнут лимит в 3 использования'
+                          : additionalDieEffect
+                            ? 'Эффект дополнительного куба: можно добавить в пул'
+                            : `Клик чтобы добавить d8 в пул (использовано: ${usageCount}/3)`
                   }
                 >
                   <DiceIcon
                     type="d8"
                     value="8"
-                    clickable={isClickable && !!distinction.name}
+                    clickable={isClickable && !!distinction.name && isUnlocked} // ← ВАЖНО: проверяем isUnlocked
                   />
                   {usageCount > 0 && (
                     <span className="usage-counter-small"> x {usageCount}</span>
                   )}
+                  {!isUnlocked && <span className="lock-indicator">🔒</span>}
                 </div>
               </div>
-
-              {/* {availableOptions.length === 1 && distinction.name && (
-                <div className="distinction-warning">
-                  ⚠️ Все группы ценностей уже используются
-                </div>
-              )} */}
             </div>
           );
         })}
       </div>
+
       {/* <div className="distinction-d4-row">
         <div className="distinction-d4-info">
           <span className="d4-label">Если ни одна из ценностей не подходит:</span>
@@ -162,31 +161,38 @@ const DistinctionBlock = ({
 
         <div className="distinction-d4-controls">
           <div
-            className={`distinction-d4-dice ${usedCategories.has('distinctions') && !additionalDieEffect ? 'dice-disabled' : ''}`}
+            className={`distinction-d4-dice ${(usedCategories.has('distinctions') && !additionalDieEffect) || !unlockedCategories.has('distinctions') ? 'dice-disabled' : ''
+              }`}
             onClick={() => handleDistinctionClick('d4_fallback', 'Без ценности', 'd4')}
             title={
-              usedCategories.has('distinctions') && !additionalDieEffect
-                ? 'Отличия уже использованы'
-                : additionalDieEffect
-                  ? 'Эффект дополнительного куба: можно добавить в пул'
-                  : 'Добавить d4 в пул (блокирует отличия)'
+              !unlockedCategories.has('distinctions')
+                ? 'Используйте жетон сюжета чтобы разблокировать отличия'
+                : usedCategories.has('distinctions') && !additionalDieEffect
+                  ? 'Отличия уже использованы'
+                  : additionalDieEffect
+                    ? 'Эффект дополнительного куба: можно добавить в пул'
+                    : 'Добавить d4 в пул (блокирует отличия)'
             }
           >
             <DiceIcon
               type="d4"
               value="4"
-              clickable={!usedCategories.has('distinctions') || additionalDieEffect}
+              clickable={unlockedCategories.has('distinctions') && (!usedCategories.has('distinctions') || additionalDieEffect)}
             />
             <span className="d4-description">добавить d4</span>
+            {!unlockedCategories.has('distinctions') && <span className="lock-indicator">🔒</span>}
           </div>
         </div>
       </div> */}
-      {/* <div className="distinction-hint">
-        {additionalDieEffect
-          ? '🎯 Эффект дополнительного куба: можно добавить любое отличие'
-          : '💡 Выберите отличия из разных групп. При выборе отличия из группы, другие отличия из этой группы становятся недоступны.'
+
+      <div className="distinction-hint">
+        {!unlockedCategories.has('distinctions') && !additionalDieEffect
+          ? '🔒 Вводите названия черт, затем используйте жетон сюжета чтобы разблокировать их использование'
+          : additionalDieEffect
+            ? '🎯 Эффект дополнительного куба: можно добавить любое отличие'
+            : '💡 Выберите отличия из разных групп. При выборе отличия из группы, другие отличия из этой группы становятся недоступны.'
         }
-      </div> */}
+      </div>
     </div>
   );
 };

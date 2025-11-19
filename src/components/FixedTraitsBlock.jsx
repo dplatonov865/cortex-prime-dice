@@ -105,7 +105,7 @@ const FixedTraitsBlock = ({
                                             e.stopPropagation();
                                             handleRankChange(id, trait.diceType, 'decrease');
                                         }}
-                                        disabled={trait.diceType === 'd6'}
+                                        disabled={trait.diceType === 'd4'}
                                         title="Понизить ранг"
                                     >
                                         ▼
