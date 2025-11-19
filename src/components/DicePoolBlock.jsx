@@ -20,7 +20,7 @@ const DicePoolBlock = ({
   return (
     <div className="horizontal-block dice-pool-block">
       <div className="block-header">
-        <h3>Текущий пул кубов</h3>
+        <h3>Текущий пул: {dicePool.length}</h3>
         <div className="pool-controls">
           <button
             onClick={onRollDice}

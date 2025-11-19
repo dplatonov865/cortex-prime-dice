@@ -59,9 +59,9 @@ const ResultsBlock = ({
             effectDice={effectDice}
           />
 
-          <div className="results-hint">
+          {/* <div className="results-hint">
             {getResultsHint(activeEffect, rerollMode, selectedDice.length, maxSelectedDice)}
-          </div>
+          </div> */}
         </div>
       )}
 

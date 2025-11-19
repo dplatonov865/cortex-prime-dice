@@ -352,16 +352,16 @@ const CharacterSheet = () => {
 
   return (
     <div className="character-sheet">
-      <CharacterHeader
+      {/* <CharacterHeader
         characterInfo={characterInfo}
         onCharacterInfoChange={handleCharacterInfoChange}
         onExportCharacter={handleExportCharacter}
         onImportCharacter={handleImportCharacter}
         onResetCharacter={handleResetCharacter}
-      />
+      /> */}
 
       {/* Строка отличий */}
-      <div className="distinctions-row">
+      {/* <div className="distinctions-row">
         <DistinctionBlock
           distinctions={distinctions}
           onTraitClick={handleTraitClick}
@@ -374,13 +374,32 @@ const CharacterSheet = () => {
           unlockedCategories={unlockedCategories} // ← НОВОЕ
           additionalDieEffect={activeEffect === 'additional_die'}
         />
-      </div>
+      </div> */}
 
       {/* Три колонки */}
       <div className="three-columns-layout">
         {/* Левая колонка */}
         <div className="column left-column">
-          <FixedTraitsBlock
+          <CharacterHeader
+            characterInfo={characterInfo}
+            onCharacterInfoChange={handleCharacterInfoChange}
+            onExportCharacter={handleExportCharacter}
+            onImportCharacter={handleImportCharacter}
+            onResetCharacter={handleResetCharacter}
+          />
+          <DistinctionBlock
+            distinctions={distinctions}
+            onTraitClick={handleTraitClick}
+            onDistinctionChange={(distinctionId, updates) =>
+              handleTraitChange('distinctions', distinctionId, updates)}
+            getUsageCount={getUsageCount}
+            isUsageLimitReached={isUsageLimitReached}
+            usedDistinctionGroups={usedDistinctionGroups}
+            usedCategories={usedCategories}
+            unlockedCategories={unlockedCategories} // ← НОВОЕ
+            additionalDieEffect={activeEffect === 'additional_die'}
+          />
+          {/* <FixedTraitsBlock
             type={TRAIT_TYPES.ATTRIBUTES}
             title="Атрибуты"
             traits={attributes}
@@ -393,9 +412,9 @@ const CharacterSheet = () => {
               ? '🎯 Эффект дополнительного куба: можно добавить любой атрибут'
               : '💡 Кликайте по атрибутам чтобы добавить кубы в пул'
             }
-          />
+          /> */}
 
-          <EditableTraitsBlock
+          {/* <EditableTraitsBlock
             type={TRAIT_TYPES.COMPLICATIONS}
             title="Стресс"
             traits={complications}
@@ -405,6 +424,25 @@ const CharacterSheet = () => {
             isUsageLimitReached={isUsageLimitReached}
           // maxItems={10}
           // hint="💡 В пул можно добавлять осложнения ранга d4"
+          /> */}
+          <PlotTokens
+            tokens={plotTokens}
+            onAddToken={handleAddToken}
+            onRemoveToken={handleRemoveToken} // ← ДОБАВИТЬ ЭТОТ ПРОПС
+            onSpendToken={handleSpendToken}
+            onActivateAdditionalDie={handleActivateAdditionalDie}
+            onActivateBoostResult={handleActivateBoostResult}
+            onActivateBoostEffect={handleActivateBoostEffect}
+            onCancelEffect={handleCancelEffect}
+            onActivateAttributes={handleActivateAttributes} // ← ДОБАВИТЬ
+            onActivateRoles={handleActivateRoles} // ← ДОБАВИТЬ
+            onActivateDistinctions={handleActivateDistinctions} // ← ДОБАВИТЬ
+            activeEffect={activeEffect}
+            hasRollResults={rollResults.length > 0}
+            usedCategories={usedCategories} // ← ДОБАВИТЬ (из useDicePool)
+            onActivateReroll={handleActivateReroll} // ← НОВОЕ
+            onUnlockDistinctions={handleUnlockDistinctions} // ← НОВОЕ
+            unlockedCategories={unlockedCategories} // ← НОВОЕ
           />
         </div>
 
@@ -434,7 +472,18 @@ const CharacterSheet = () => {
             rerollMode={rerollMode} // ← НОВОЕ
           />
 
-          <PlotTokens
+          <EditableTraitsBlock
+            type={TRAIT_TYPES.COMPLICATIONS}
+            title="Стресс"
+            traits={complications}
+            onTraitClick={handleTraitClick}
+            onTraitChange={handleEditableTraitChange}
+            getUsageCount={getUsageCount}
+            isUsageLimitReached={isUsageLimitReached}
+          // maxItems={10}
+          // hint="💡 В пул можно добавлять осложнения ранга d4"
+          />
+          {/* <PlotTokens
             tokens={plotTokens}
             onAddToken={handleAddToken}
             onRemoveToken={handleRemoveToken} // ← ДОБАВИТЬ ЭТОТ ПРОПС
@@ -452,11 +501,25 @@ const CharacterSheet = () => {
             onActivateReroll={handleActivateReroll} // ← НОВОЕ
             onUnlockDistinctions={handleUnlockDistinctions} // ← НОВОЕ
             unlockedCategories={unlockedCategories} // ← НОВОЕ
-          />
+          /> */}
         </div>
 
         {/* Правая колонка */}
         <div className="column right-column">
+          <FixedTraitsBlock
+            type={TRAIT_TYPES.ATTRIBUTES}
+            title="Атрибуты"
+            traits={attributes}
+            onTraitClick={handleTraitClick}
+            onTraitChange={handleTraitChange}
+            getUsageCount={getUsageCount}
+            isUsageLimitReached={isUsageLimitReached}
+            additionalDieEffect={activeEffect === 'additional_die'}
+            // hint={activeEffect === 'additional_die'
+            //   ? '🎯 Эффект дополнительного куба: можно добавить любой атрибут'
+            //   : '💡 Кликайте по атрибутам чтобы добавить кубы в пул'
+            // }
+          />
           <FixedTraitsBlock
             type={TRAIT_TYPES.ROLES}
             title="Навыки"
@@ -466,11 +529,30 @@ const CharacterSheet = () => {
             getUsageCount={getUsageCount}
             isUsageLimitReached={isUsageLimitReached}
             additionalDieEffect={activeEffect === 'additional_die'}
-            hint={activeEffect === 'additional_die'
-              ? '🎯 Эффект дополнительного куба: можно добавить любой навык'
-              : '💡 Кликайте по навыкам чтобы добавить кубы в пул'
-            }
+            // hint={activeEffect === 'additional_die'
+            //   ? '🎯 Эффект дополнительного куба: можно добавить любой навык'
+            //   : '💡 Кликайте по навыкам чтобы добавить кубы в пул'
+            // }
           />
+          {/* <PlotTokens
+            tokens={plotTokens}
+            onAddToken={handleAddToken}
+            onRemoveToken={handleRemoveToken} // ← ДОБАВИТЬ ЭТОТ ПРОПС
+            onSpendToken={handleSpendToken}
+            onActivateAdditionalDie={handleActivateAdditionalDie}
+            onActivateBoostResult={handleActivateBoostResult}
+            onActivateBoostEffect={handleActivateBoostEffect}
+            onCancelEffect={handleCancelEffect}
+            onActivateAttributes={handleActivateAttributes} // ← ДОБАВИТЬ
+            onActivateRoles={handleActivateRoles} // ← ДОБАВИТЬ
+            onActivateDistinctions={handleActivateDistinctions} // ← ДОБАВИТЬ
+            activeEffect={activeEffect}
+            hasRollResults={rollResults.length > 0}
+            usedCategories={usedCategories} // ← ДОБАВИТЬ (из useDicePool)
+            onActivateReroll={handleActivateReroll} // ← НОВОЕ
+            onUnlockDistinctions={handleUnlockDistinctions} // ← НОВОЕ
+            unlockedCategories={unlockedCategories} // ← НОВОЕ
+          /> */}
         </div>
       </div>
     </div>

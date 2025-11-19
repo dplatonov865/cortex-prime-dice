@@ -297,7 +297,7 @@ const PlotTokens = ({
         </button> */}
       </div>
 
-      <div className="tokens-hint">
+      {/* <div className="tokens-hint">
         {isEffectActive
           ? `💡 ${getActiveEffectHint(activeEffect)}`
           : '💡 Используйте жетоны сюжета для особых действий'
@@ -307,7 +307,7 @@ const PlotTokens = ({
             Можно отменить эффект и вернуть жетон
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };
